@@ -30,7 +30,7 @@ import (
 )
 
 const (
-	serviceID string = "<name>"
+	serviceID string = "skills-to-jobs"
 )
 
 func buildTestApplication(storage interfaces.Storage) *core.Application {

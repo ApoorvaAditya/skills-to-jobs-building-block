@@ -1,8 +1,8 @@
-p, all_admin_<name>, /<name>/api/admin/*, (GET)|(POST)|(PUT)|(DELETE), All <name> admin actions
+p, all_admin_skills-to-jobs, /skills-to-jobs/api/admin/*, (GET)|(POST)|(PUT)|(DELETE), All skills-to-jobs admin actions
 
-p, all_examples, /<name>/api/admin/examples, (POST), All example admin actions
-p, all_examples, /<name>/api/admin/examples/*, (GET)|(PUT)|(DELETE),
-p, get_examples, /<name>/api/admin/examples/*, (GET), Get examples
-p, update_examples, /<name>/api/admin/examples, (POST), Update examples
-p, update_examples, /<name>/api/admin/examples/*, (GET)|(PUT),
-p, delete_examples, /<name>/api/admin/examples/*, (GET)|(DELETE),
+p, all_examples, /skills-to-jobs/api/admin/examples, (POST), All example admin actions
+p, all_examples, /skills-to-jobs/api/admin/examples/*, (GET)|(PUT)|(DELETE),
+p, get_examples, /skills-to-jobs/api/admin/examples/*, (GET), Get examples
+p, update_examples, /skills-to-jobs/api/admin/examples, (POST), Update examples
+p, update_examples, /skills-to-jobs/api/admin/examples/*, (GET)|(PUT),
+p, delete_examples, /skills-to-jobs/api/admin/examples/*, (GET)|(DELETE),

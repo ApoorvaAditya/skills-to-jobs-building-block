@@ -1,6 +1,6 @@
-p, all_system_<name>, /<name>/api/system/*, (GET)|(POST)|(PUT)|(DELETE), All <name> system admin actions
+p, all_system_skills-to-jobs, /skills-to-jobs/api/system/*, (GET)|(POST)|(PUT)|(DELETE), All skills-to-jobs system admin actions
 
-p, all_configs_<name>, /<name>/api/system/configs/*, (GET)|(PUT)|(DELETE), All <name> config admin actions
-p, get_configs_<name>, /<name>/api/system/configs/*, (GET), Get <name> configs
-p, update_configs_<name>, /<name>/api/system/configs/*, (GET)|(PUT),
-p, delete_configs_<name>, /<name>/api/system/configs/*, (GET)|(DELETE),
+p, all_configs_skills-to-jobs, /skills-to-jobs/api/system/configs/*, (GET)|(PUT)|(DELETE), All skills-to-jobs config admin actions
+p, get_configs_skills-to-jobs, /skills-to-jobs/api/system/configs/*, (GET), Get skills-to-jobs configs
+p, update_configs_skills-to-jobs, /skills-to-jobs/api/system/configs/*, (GET)|(PUT),
+p, delete_configs_skills-to-jobs, /skills-to-jobs/api/system/configs/*, (GET)|(DELETE),

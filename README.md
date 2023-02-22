@@ -1,9 +1,5 @@
-# <Name> Building Block
-*__To use this template, press `Use this template > Create a new repository`, or visit https://github.com/rokwire/building-block-template-go/generate.__* 
-
-*__Clone the new repo and find and replace `<name>` with the name of your new Building Block (note that there are some case sensitive matches that are indicated as `<Name>` or `<NAME>`, so you may want to perform a case sensitive find and replace all on each separately).__*
-
-*Write a short description of the functionality provided by the Building Block and delete these lines*
+# Skill to Jobs Building Block
+Building block to handle the backend for the skills to occupations/jobs feature.
 
 ## Architecture
 The service is based on clear hexagonal architecture. The hexagonal architecture divides the system into several loosely-coupled components, such as the application core and different adapters. We categorize the adapters in two categories - driver and driven.
@@ -18,9 +14,9 @@ What the service provides - user interface, rest adapter, test agent etc.
 What the service depends on - database, mock database, integration with other services etc.
 
 ## Documentation
-The functionality provided by this application is documented in the [Wiki](https://github.com/rokwire/<name>-building-block/wiki).
+The functionality provided by this application is documented in the [Wiki](https://github.com/rokwire/skills-to-jobs-building-block/wiki).
 
-The API documentation is available here: https://api.rokwire.illinois.edu/<name>/api/doc/ui/index.html
+The API documentation is available here: https://api.rokwire.illinois.edu/skills-to-jobs/api/doc/ui/index.html
 
 ## Set Up
 
@@ -34,12 +30,12 @@ The following Environment variables are supported. The service will not start un
 
 Name|Format|Required|Description
 ---|---|---|---
-<NAME>_BASE_URL | < url > | yes | Base URL where this application is being hosted
-<NAME>_PORT | < int > | yes | Port to be used by this application
-<NAME>_MONGO_AUTH | <mongodb://USER:PASSWORD@HOST:PORT/DATABASE NAME> | yes | MongoDB authentication string. The user must have read/write privileges.
-<NAME>_MONGO_DATABASE | < string > | yes | MongoDB database name
-<NAME>_MONGO_TIMEOUT | < int > | no | MongoDB timeout in milliseconds. Defaults to 500.
-<NAME>_CORE_BB_BASE_URL | < url > | yes | Core BB base URL
+SKILLS_TO_JOBS_BASE_URL | < url > | yes | Base URL where this application is being hosted
+SKILLS_TO_JOBS_PORT | < int > | yes | Port to be used by this application
+SKILLS_TO_JOBS_MONGO_AUTH | <mongodb://USER:PASSWORD@HOST:PORT/DATABASE NAME> | yes | MongoDB authentication string. The user must have read/write privileges.
+SKILLS_TO_JOBS_MONGO_DATABASE | < string > | yes | MongoDB database name
+SKILLS_TO_JOBS_MONGO_TIMEOUT | < int > | no | MongoDB timeout in milliseconds. Defaults to 500.
+SKILLS_TO_JOBS_CORE_BB_BASE_URL | < url > | yes | Core BB base URL
 
 ### Run Application
 
@@ -69,7 +65,7 @@ $ ./bin/application
   
 3. Create Docker image  
 ```
-docker build -t <name> .
+docker build -t skills-to-jobs .
 ```
 4. Run as Docker container
 ```
@@ -130,7 +126,7 @@ Verify the service is running as calling the get version API.
 
 #### Call get version API
 
-curl -X GET -i https://api-dev.rokwire.illinois.edu/<name>/api/version
+curl -X GET -i https://api-dev.rokwire.illinois.edu/skills-to-jobs/api/version
 
 Response
 ```
