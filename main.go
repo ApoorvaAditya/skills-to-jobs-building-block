@@ -43,7 +43,7 @@ func main() {
 	logger := logs.NewLogger(serviceID, &loggerOpts)
 	envLoader := envloader.NewEnvLoader(Version, logger)
 
-	envPrefix := strings.ToUpper(serviceID) + "_"
+	envPrefix := strings.ReplaceAll(strings.ToUpper(serviceID), "-", "_") + "_"
 	port := envLoader.GetAndLogEnvVar(envPrefix+"PORT", false, false)
 	if len(port) == 0 {
 		port = "80"
@@ -79,7 +79,12 @@ func main() {
 		logger.Fatalf("Error initializing remote service registration loader: %v", err)
 	}
 
-	serviceRegManager, err := authservice.NewTestServiceRegManager(&authService, serviceRegLoader)
+	var serviceRegManager *authservice.ServiceRegManager
+	if strings.HasPrefix(baseURL, "http://localhost") {
+		serviceRegManager, err = authservice.NewTestServiceRegManager(&authService, serviceRegLoader)
+	} else {
+		serviceRegManager, err = authservice.NewServiceRegManager(&authService, serviceRegLoader)
+	}
 	if err != nil {
 		logger.Fatalf("Error initializing service registration manager: %v", err)
 	}

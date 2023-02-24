@@ -22,8 +22,8 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// GetExample gets example by id
-func (a Adapter) GetExample(orgID string, appID string, id string) (*model.Example, error) {
+// FindExample finds example by id
+func (a Adapter) FindExample(orgID string, appID string, id string) (*model.Example, error) {
 	filter := bson.M{"org_id": orgID, "app_id": appID, "_id": id}
 
 	var data *model.Example

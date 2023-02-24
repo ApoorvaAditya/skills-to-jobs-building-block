@@ -25,7 +25,7 @@ type appShared struct {
 
 // getExample gets an Example by ID
 func (a appShared) getExample(orgID string, appID string, id string) (*model.Example, error) {
-	return a.app.storage.GetExample(orgID, appID, id)
+	return a.app.storage.FindExample(orgID, appID, id)
 }
 
 // newAppShared creates new appShared

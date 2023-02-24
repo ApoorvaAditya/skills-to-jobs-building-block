@@ -113,6 +113,57 @@ func Test_appAdmin_UpdateExample(t *testing.T) {
 	}
 }
 
+func Test_appAdmin_AppendExample(t *testing.T) {
+	example := buildTestExample()
+	example.Data = "new_data"
+	oldExample := example
+	oldExample.Data = "old_data"
+	newExample := example
+	newExample.Data = "old_data,new_data"
+	exampleWrongOrg := buildTestExample()
+	exampleWrongOrg.OrgID = "org2"
+	exampleWrongID := buildTestExample()
+	exampleWrongID.ID = "id2"
+
+	storage := mocks.NewStorage(t)
+	mockPerformTransaction(storage)
+	storage.On("FindExample", example.OrgID, example.AppID, example.ID).Return(&oldExample, nil)
+	storage.On("UpdateExample", mock.AnythingOfType("model.Example")).Return(nil)
+	storage.On("FindExample", exampleWrongOrg.OrgID, exampleWrongOrg.AppID, exampleWrongOrg.ID).Return(nil, errors.New("no example found"))
+	storage.On("FindExample", exampleWrongID.OrgID, exampleWrongID.AppID, exampleWrongID.ID).Return(nil, errors.New("no example found"))
+
+	app := buildTestApplication(storage)
+
+	type args struct {
+		example model.Example
+	}
+	tests := []struct {
+		name    string
+		a       interfaces.Admin
+		args    args
+		want    *model.Example
+		wantErr bool
+	}{
+		{"found", app.Admin, args{example}, &newExample, false},
+		{"invalid org", app.Admin, args{exampleWrongOrg}, nil, true},
+		{"invalid id", app.Admin, args{exampleWrongID}, nil, true},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			got, err := tt.a.AppendExample(tt.args.example)
+			if (err != nil) != tt.wantErr {
+				t.Errorf("appAdmin.AppendExample() error = %v, wantErr %v", err, tt.wantErr)
+			}
+			if tt.want != nil && got != nil {
+				tt.want.DateUpdated = got.DateUpdated
+			}
+			if !reflect.DeepEqual(got, tt.want) {
+				t.Errorf("appAdmin.AppendExample() = %v, want %v", got, tt.want)
+			}
+		})
+	}
+}
+
 func Test_appAdmin_DeleteExample(t *testing.T) {
 	example := buildTestExample()
 	storage := mocks.NewStorage(t)

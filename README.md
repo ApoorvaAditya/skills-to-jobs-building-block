@@ -28,13 +28,13 @@ Go v1.19+
 ### Environment variables
 The following Environment variables are supported. The service will not start unless those marked as Required are supplied.
 
-Name|Format|Required|Description
----|---|---|---
+Name|Format|Required|Description|Default
+---|---|---|---|---
 SKILLS_TO_JOBS_BASE_URL | < url > | yes | Base URL where this application is being hosted
-SKILLS_TO_JOBS_PORT | < int > | yes | Port to be used by this application
+SKILLS_TO_JOBS_PORT | < int > | no | Port to be used by this application | 80
 SKILLS_TO_JOBS_MONGO_AUTH | <mongodb://USER:PASSWORD@HOST:PORT/DATABASE NAME> | yes | MongoDB authentication string. The user must have read/write privileges.
 SKILLS_TO_JOBS_MONGO_DATABASE | < string > | yes | MongoDB database name
-SKILLS_TO_JOBS_MONGO_TIMEOUT | < int > | no | MongoDB timeout in milliseconds. Defaults to 500.
+SKILLS_TO_JOBS_MONGO_TIMEOUT | < int > | no | MongoDB timeout in milliseconds | 500
 SKILLS_TO_JOBS_CORE_BB_BASE_URL | < url > | yes | Core BB base URL
 
 ### Run Application

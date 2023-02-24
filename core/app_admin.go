@@ -15,7 +15,9 @@
 package core
 
 import (
+	"application/core/interfaces"
 	"application/core/model"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/rokwire/logging-library-go/v2/errors"
@@ -45,6 +47,36 @@ func (a appAdmin) CreateExample(example model.Example) (*model.Example, error) {
 // UpdateExample updates an Example
 func (a appAdmin) UpdateExample(example model.Example) error {
 	return a.app.storage.UpdateExample(example)
+}
+
+// AppendExample appends to the data in an example - Example of transaction usage
+func (a appAdmin) AppendExample(example model.Example) (*model.Example, error) {
+	now := time.Now()
+	var newExample *model.Example
+	transaction := func(storage interfaces.Storage) error {
+		oldExample, err := storage.FindExample(example.OrgID, example.AppID, example.ID)
+		if err != nil || oldExample == nil {
+			return errors.WrapErrorAction(logutils.ActionFind, model.TypeExample, nil, err)
+		}
+
+		oldExample.Data = oldExample.Data + "," + example.Data
+		oldExample.DateUpdated = &now
+
+		err = storage.UpdateExample(*oldExample)
+		if err != nil {
+			return errors.WrapErrorAction(logutils.ActionUpdate, model.TypeExample, nil, err)
+		}
+
+		newExample = oldExample
+		return nil
+	}
+
+	err := a.app.storage.PerformTransaction(transaction)
+	if err != nil {
+		return nil, errors.WrapErrorAction(logutils.ActionCommit, logutils.TypeTransaction, nil, err)
+	}
+
+	return newExample, nil
 }
 
 // DeleteExample deletes an Example by ID

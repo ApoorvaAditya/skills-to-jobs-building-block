@@ -43,6 +43,29 @@ func (_m *Storage) DeleteExample(orgID string, appID string, id string) error {
 	return r0
 }
 
+// FindExample provides a mock function with given fields: orgID, appID, id
+func (_m *Storage) FindExample(orgID string, appID string, id string) (*model.Example, error) {
+	ret := _m.Called(orgID, appID, id)
+
+	var r0 *model.Example
+	if rf, ok := ret.Get(0).(func(string, string, string) *model.Example); ok {
+		r0 = rf(orgID, appID, id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Example)
+		}
+	}
+
+	var r1 error
+	if rf, ok := ret.Get(1).(func(string, string, string) error); ok {
+		r1 = rf(orgID, appID, id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetConfig provides a mock function with given fields: id
 func (_m *Storage) GetConfig(id string) (*model.Config, error) {
 	ret := _m.Called(id)
@@ -59,29 +82,6 @@ func (_m *Storage) GetConfig(id string) (*model.Config, error) {
 	var r1 error
 	if rf, ok := ret.Get(1).(func(string) error); ok {
 		r1 = rf(id)
-	} else {
-		r1 = ret.Error(1)
-	}
-
-	return r0, r1
-}
-
-// GetExample provides a mock function with given fields: orgID, appID, id
-func (_m *Storage) GetExample(orgID string, appID string, id string) (*model.Example, error) {
-	ret := _m.Called(orgID, appID, id)
-
-	var r0 *model.Example
-	if rf, ok := ret.Get(0).(func(string, string, string) *model.Example); ok {
-		r0 = rf(orgID, appID, id)
-	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*model.Example)
-		}
-	}
-
-	var r1 error
-	if rf, ok := ret.Get(1).(func(string, string, string) error); ok {
-		r1 = rf(orgID, appID, id)
 	} else {
 		r1 = ret.Error(1)
 	}

@@ -16,12 +16,15 @@ package core_test
 
 import (
 	"application/core"
+	"application/core/interfaces"
 	"application/core/interfaces/mocks"
 	"application/core/model"
 	"errors"
 	"reflect"
 	"testing"
 	"time"
+
+	"github.com/stretchr/testify/mock"
 )
 
 type getExample interface {
@@ -32,12 +35,18 @@ func buildTestExample() model.Example {
 	return model.Example{ID: "id1", OrgID: "org1", AppID: "app1", Data: "Example data", DateCreated: time.Now(), DateUpdated: nil}
 }
 
+func mockPerformTransaction(storage *mocks.Storage) {
+	storage.On("PerformTransaction", mock.AnythingOfType("func(interfaces.Storage) error")).Return(func(arg func(storage interfaces.Storage) error) error {
+		return arg(storage)
+	})
+}
+
 func buildTestAppGetExample(t *testing.T) (*core.Application, model.Example) {
 	example := buildTestExample()
 	storage := mocks.NewStorage(t)
-	storage.On("GetExample", example.OrgID, example.AppID, example.ID).Return(&example, nil)
-	storage.On("GetExample", "org2", example.AppID, example.ID).Return(nil, errors.New("no example found"))
-	storage.On("GetExample", example.OrgID, example.AppID, "id2").Return(nil, errors.New("no example found"))
+	storage.On("FindExample", example.OrgID, example.AppID, example.ID).Return(&example, nil)
+	storage.On("FindExample", "org2", example.AppID, example.ID).Return(nil, errors.New("no example found"))
+	storage.On("FindExample", example.OrgID, example.AppID, "id2").Return(nil, errors.New("no example found"))
 	return buildTestApplication(storage), example
 }
 

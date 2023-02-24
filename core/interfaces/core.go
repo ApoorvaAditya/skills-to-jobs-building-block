@@ -31,6 +31,7 @@ type Admin interface {
 	GetExample(orgID string, appID string, id string) (*model.Example, error)
 	CreateExample(example model.Example) (*model.Example, error)
 	UpdateExample(example model.Example) error
+	AppendExample(example model.Example) (*model.Example, error)
 	DeleteExample(orgID string, appID string, id string) error
 }
 

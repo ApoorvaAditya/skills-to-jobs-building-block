@@ -21,13 +21,13 @@ import (
 // Storage is used by core to storage data - DB storage adapter, file storage adapter etc
 type Storage interface {
 	RegisterStorageListener(listener StorageListener)
-	PerformTransaction(func(torage Storage) error) error
+	PerformTransaction(func(storage Storage) error) error
 
 	GetConfig(id string) (*model.Config, error)
 	SaveConfig(configs model.Config) error
 	DeleteConfig(id string) error
 
-	GetExample(orgID string, appID string, id string) (*model.Example, error)
+	FindExample(orgID string, appID string, id string) (*model.Example, error)
 	InsertExample(example model.Example) error
 	UpdateExample(example model.Example) error
 	DeleteExample(orgID string, appID string, id string) error
