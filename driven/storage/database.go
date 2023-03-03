@@ -39,8 +39,9 @@ type database struct {
 	dbClient *mongo.Client
 	logger   *logs.Logger
 
-	configs  *collectionWrapper
-	examples *collectionWrapper
+	configs    *collectionWrapper
+	examples   *collectionWrapper
+	bessiDatas *collectionWrapper
 
 	listeners []interfaces.StorageListener
 }
@@ -81,12 +82,19 @@ func (d *database) start() error {
 		return err
 	}
 
+	bessiDatas := &collectionWrapper{database: d, coll: db.Collection("bessiDatas")}
+	err = d.applyBessiDatasChecks(bessiDatas)
+	if err != nil {
+		return err
+	}
+
 	//assign the db, db client and the collections
 	d.db = db
 	d.dbClient = client
 
 	d.configs = configs
 	d.examples = examples
+	d.bessiDatas = bessiDatas
 
 	go d.configs.Watch(nil, d.logger)
 
@@ -110,6 +118,13 @@ func (d *database) applyExamplesChecks(examples *collectionWrapper) error {
 	}
 
 	d.logger.Info("apply examples passed")
+	return nil
+}
+
+func (d *database) applyBessiDatasChecks(messages *collectionWrapper) error {
+	d.logger.Info("apply bessiDatas checks.....")
+
+	d.logger.Info("apply bessiDatas passed")
 	return nil
 }
 
