@@ -25,6 +25,7 @@ const (
 	TypeBessiData logutils.MessageDataType = "bessi"
 )
 
+// BessiData represents the survey results from the BESSI
 type BessiData struct {
 	ID          string     `json:"id" bson:"_id"`
 	Data        string     `json:"data" bson:"data"`
