@@ -16,6 +16,7 @@ package core
 
 import (
 	"application/core/model"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/rokwire/logging-library-go/v2/errors"
@@ -40,6 +41,7 @@ func (a appClient) GetBessiData(id string) (*model.BessiData, error) {
 // CreateBessiData creates a new BessiData
 func (a appClient) CreateBessiData(example model.BessiData) (*model.BessiData, error) {
 	example.ID = uuid.NewString()
+	example.DateCreated = time.Now()
 	err := a.app.storage.CreateBessiData(example)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeBessiData, nil, err)
