@@ -38,12 +38,12 @@ func (h ClientAPIsHandler) getExample(l *logs.Log, r *http.Request, claims *toke
 		return l.HTTPResponseErrorData(logutils.StatusMissing, logutils.TypePathParam, logutils.StringArgs("id"), nil, http.StatusBadRequest, false)
 	}
 
-	example, err := h.app.Client.GetExample(claims.OrgID, claims.AppID, id)
+	bessiData, err := h.app.Client.GetExample(claims.OrgID, claims.AppID, id)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionGet, model.TypeExample, nil, err, http.StatusInternalServerError, true)
 	}
 
-	response, err := json.Marshal(example)
+	response, err := json.Marshal(bessiData)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
 	}
@@ -57,12 +57,12 @@ func (h ClientAPIsHandler) getBessiData(l *logs.Log, r *http.Request, claims *to
 		return l.HTTPResponseErrorData(logutils.StatusMissing, logutils.TypePathParam, logutils.StringArgs("id"), nil, http.StatusBadRequest, false)
 	}
 
-	example, err := h.app.Client.GetBessiData(id)
+	bessiData, err := h.app.Client.GetBessiData(id)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionGet, model.TypeBessiData, nil, err, http.StatusInternalServerError, true)
 	}
 
-	response, err := json.Marshal(example)
+	response, err := json.Marshal(bessiData)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
 	}
@@ -76,12 +76,12 @@ func (h ClientAPIsHandler) createBessiData(l *logs.Log, r *http.Request, claims 
 		return l.HTTPResponseErrorAction(logutils.ActionUnmarshal, logutils.TypeRequestBody, nil, err, http.StatusBadRequest, true)
 	}
 
-	example, err := h.app.Client.CreateBessiData(requestData)
-	if err != nil || example == nil {
+	bessiData, err := h.app.Client.CreateBessiData(requestData)
+	if err != nil || bessiData == nil {
 		return l.HTTPResponseErrorAction(logutils.ActionCreate, model.TypeBessiData, nil, err, http.StatusInternalServerError, true)
 	}
 
-	response, err := json.Marshal(example)
+	response, err := json.Marshal(bessiData)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
 	}
