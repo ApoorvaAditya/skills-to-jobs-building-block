@@ -16,6 +16,7 @@ package storage
 
 import (
 	"application/core/model"
+	"time"
 
 	"github.com/rokwire/logging-library-go/v2/errors"
 	"github.com/rokwire/logging-library-go/v2/logutils"
@@ -48,7 +49,7 @@ func (a Adapter) CreateBessiData(bessiData model.BessiData) error {
 // UpdateBessiData updates an bessiData
 func (a Adapter) UpdateBessiData(bessiData model.BessiData) error {
 	filter := bson.M{"_id": bessiData.ID}
-	update := bson.M{"$set": bson.M{"data": bessiData.Data}}
+	update := bson.M{"$set": bson.M{"data": bessiData.Data, "date_updated": time.Now()}}
 
 	_, err := a.db.bessiDatas.UpdateOneWithContext(a.context, filter, update, nil)
 	if err != nil {
