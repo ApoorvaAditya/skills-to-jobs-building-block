@@ -5,3 +5,5 @@ EnvConfigData:
   $ref: "./application/EnvConfigData.yaml"
 Example:
   $ref: "./application/Example.yaml"
+BessiData:
+  $ref: "./application/BessiData.yaml"
