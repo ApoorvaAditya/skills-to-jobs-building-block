@@ -14,7 +14,13 @@
 
 package core
 
-import "application/core/model"
+import (
+	"application/core/model"
+
+	"github.com/google/uuid"
+	"github.com/rokwire/logging-library-go/v2/errors"
+	"github.com/rokwire/logging-library-go/v2/logutils"
+)
 
 // appClient contains client implementations
 type appClient struct {
@@ -29,4 +35,29 @@ func (a appClient) GetExample(orgID string, appID string, id string) (*model.Exa
 // newAppClient creates new appClient
 func newAppClient(app *Application) appClient {
 	return appClient{app: app}
+}
+
+// GetUserData gets an UserData by ID
+func (a appClient) GetUserData(id string) (*model.UserData, error) {
+	return a.app.storage.GetUserData(id)
+}
+
+// CreateUserData creates a new UserData
+func (a appClient) CreateUserData(example model.UserData) (*model.UserData, error) {
+	example.ID = uuid.NewString()
+	err := a.app.storage.CreateUserData(example)
+	if err != nil {
+		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeUserData, nil, err)
+	}
+	return &example, nil
+}
+
+// UpdateUserData updates an UserData
+func (a appClient) UpdateUserData(example model.UserData) error {
+	return a.app.storage.UpdateUserData(example)
+}
+
+// DeleteUserData deletes an UserData by ID
+func (a appClient) DeleteUserData(id string) error {
+	return a.app.storage.DeleteUserData(id)
 }
