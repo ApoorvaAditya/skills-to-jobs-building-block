@@ -72,7 +72,15 @@ func (a Adapter) Start() {
 	mainRouter := baseRouter.PathPrefix("/api").Subrouter()
 
 	// Client APIs
+
+	// Example APIs
 	mainRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.clientAPIsHandler.getExample, a.auth.client.Permissions)).Methods("GET")
+
+	// UserData API
+	mainRouter.HandleFunc("/user/{id}", a.wrapFunc(a.clientAPIsHandler.getUserData, a.auth.client.Permissions)).Methods("GET")
+	mainRouter.HandleFunc("/user", a.wrapFunc(a.clientAPIsHandler.createUserData, a.auth.client.Permissions)).Methods("POST")
+	mainRouter.HandleFunc("/user/{id}", a.wrapFunc(a.clientAPIsHandler.updateUserData, a.auth.client.Permissions)).Methods("PUT")
+	mainRouter.HandleFunc("/user/{id}", a.wrapFunc(a.clientAPIsHandler.deleteUserData, a.auth.client.Permissions)).Methods("DELETE")
 
 	// Admin APIs
 	adminRouter := mainRouter.PathPrefix("/admin").Subrouter()
