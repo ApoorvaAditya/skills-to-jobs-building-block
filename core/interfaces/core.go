@@ -24,6 +24,12 @@ type Default interface {
 // Client exposes client APIs for the driver adapters
 type Client interface {
 	GetExample(orgID string, appID string, id string) (*model.Example, error)
+
+	// Bessi APIs
+	GetBessiData(id string) (*model.BessiData, error)
+	CreateBessiData(example model.BessiData) (*model.BessiData, error)
+	UpdateBessiData(example model.BessiData) error
+	DeleteBessiData(id string) error
 }
 
 // Admin exposes administrative APIs for the driver adapters
