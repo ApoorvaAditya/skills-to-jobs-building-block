@@ -50,6 +50,25 @@ func (h ClientAPIsHandler) getExample(l *logs.Log, r *http.Request, claims *toke
 	return l.HTTPResponseSuccessJSON(response)
 }
 
+func (h ClientAPIsHandler) getOnetData(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
+	params := mux.Vars(r)
+	id := params["id"]
+	if len(id) <= 0 {
+		return l.HTTPResponseErrorData(logutils.StatusMissing, logutils.TypePathParam, logutils.StringArgs("id"), nil, http.StatusBadRequest, false)
+	}
+
+	example, err := h.app.Client.GetBessiData(id)
+	if err != nil {
+		return l.HTTPResponseErrorAction(logutils.ActionGet, model.TypeBessiData, nil, err, http.StatusInternalServerError, true)
+	}
+
+	response, err := json.Marshal(example)
+	if err != nil {
+		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
+	}
+	return l.HTTPResponseSuccessJSON(response)
+}
+
 func (h ClientAPIsHandler) getBessiData(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
 	params := mux.Vars(r)
 	id := params["id"]

@@ -82,6 +82,9 @@ func (a Adapter) Start() {
 	mainRouter.HandleFunc("/bessi/{id}", a.wrapFunc(a.clientAPIsHandler.updateBessiData, a.auth.client.Permissions)).Methods("PUT")
 	mainRouter.HandleFunc("/bessi/{id}", a.wrapFunc(a.clientAPIsHandler.deleteBessiData, a.auth.client.Permissions)).Methods("DELETE")
 
+	// Onet API
+	mainRouter.HandleFunc("/occupations/{id}", a.wrapFunc(a.clientAPIsHandler.getOnetData, a.auth.client.Permissions)).Methods("GET")
+
 	// Admin APIs
 	adminRouter := mainRouter.PathPrefix("/admin").Subrouter()
 	adminRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.adminAPIsHandler.getExample, a.auth.admin.Permissions)).Methods("GET")

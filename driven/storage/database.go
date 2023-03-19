@@ -42,6 +42,7 @@ type database struct {
 	configs    *collectionWrapper
 	examples   *collectionWrapper
 	bessiDatas *collectionWrapper
+	OnetDatas  *collectionWrapper
 
 	listeners []interfaces.StorageListener
 }
@@ -88,6 +89,12 @@ func (d *database) start() error {
 		return err
 	}
 
+	OnetDatas := &collectionWrapper{database: d, coll: db.Collection("OnetDatas")}
+	err = d.applyOnetDatasChecks(OnetDatas)
+	if err != nil {
+		return err
+	}
+
 	//assign the db, db client and the collections
 	d.db = db
 	d.dbClient = client
@@ -95,6 +102,7 @@ func (d *database) start() error {
 	d.configs = configs
 	d.examples = examples
 	d.bessiDatas = bessiDatas
+	d.OnetDatas = OnetDatas
 
 	go d.configs.Watch(nil, d.logger)
 
@@ -125,6 +133,13 @@ func (d *database) applyBessiDatasChecks(messages *collectionWrapper) error {
 	d.logger.Info("apply bessiDatas checks.....")
 
 	d.logger.Info("apply bessiDatas passed")
+	return nil
+}
+
+func (d *database) applyOnetDatasChecks(messages *collectionWrapper) error {
+	d.logger.Info("apply OnetDatas checks.....")
+
+	d.logger.Info("apply OnetDatas passed")
 	return nil
 }
 

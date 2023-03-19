@@ -16,6 +16,8 @@ package interfaces
 
 import (
 	"application/core/model"
+
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // Storage is used by core to storage data - DB storage adapter, file storage adapter etc
@@ -36,6 +38,9 @@ type Storage interface {
 	CreateBessiData(bessiData model.BessiData) error
 	UpdateBessiData(bessiData model.BessiData) error
 	DeleteBessiData(id string) error
+
+	GetOnetDataById(id string) (*model.OnetData, error)
+	GetManyOnetData(option *options.FindOptions) (*model.OnetData, error)
 }
 
 // StorageListener represents storage listener

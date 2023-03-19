@@ -14,7 +14,11 @@
 
 package interfaces
 
-import "application/core/model"
+import (
+	"application/core/model"
+
+	"go.mongodb.org/mongo-driver/mongo/options"
+)
 
 // Default exposes client APIs for the driver adapters
 type Default interface {
@@ -30,6 +34,10 @@ type Client interface {
 	CreateBessiData(example model.BessiData) (*model.BessiData, error)
 	UpdateBessiData(example model.BessiData) error
 	DeleteBessiData(id string) error
+
+	// Onet APIs
+	GetOnetDataById(id string) (*model.BessiData, error)
+	GetManyOnetData(option *options.FindOptions) (*model.BessiData, error)
 }
 
 // Admin exposes administrative APIs for the driver adapters

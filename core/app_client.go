@@ -20,6 +20,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/rokwire/logging-library-go/v2/errors"
 	"github.com/rokwire/logging-library-go/v2/logutils"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // appClient contains client implementations
@@ -30,6 +31,16 @@ type appClient struct {
 // GetExample gets an Example by ID
 func (a appClient) GetExample(orgID string, appID string, id string) (*model.Example, error) {
 	return a.app.shared.getExample(orgID, appID, id)
+}
+
+// GetOnetData gets an OnetData by ID
+func (a appClient) GetOnetDataById(id string) (*model.OnetData, error) {
+	return a.app.storage.GetOnetDataById(id)
+}
+
+// GetManyOnetData gets Onet data with a specified option
+func (a appClient) GetManyOnetData(option *options.FindOptions) (*model.OnetData, error) {
+	return a.app.storage.GetManyOnetData(option)
 }
 
 // GetBessiData gets an BessiData by ID
