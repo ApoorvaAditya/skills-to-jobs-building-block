@@ -34,6 +34,12 @@ paths:
   /api/examples/{id}:
     $ref: "./resources/client/examples-id.yaml"
 
+  /api/user/match-results/{id}:
+    $ref: "./resources/client/user-data-id.yaml"
+
+  /api/user/match-results:
+    $ref: "./resources/client/user-data.yaml"
+
   # Admin
   /api/admin/examples:
     $ref: "./resources/admin/examples.yaml"

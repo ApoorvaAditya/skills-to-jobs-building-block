@@ -1,0 +1,24 @@
+post:
+  tags:
+  - Client
+  summary: Posts the User data
+  description: |
+    Posts User data
+    **Auth:** Requires valid user token with `post_user_datas` permission
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/application/UserData.yaml"
+  responses:
+    200:
+      description: Success
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error

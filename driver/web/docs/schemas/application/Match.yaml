@@ -1,0 +1,11 @@
+type: object
+required:
+- job_id
+- score
+properties:
+  job_id:
+    type: string
+    readOnly: true
+  score:
+    type: float
+    readOnly: true
