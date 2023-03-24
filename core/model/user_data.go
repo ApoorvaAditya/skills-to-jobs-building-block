@@ -21,16 +21,23 @@ import (
 )
 
 const (
-	//TypeUserData example type
-	TypeUserData logutils.MessageDataType = "example"
+	//TypeUserData type
+	TypeUserData logutils.MessageDataType = "userdata"
+	//TypeMatch type
+	TypeMatch logutils.MessageDataType = "match"
 )
 
 // UserData is a generic UserData data type
 type UserData struct {
 	ID          string     `json:"id" bson:"_id"`
-	OrgID       string     `json:"org_id" bson:"org_id"`
-	AppID       string     `json:"app_id" bson:"app_id"`
-	Data        string     `json:"data" bson:"data"`
+	Version     string     `json:"version" bson:"version"`
+	Matches     []Match    `json:"matches" bson:"matches"`
 	DateCreated time.Time  `json:"date_created" bson:"date_created"`
 	DateUpdated *time.Time `json:"date_updated" bson:"date_updated"`
+}
+
+// Match represents a occupation match and the corresponding score
+type Match struct {
+	JobID string  `json:"id" bson:"_id"`
+	Score float32 `json:"score" bson:"score"`
 }
