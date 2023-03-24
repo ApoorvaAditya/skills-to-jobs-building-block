@@ -16,6 +16,7 @@ package core
 
 import (
 	"application/core/model"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/rokwire/logging-library-go/v2/errors"
@@ -43,18 +44,19 @@ func (a appClient) GetUserData(id string) (*model.UserData, error) {
 }
 
 // CreateUserData creates a new UserData
-func (a appClient) CreateUserData(example model.UserData) (*model.UserData, error) {
-	example.ID = uuid.NewString()
-	err := a.app.storage.CreateUserData(example)
+func (a appClient) CreateUserData(userData model.UserData) (*model.UserData, error) {
+	userData.ID = uuid.NewString()
+	userData.DateCreated = time.Now()
+	err := a.app.storage.CreateUserData(userData)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeUserData, nil, err)
 	}
-	return &example, nil
+	return &userData, nil
 }
 
 // UpdateUserData updates an UserData
-func (a appClient) UpdateUserData(example model.UserData) error {
-	return a.app.storage.UpdateUserData(example)
+func (a appClient) UpdateUserData(userData model.UserData) error {
+	return a.app.storage.UpdateUserData(userData)
 }
 
 // DeleteUserData deletes an UserData by ID
