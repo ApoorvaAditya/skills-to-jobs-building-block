@@ -27,8 +27,14 @@ const (
 
 // BessiData represents the survey results from the BESSI
 type BessiData struct {
-	ID          string     `json:"id" bson:"_id"`
-	Data        string     `json:"data" bson:"data"`
-	DateCreated time.Time  `json:"date_created" bson:"date_created"`
-	DateUpdated *time.Time `json:"date_updated" bson:"date_updated"`
+	ID          string           `json:"id" bson:"_id"`
+	Scores      []WorkstyleScore `json:"scores" bson:"scores"`
+	DateCreated time.Time        `json:"date_created" bson:"date_created"`
+	DateUpdated *time.Time       `json:"date_updated" bson:"date_updated"`
+}
+
+// WorkstyleScore represents the score for each workstyle
+type WorkstyleScore struct {
+	Workstyle string `json:"workstyle" bson:"workstyle"`
+	Score     int    `json:"score" bson:"score"`
 }
