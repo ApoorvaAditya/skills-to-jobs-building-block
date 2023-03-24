@@ -582,26 +582,33 @@ components:
       type: object
       required:
         - id
-        - app_id
-        - org_id
-        - data
+        - scores
         - date_created
+        - date_updated
       properties:
         id:
           type: string
           readOnly: true
-        org_id:
-          type: string
-          readOnly: true
-        app_id:
-          type: string
-          readOnly: true
-        data:
-          type: string
+        scores:
+          type: array
+          items:
+            $ref: '#/components/schemas/WorkstyleScore'
         date_created:
           type: string
           readOnly: true
         date_updated:
           type: string
           nullable: true
+          readOnly: true
+    WorkstyleScore:
+      type: object
+      required:
+        - workstyle
+        - score
+      properties:
+        workstyle:
+          type: string
+          readOnly: true
+        score:
+          type: int
           readOnly: true

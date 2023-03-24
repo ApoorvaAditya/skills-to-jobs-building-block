@@ -7,3 +7,5 @@ Example:
   $ref: "./application/Example.yaml"
 BessiData:
   $ref: "./application/BessiData.yaml"
+WorkstyleScore:
+  $ref: "./application/WorkstyleScore.yaml"

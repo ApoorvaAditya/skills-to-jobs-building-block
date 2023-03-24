@@ -1,22 +1,17 @@
 type: object
 required:
 - id
-- app_id
-- org_id
-- data
+- scores
 - date_created
+- date_updated
 properties:
   id:
     type: string
     readOnly: true
-  org_id:
-    type: string
-    readOnly: true
-  app_id:
-    type: string  
-    readOnly: true
-  data:
-    type: string
+  scores:
+    type: array
+    items:
+      $ref: "./WorkstyleScore.yaml"
   date_created:
     type: string
     readOnly: true
