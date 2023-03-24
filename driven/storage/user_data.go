@@ -16,13 +16,14 @@ package storage
 
 import (
 	"application/core/model"
+	"time"
 
 	"github.com/rokwire/logging-library-go/v2/errors"
 	"github.com/rokwire/logging-library-go/v2/logutils"
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// GetUserData finds bessiData by id
+// GetUserData finds userData by id
 func (a Adapter) GetUserData(id string) (*model.UserData, error) {
 	filter := bson.M{"_id": id}
 
@@ -35,9 +36,9 @@ func (a Adapter) GetUserData(id string) (*model.UserData, error) {
 	return data, nil
 }
 
-// CreateUserData inserts a new bessiData
-func (a Adapter) CreateUserData(bessiData model.UserData) error {
-	_, err := a.db.userDatas.InsertOneWithContext(a.context, bessiData)
+// CreateUserData inserts a new userData
+func (a Adapter) CreateUserData(userData model.UserData) error {
+	_, err := a.db.userDatas.InsertOneWithContext(a.context, userData)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionInsert, model.TypeUserData, nil, err)
 	}
@@ -45,10 +46,10 @@ func (a Adapter) CreateUserData(bessiData model.UserData) error {
 	return nil
 }
 
-// UpdateUserData updates an bessiData
-func (a Adapter) UpdateUserData(bessiData model.UserData) error {
-	filter := bson.M{"_id": bessiData.ID}
-	update := bson.M{"$set": bson.M{"data": bessiData.Data}}
+// UpdateUserData updates an userData
+func (a Adapter) UpdateUserData(userData model.UserData) error {
+	filter := bson.M{"_id": userData.ID}
+	update := bson.M{"$set": bson.M{"matches": userData.Matches, "data_updated": time.Now()}}
 
 	_, err := a.db.userDatas.UpdateOneWithContext(a.context, filter, update, nil)
 	if err != nil {
@@ -57,7 +58,7 @@ func (a Adapter) UpdateUserData(bessiData model.UserData) error {
 	return nil
 }
 
-// DeleteUserData deletes an bessiData
+// DeleteUserData deletes an userData
 func (a Adapter) DeleteUserData(id string) error {
 	filter := bson.M{"_id": id}
 
