@@ -49,7 +49,7 @@ func (a Adapter) CreateBessiData(bessiData model.BessiData) error {
 // UpdateBessiData updates an bessiData
 func (a Adapter) UpdateBessiData(bessiData model.BessiData) error {
 	filter := bson.M{"_id": bessiData.ID}
-	update := bson.M{"$set": bson.M{"data": bessiData.Data, "date_updated": time.Now()}}
+	update := bson.M{"$set": bson.M{"scores": bessiData.Scores, "date_updated": time.Now()}}
 
 	_, err := a.db.bessiDatas.UpdateOneWithContext(a.context, filter, update, nil)
 	if err != nil {
