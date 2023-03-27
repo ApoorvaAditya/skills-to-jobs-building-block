@@ -2,7 +2,7 @@ openapi: 3.0.3
 info:
   title: Rokwire Skill to Jobs Building Block API
   description: Skill to Jobs Building Block API Documentation
-  version: 1.4.0
+  version: 1.0.0
 servers:
   - url: 'https://api.rokwire.illinois.edu/skills-to-jobs'
     description: Production server
@@ -38,7 +38,11 @@ paths:
   /api/admin/examples:
     $ref: "./resources/admin/examples.yaml"
   /api/admin/examples/{id}:
-    $ref: "./resources/admin/examples-id.yaml" 
+    $ref: "./resources/admin/examples-id.yaml"
+  /api/admin/configs:
+    $ref: "./resources/admin/configs.yaml"
+  /api/admin/configs/{id}:
+    $ref: "./resources/admin/configs-id.yaml"
 
   # BBs
   /api/bbs/examples/{id}:
@@ -49,8 +53,8 @@ paths:
     $ref: "./resources/tps/examples-id.yaml"
 
   # System
-  /api/system/configs/{id}:
-    $ref: "./resources/system/configs-id.yaml"
+  /api/system/examples/{id}:
+    $ref: "./resources/system/examples-id.yaml"
     
 components:
   securitySchemes:

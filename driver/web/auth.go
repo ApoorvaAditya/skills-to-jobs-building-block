@@ -17,12 +17,12 @@ package web
 import (
 	"net/http"
 
-	"github.com/rokwire/core-auth-library-go/v2/authorization"
+	"github.com/rokwire/core-auth-library-go/v3/authorization"
 	"github.com/rokwire/logging-library-go/v2/errors"
 	"github.com/rokwire/logging-library-go/v2/logutils"
 
-	"github.com/rokwire/core-auth-library-go/v2/authservice"
-	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
+	"github.com/rokwire/core-auth-library-go/v3/authservice"
+	"github.com/rokwire/core-auth-library-go/v3/tokenauth"
 )
 
 // Auth handler
@@ -80,7 +80,7 @@ func NewAuth(serviceRegManager *authservice.ServiceRegManager) (*Auth, error) {
 
 func newClientAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
 	clientPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/client_permission_policy.csv")
-	clientScopeAuth := authorization.NewCasbinStringAuthorization("driver/web/client_scope_policy.csv")
+	clientScopeAuth := authorization.NewCasbinScopeAuthorization("driver/web/client_scope_policy.csv", serviceRegManager.AuthService.ServiceID)
 	clientTokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, clientPermissionAuth, clientScopeAuth)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionCreate, "client token auth", nil, err)
@@ -97,8 +97,8 @@ func newClientAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth
 		return http.StatusOK, nil
 	}
 
-	auth := tokenauth.NewScopeHandler(*clientTokenAuth, check)
-	return &auth, nil
+	auth := tokenauth.NewScopeHandler(clientTokenAuth, check)
+	return auth, nil
 }
 
 func newAdminAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
@@ -116,8 +116,8 @@ func newAdminAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.
 		return http.StatusOK, nil
 	}
 
-	auth := tokenauth.NewStandardHandler(*adminTokenAuth, check)
-	return &auth, nil
+	auth := tokenauth.NewStandardHandler(adminTokenAuth, check)
+	return auth, nil
 }
 
 func newBBsAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
@@ -139,8 +139,8 @@ func newBBsAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.St
 		return http.StatusOK, nil
 	}
 
-	auth := tokenauth.NewStandardHandler(*bbsTokenAuth, check)
-	return &auth, nil
+	auth := tokenauth.NewStandardHandler(bbsTokenAuth, check)
+	return auth, nil
 }
 
 func newTPSAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
@@ -162,8 +162,8 @@ func newTPSAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.St
 		return http.StatusOK, nil
 	}
 
-	auth := tokenauth.NewStandardHandler(*tpsTokenAuth, check)
-	return &auth, nil
+	auth := tokenauth.NewStandardHandler(tpsTokenAuth, check)
+	return auth, nil
 }
 
 func newSystemAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
@@ -181,6 +181,6 @@ func newSystemAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth
 		return http.StatusOK, nil
 	}
 
-	auth := tokenauth.NewStandardHandler(*systemTokenAuth, check)
-	return &auth, nil
+	auth := tokenauth.NewStandardHandler(systemTokenAuth, check)
+	return auth, nil
 }

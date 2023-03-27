@@ -8,6 +8,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Added
 
 ### Fixed
+- Fix configs [#4](https://github.com/rokwire/building-block-template-go/issues/4)
 - Fix PerformTransaction [#1](https://github.com/rokwire/building-block-template-go/issues/1)
 
 ### Changed

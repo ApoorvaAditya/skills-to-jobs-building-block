@@ -93,8 +93,13 @@ func (d *database) start() error {
 	return nil
 }
 
-func (d *database) applyConfigsChecks(messages *collectionWrapper) error {
+func (d *database) applyConfigsChecks(configs *collectionWrapper) error {
 	d.logger.Info("apply configs checks.....")
+
+	err := configs.AddIndex(nil, bson.D{primitive.E{Key: "type", Value: 1}, primitive.E{Key: "app_id", Value: 1}, primitive.E{Key: "org_id", Value: 1}}, true)
+	if err != nil {
+		return err
+	}
 
 	d.logger.Info("apply configs passed")
 	return nil
@@ -104,7 +109,7 @@ func (d *database) applyExamplesChecks(examples *collectionWrapper) error {
 	d.logger.Info("apply examples checks.....")
 
 	//add compound unique index - org_id + app_id
-	err := examples.AddIndex(bson.D{primitive.E{Key: "org_id", Value: 1}, primitive.E{Key: "app_id", Value: 1}}, false)
+	err := examples.AddIndex(nil, bson.D{primitive.E{Key: "org_id", Value: 1}, primitive.E{Key: "app_id", Value: 1}}, false)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionCreate, "index", nil, err)
 	}

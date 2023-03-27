@@ -23,11 +23,11 @@ import (
 )
 
 // FindExample finds example by id
-func (a Adapter) FindExample(orgID string, appID string, id string) (*model.Example, error) {
+func (a *Adapter) FindExample(orgID string, appID string, id string) (*model.Example, error) {
 	filter := bson.M{"org_id": orgID, "app_id": appID, "_id": id}
 
 	var data *model.Example
-	err := a.db.examples.FindOneWithContext(a.context, filter, &data, nil)
+	err := a.db.examples.FindOne(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeExample, filterArgs(filter), err)
 	}
@@ -36,8 +36,8 @@ func (a Adapter) FindExample(orgID string, appID string, id string) (*model.Exam
 }
 
 // InsertExample inserts a new example
-func (a Adapter) InsertExample(example model.Example) error {
-	_, err := a.db.examples.InsertOneWithContext(a.context, example)
+func (a *Adapter) InsertExample(example model.Example) error {
+	_, err := a.db.examples.InsertOne(a.context, example)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionInsert, model.TypeExample, nil, err)
 	}
@@ -46,11 +46,11 @@ func (a Adapter) InsertExample(example model.Example) error {
 }
 
 // UpdateExample updates an example
-func (a Adapter) UpdateExample(example model.Example) error {
+func (a *Adapter) UpdateExample(example model.Example) error {
 	filter := bson.M{"org_id": example.OrgID, "app_id": example.AppID, "_id": example.ID}
 	update := bson.M{"$set": bson.M{"data": example.Data}}
 
-	_, err := a.db.examples.UpdateOneWithContext(a.context, filter, update, nil)
+	_, err := a.db.examples.UpdateOne(a.context, filter, update, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionUpdate, model.TypeExample, filterArgs(filter), err)
 	}
@@ -58,10 +58,10 @@ func (a Adapter) UpdateExample(example model.Example) error {
 }
 
 // DeleteExample deletes an example
-func (a Adapter) DeleteExample(orgID string, appID string, id string) error {
+func (a *Adapter) DeleteExample(orgID string, appID string, id string) error {
 	filter := bson.M{"org_id": orgID, "app_id": appID, "_id": id}
 
-	res, err := a.db.examples.DeleteOneWithContext(a.context, filter, nil)
+	res, err := a.db.examples.DeleteOne(a.context, filter, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionDelete, model.TypeExample, filterArgs(filter), err)
 	}

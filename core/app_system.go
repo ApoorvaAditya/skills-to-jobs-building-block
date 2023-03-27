@@ -23,19 +23,9 @@ type appSystem struct {
 	app *Application
 }
 
-// GetConfig gets the configs for the provided id
-func (a appSystem) GetConfig(id string) (*model.Config, error) {
-	return a.app.storage.GetConfig(id)
-}
-
-// SaveConfig saves the provided configs
-func (a appSystem) SaveConfig(configs model.Config) error {
-	return a.app.storage.SaveConfig(configs)
-}
-
-// DeleteConfig deletes the configs for the provided id
-func (a appSystem) DeleteConfig(id string) error {
-	return a.app.storage.DeleteConfig(id)
+// GetExample gets an Example by ID
+func (a appSystem) GetExample(orgID string, appID string, id string) (*model.Example, error) {
+	return a.app.shared.getExample(orgID, appID, id)
 }
 
 // newAppSystem creates new appSystem
