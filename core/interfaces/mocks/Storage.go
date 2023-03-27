@@ -71,6 +71,84 @@ func (_m *Storage) DeleteExample(orgID string, appID string, id string) error {
 	return r0
 }
 
+// FindConfig provides a mock function with given fields: configType, appID, orgID
+func (_m *Storage) FindConfig(configType string, appID string, orgID string) (*model.Config, error) {
+	ret := _m.Called(configType, appID, orgID)
+
+	var r0 *model.Config
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string, string, string) (*model.Config, error)); ok {
+		return rf(configType, appID, orgID)
+	}
+	if rf, ok := ret.Get(0).(func(string, string, string) *model.Config); ok {
+		r0 = rf(configType, appID, orgID)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Config)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string, string, string) error); ok {
+		r1 = rf(configType, appID, orgID)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// FindConfigByID provides a mock function with given fields: id
+func (_m *Storage) FindConfigByID(id string) (*model.Config, error) {
+	ret := _m.Called(id)
+
+	var r0 *model.Config
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) (*model.Config, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(string) *model.Config); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.Config)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// FindConfigs provides a mock function with given fields: configType
+func (_m *Storage) FindConfigs(configType *string) ([]model.Config, error) {
+	ret := _m.Called(configType)
+
+	var r0 []model.Config
+	var r1 error
+	if rf, ok := ret.Get(0).(func(*string) ([]model.Config, error)); ok {
+		return rf(configType)
+	}
+	if rf, ok := ret.Get(0).(func(*string) []model.Config); ok {
+		r0 = rf(configType)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).([]model.Config)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(*string) error); ok {
+		r1 = rf(configType)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // FindExample provides a mock function with given fields: orgID, appID, id
 func (_m *Storage) FindExample(orgID string, appID string, id string) (*model.Example, error) {
 	ret := _m.Called(orgID, appID, id)
@@ -135,11 +213,8 @@ func (_m *Storage) GetConfig(id string) (*model.Config, error) {
 	if rf, ok := ret.Get(0).(func(string) *model.Config); ok {
 		r0 = rf(id)
 	} else {
-		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*model.Config)
-		}
+		r0 = ret.Error(0)
 	}
-
 	if rf, ok := ret.Get(1).(func(string) error); ok {
 		r1 = rf(id)
 	} else {
@@ -147,6 +222,20 @@ func (_m *Storage) GetConfig(id string) (*model.Config, error) {
 	}
 
 	return r0, r1
+}
+
+// InsertConfig provides a mock function with given fields: config
+func (_m *Storage) InsertConfig(config model.Config) error {
+	ret := _m.Called(config)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.Config) error); ok {
+		r0 = rf(config)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
 }
 
 // InsertExample provides a mock function with given fields: example
@@ -182,13 +271,13 @@ func (_m *Storage) RegisterStorageListener(listener interfaces.StorageListener) 
 	_m.Called(listener)
 }
 
-// SaveConfig provides a mock function with given fields: configs
-func (_m *Storage) SaveConfig(configs model.Config) error {
-	ret := _m.Called(configs)
+// UpdateConfig provides a mock function with given fields: config
+func (_m *Storage) UpdateConfig(config model.Config) error {
+	ret := _m.Called(config)
 
 	var r0 error
 	if rf, ok := ret.Get(0).(func(model.Config) error); ok {
-		r0 = rf(configs)
+		r0 = rf(config)
 	} else {
 		r0 = ret.Error(0)
 	}

@@ -14,7 +14,11 @@
 
 package interfaces
 
-import "application/core/model"
+import (
+	"application/core/model"
+
+	"github.com/rokwire/core-auth-library-go/v3/tokenauth"
+)
 
 // Default exposes client APIs for the driver adapters
 type Default interface {
@@ -39,6 +43,12 @@ type Admin interface {
 	UpdateExample(example model.Example) error
 	AppendExample(example model.Example) (*model.Example, error)
 	DeleteExample(orgID string, appID string, id string) error
+
+	GetConfig(id string, claims *tokenauth.Claims) (*model.Config, error)
+	GetConfigs(configType *string, claims *tokenauth.Claims) ([]model.Config, error)
+	CreateConfig(config model.Config, claims *tokenauth.Claims) (*model.Config, error)
+	UpdateConfig(config model.Config, claims *tokenauth.Claims) error
+	DeleteConfig(id string, claims *tokenauth.Claims) error
 }
 
 // BBs exposes Building Block APIs for the driver adapters
@@ -53,7 +63,5 @@ type TPS interface {
 
 // System exposes system administrative APIs for the driver adapters
 type System interface {
-	GetConfig(id string) (*model.Config, error)
-	SaveConfig(configs model.Config) error
-	DeleteConfig(id string) error
+	GetExample(orgID string, appID string, id string) (*model.Example, error)
 }
