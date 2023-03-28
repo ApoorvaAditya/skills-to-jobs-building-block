@@ -25,8 +25,8 @@ import (
 	"gopkg.in/yaml.v2"
 
 	"github.com/gorilla/mux"
-	"github.com/rokwire/core-auth-library-go/v2/authservice"
-	"github.com/rokwire/core-auth-library-go/v2/tokenauth"
+	"github.com/rokwire/core-auth-library-go/v3/authservice"
+	"github.com/rokwire/core-auth-library-go/v3/tokenauth"
 
 	"github.com/rokwire/logging-library-go/v2/logs"
 	"github.com/rokwire/logging-library-go/v2/logutils"
@@ -89,6 +89,12 @@ func (a Adapter) Start() {
 	adminRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.adminAPIsHandler.updateExample, a.auth.admin.Permissions)).Methods("PUT")
 	adminRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.adminAPIsHandler.deleteExample, a.auth.admin.Permissions)).Methods("DELETE")
 
+	adminRouter.HandleFunc("/configs/{id}", a.wrapFunc(a.adminAPIsHandler.getConfig, a.auth.admin.Permissions)).Methods("GET")
+	adminRouter.HandleFunc("/configs", a.wrapFunc(a.adminAPIsHandler.getConfigs, a.auth.admin.Permissions)).Methods("GET")
+	adminRouter.HandleFunc("/configs", a.wrapFunc(a.adminAPIsHandler.createConfig, a.auth.admin.Permissions)).Methods("POST")
+	adminRouter.HandleFunc("/configs/{id}", a.wrapFunc(a.adminAPIsHandler.updateConfig, a.auth.admin.Permissions)).Methods("PUT")
+	adminRouter.HandleFunc("/configs/{id}", a.wrapFunc(a.adminAPIsHandler.deleteConfig, a.auth.admin.Permissions)).Methods("DELETE")
+
 	// BB APIs
 	bbsRouter := mainRouter.PathPrefix("/bbs").Subrouter()
 	bbsRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.bbsAPIsHandler.getExample, a.auth.bbs.Permissions)).Methods("GET")
@@ -99,9 +105,7 @@ func (a Adapter) Start() {
 
 	// System APIs
 	systemRouter := mainRouter.PathPrefix("/system").Subrouter()
-	systemRouter.HandleFunc("/configs/{id}", a.wrapFunc(a.systemAPIsHandler.getConfig, a.auth.system.Permissions)).Methods("GET")
-	systemRouter.HandleFunc("/configs/{id}", a.wrapFunc(a.systemAPIsHandler.saveConfig, a.auth.system.Permissions)).Methods("PUT")
-	systemRouter.HandleFunc("/configs/{id}", a.wrapFunc(a.systemAPIsHandler.deleteConfig, a.auth.system.Permissions)).Methods("DELETE")
+	systemRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.systemAPIsHandler.getExample, a.auth.system.Permissions)).Methods("GET")
 
 	a.logger.Fatalf("Error serving: %v", http.ListenAndServe(":"+a.port, router))
 }
@@ -164,7 +168,9 @@ func (a Adapter) wrapFunc(handler handlerFunc, authorization tokenauth.Handler) 
 				return
 			}
 
-			logObj.SetContext("account_id", claims.Subject)
+			if claims != nil {
+				logObj.SetContext("account_id", claims.Subject)
+			}
 			response = handler(logObj, req, claims)
 		} else {
 			response = handler(logObj, req, nil)

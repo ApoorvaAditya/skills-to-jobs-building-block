@@ -1,0 +1,12 @@
+{
+    "app_secret": {
+        "SKILLS_TO_JOBS_MONGO_AUTH": "<mongodb-connection-string>"
+    },
+    "app_config": {
+        "SKILLS_TO_JOBS_BASE_URL": "<service-base-url>",
+        "SKILLS_TO_JOBS_PORT": "5000",
+        "SKILLS_TO_JOBS_MONGO_DATABASE": "<service-db-name>",
+        "SKILLS_TO_JOBS_MONGO_TIMEOUT": "",
+        "SKILLS_TO_JOBS_CORE_BB_BASE_URL": "<core-bb-base-url>"
+    }
+}

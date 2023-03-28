@@ -21,9 +21,9 @@ The API documentation is available here: https://api.rokwire.illinois.edu/skills
 ## Set Up
 
 ### Prerequisites
-MongoDB v4.2.2+
+MongoDB v4.4+
 
-Go v1.19+
+Go v1.20+
 
 ### Environment variables
 The following Environment variables are supported. The service will not start unless those marked as Required are supplied.
@@ -130,7 +130,7 @@ curl -X GET -i https://api-dev.rokwire.illinois.edu/skills-to-jobs/api/version
 
 Response
 ```
-0.1.2
+1.0.0
 ```
 
 ## Contributing
@@ -144,3 +144,15 @@ This repository is configured with a [pre-commit](https://pre-commit.com/) hook 
 $ git pull  # Pull in pre-commit configuration & baseline 
 $ pip install pre-commit 
 $ pre-commit install
+```
+
+If detect-secrets returns an error, ensure that the value it detected is not a secret, then run the following to update the secrets baseline file to match the current state of the codebase:
+
+```
+detect-secrets scan --baseline .secrets.baseline
+```
+
+### Environment Variables
+All environment variables **MUST** be declared in the appropriate section of [app-env.json](app-env.json). Declare all secret environment variables in the `app_secret` section and all others in the `app_config` section. 
+
+If the default value of a config is known and should be consistent across environments, provide the value directly in this file. Please note that this **DOES NOT** apply to secrets, as secret values **MUST NOT** be pushed to this repository. For other configs and all secrets, provide a hint for all required values and set all optional values to an empty string (ie. `""`). 
