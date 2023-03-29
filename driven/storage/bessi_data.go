@@ -28,7 +28,7 @@ func (a Adapter) GetBessiData(id string) (*model.BessiData, error) {
 	filter := bson.M{"_id": id}
 
 	var data *model.BessiData
-	err := a.db.bessiDatas.FindOneWithContext(a.context, filter, &data, nil)
+	err := a.db.bessiDatas.FindOne(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeBessiData, filterArgs(filter), err)
 	}
@@ -38,7 +38,7 @@ func (a Adapter) GetBessiData(id string) (*model.BessiData, error) {
 
 // CreateBessiData inserts a new bessiData
 func (a Adapter) CreateBessiData(bessiData model.BessiData) error {
-	_, err := a.db.bessiDatas.InsertOneWithContext(a.context, bessiData)
+	_, err := a.db.bessiDatas.InsertOne(a.context, bessiData)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionInsert, model.TypeBessiData, nil, err)
 	}
@@ -51,7 +51,7 @@ func (a Adapter) UpdateBessiData(bessiData model.BessiData) error {
 	filter := bson.M{"_id": bessiData.ID}
 	update := bson.M{"$set": bson.M{"scores": bessiData.Scores, "date_updated": time.Now()}}
 
-	_, err := a.db.bessiDatas.UpdateOneWithContext(a.context, filter, update, nil)
+	_, err := a.db.bessiDatas.UpdateOne(a.context, filter, update, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionUpdate, model.TypeBessiData, filterArgs(filter), err)
 	}
@@ -62,7 +62,7 @@ func (a Adapter) UpdateBessiData(bessiData model.BessiData) error {
 func (a Adapter) DeleteBessiData(id string) error {
 	filter := bson.M{"_id": id}
 
-	res, err := a.db.bessiDatas.DeleteOneWithContext(a.context, filter, nil)
+	res, err := a.db.bessiDatas.DeleteOne(a.context, filter, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionDelete, model.TypeBessiData, filterArgs(filter), err)
 	}
