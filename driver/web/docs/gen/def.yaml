@@ -84,7 +84,7 @@ paths:
       description: |
         Posts BESSI data
 
-        **Auth:** Requires valid user token with `post_bessi_datas` permission
+        **Auth:** Requires valid user token
       security:
         - bearerAuth: []
       requestBody:
@@ -114,7 +114,7 @@ paths:
       description: |
         Gets BESSI data
 
-        **Auth:** Requires valid user token with `get_bessi_datas` permission
+        **Auth:** Requires valid user token
       security:
         - bearerAuth: []
       parameters:

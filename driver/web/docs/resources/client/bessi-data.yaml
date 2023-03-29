@@ -5,7 +5,7 @@ post:
   description: |
     Posts BESSI data
 
-    **Auth:** Requires valid user token with `post_bessi_datas` permission
+    **Auth:** Requires valid user token
   security:
     - bearerAuth: []
   requestBody:
