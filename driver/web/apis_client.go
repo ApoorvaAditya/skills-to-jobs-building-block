@@ -77,6 +77,7 @@ func (h ClientAPIsHandler) createBessiData(l *logs.Log, r *http.Request, claims 
 	}
 
 	bessiData, err := h.app.Client.CreateBessiData(requestData)
+	bessiData.ID = claims.Subject
 	if err != nil || bessiData == nil {
 		return l.HTTPResponseErrorAction(logutils.ActionCreate, model.TypeBessiData, nil, err, http.StatusInternalServerError, true)
 	}
