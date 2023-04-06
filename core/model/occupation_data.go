@@ -24,10 +24,6 @@ const (
 	TypeOccupationData logutils.MessageDataType = "occupation"
 )
 
-type OccupationListData struct {
-	Occupations      []OccupationData `json:"occupations" bson:"occupations"`
-}
-
 // OccupationData represents the survey results from the Occupation
 type OccupationData struct {
 	Code       string       `json:"code" bson:"code"`		
