@@ -28,7 +28,11 @@ type Default interface {
 // Client exposes client APIs for the driver adapters
 type Client interface {
 	GetExample(orgID string, appID string, id string) (*model.Example, error)
+	GetOccupationData(code string) (*model.OccupationData, error)
+	GetOccupationListData() ([]model.OccupationData, error)
 }
+
+
 
 // Admin exposes administrative APIs for the driver adapters
 type Admin interface {

@@ -30,3 +30,11 @@ func (a appClient) GetExample(orgID string, appID string, id string) (*model.Exa
 func newAppClient(app *Application) appClient {
 	return appClient{app: app}
 }
+
+func (a appClient) GetOccupationData(code string) (*model.OccupationData, error) {
+	return a.app.storage.GetOccupationData(code)
+}
+
+func (a appClient) GetOccupationListData() ([]model.OccupationData, error) {
+	return a.app.storage.GetOccupationListData()
+}
