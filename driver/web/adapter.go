@@ -76,8 +76,7 @@ func (a Adapter) Start() {
 
 	// Occupation API
 	mainRouter.HandleFunc("/occupation/{code}", a.wrapFunc(a.clientAPIsHandler.getOccupationData, a.auth.client.User)).Methods("GET")
-	mainRouter.HandleFunc("/occupations", a.wrapFunc(a.clientAPIsHandler.getOccupationListData, a.auth.client.User)).Methods("GET")
-	
+	mainRouter.HandleFunc("/occupation", a.wrapFunc(a.clientAPIsHandler.GetAllOccupationDatas, a.auth.client.User)).Methods("GET")
 
 	// Admin APIs
 	adminRouter := mainRouter.PathPrefix("/admin").Subrouter()

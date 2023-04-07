@@ -35,7 +35,7 @@ func (a Adapter) GetOccupationData(code string) (*model.OccupationData, error) {
 	return data, nil
 }
 
-func (a Adapter) GetOccupationListData() ([]model.OccupationData, error) {
+func (a Adapter) GetAllOccupationDatas() ([]model.OccupationData, error) {
 	filter := bson.M{}
 	var data []model.OccupationData
 	err := a.db.occupationDatas.Find(a.context, filter, &data, nil)

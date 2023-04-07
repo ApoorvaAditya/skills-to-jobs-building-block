@@ -35,6 +35,6 @@ func (a appClient) GetOccupationData(code string) (*model.OccupationData, error)
 	return a.app.storage.GetOccupationData(code)
 }
 
-func (a appClient) GetOccupationListData() ([]model.OccupationData, error) {
-	return a.app.storage.GetOccupationListData()
+func (a appClient) GetAllOccupationDatas() ([]model.OccupationData, error) {
+	return a.app.storage.GetAllOccupationDatas()
 }

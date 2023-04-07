@@ -34,9 +34,9 @@ type Storage interface {
 	InsertExample(example model.Example) error
 	UpdateExample(example model.Example) error
 	DeleteExample(orgID string, appID string, id string) error
-	
+
 	GetOccupationData(id string) (*model.OccupationData, error)
-	GetOccupationListData() ([]model.OccupationData, error)
+	GetAllOccupationDatas() ([]model.OccupationData, error)
 }
 
 // StorageListener represents storage listener

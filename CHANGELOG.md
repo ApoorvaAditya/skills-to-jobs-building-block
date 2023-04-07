@@ -6,10 +6,9 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added endpoints for storing ONET occupation data [#4](https://github.com/ApoorvaAditya/skills-to-jobs-building-block/issues/4)
 
 ### Fixed
-- Fix configs [#4](https://github.com/rokwire/building-block-template-go/issues/4)
-- Fix PerformTransaction [#1](https://github.com/rokwire/building-block-template-go/issues/1)
 
 ### Changed
 

@@ -50,11 +50,6 @@ func (h ClientAPIsHandler) getExample(l *logs.Log, r *http.Request, claims *toke
 	return l.HTTPResponseSuccessJSON(response)
 }
 
-// NewClientAPIsHandler creates new client API handler instance
-func NewClientAPIsHandler(app *core.Application) ClientAPIsHandler {
-	return ClientAPIsHandler{app: app}
-}
-
 func (h ClientAPIsHandler) getOccupationData(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
 	params := mux.Vars(r)
 	code := params["code"]
@@ -74,9 +69,8 @@ func (h ClientAPIsHandler) getOccupationData(l *logs.Log, r *http.Request, claim
 	return l.HTTPResponseSuccessJSON(response)
 }
 
-// TODO
-func (h ClientAPIsHandler) getOccupationListData(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
-	occupationData, err := h.app.Client.GetOccupationListData()
+func (h ClientAPIsHandler) GetAllOccupationDatas(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
+	occupationData, err := h.app.Client.GetAllOccupationDatas()
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionGet, model.TypeOccupationData, nil, err, http.StatusInternalServerError, true)
 	}
@@ -88,3 +82,7 @@ func (h ClientAPIsHandler) getOccupationListData(l *logs.Log, r *http.Request, c
 	return l.HTTPResponseSuccessJSON(response)
 }
 
+// NewClientAPIsHandler creates new client API handler instance
+func NewClientAPIsHandler(app *core.Application) ClientAPIsHandler {
+	return ClientAPIsHandler{app: app}
+}
