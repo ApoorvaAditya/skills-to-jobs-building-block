@@ -15,7 +15,6 @@
 package model
 
 import (
-
 	"github.com/rokwire/logging-library-go/v2/logutils"
 )
 
@@ -26,7 +25,7 @@ const (
 
 // OccupationData represents the survey results from the Occupation
 type OccupationData struct {
-	Code       string       `json:"code" bson:"code"`		
-	Title      string 		`json:"title" bson:"title"`
-	Description string		`json:"description" bson:"description"`
+	Code        string `json:"code" bson:"code"`
+	Title       string `json:"title" bson:"title"`
+	Description string `json:"description" bson:"description"`
 }

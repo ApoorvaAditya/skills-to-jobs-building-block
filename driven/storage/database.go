@@ -41,7 +41,7 @@ type database struct {
 
 	configs             *collectionWrapper
 	examples            *collectionWrapper
-  occupationDatas     *collectionWrapper
+	occupationDatas     *collectionWrapper
 	userMatchingResults *collectionWrapper
 	surveyDatas         *collectionWrapper
 
@@ -86,7 +86,7 @@ func (d *database) start() error {
 
 	occupationDatas := &collectionWrapper{database: d, coll: db.Collection("occupationDatas")}
 	err = d.applyOccupationDatasChecks(occupationDatas)
-  if err != nil {
+	if err != nil {
 		return err
 	}
 
@@ -108,7 +108,7 @@ func (d *database) start() error {
 
 	d.configs = configs
 	d.examples = examples
-  d.occupationDatas = occupationDatas
+	d.occupationDatas = occupationDatas
 	d.userMatchingResults = userMatchingResults
 	d.surveyDatas = surveyDatas
 
@@ -146,7 +146,7 @@ func (d *database) applyOccupationDatasChecks(messages *collectionWrapper) error
 	d.logger.Info("apply occupationDatas checks.....")
 
 	d.logger.Info("apply occupationDatas passed")
-  return nil
+	return nil
 }
 
 func (d *database) applyUserMatchingResultsChecks(messages *collectionWrapper) error {
