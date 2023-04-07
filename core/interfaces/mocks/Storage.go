@@ -15,6 +15,34 @@ type Storage struct {
 	mock.Mock
 }
 
+// CreateSurveyData provides a mock function with given fields: surveyData
+func (_m *Storage) CreateSurveyData(surveyData model.SurveyData) error {
+	ret := _m.Called(surveyData)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.SurveyData) error); ok {
+		r0 = rf(surveyData)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// CreateUserMatchingResult provides a mock function with given fields: bessiData
+func (_m *Storage) CreateUserMatchingResult(bessiData model.UserMatchingResult) error {
+	ret := _m.Called(bessiData)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.UserMatchingResult) error); ok {
+		r0 = rf(bessiData)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // DeleteConfig provides a mock function with given fields: id
 func (_m *Storage) DeleteConfig(id string) error {
 	ret := _m.Called(id)
@@ -36,6 +64,34 @@ func (_m *Storage) DeleteExample(orgID string, appID string, id string) error {
 	var r0 error
 	if rf, ok := ret.Get(0).(func(string, string, string) error); ok {
 		r0 = rf(orgID, appID, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// DeleteSurveyData provides a mock function with given fields: id
+func (_m *Storage) DeleteSurveyData(id string) error {
+	ret := _m.Called(id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string) error); ok {
+		r0 = rf(id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// DeleteUserMatchingResult provides a mock function with given fields: id
+func (_m *Storage) DeleteUserMatchingResult(id string) error {
+	ret := _m.Called(id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string) error); ok {
+		r0 = rf(id)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -173,6 +229,32 @@ func (_m *Storage) GetOccupationData(id string) (*model.OccupationData, error) {
 	return r0, r1
 }
 
+// GetSurveyData provides a mock function with given fields: id
+func (_m *Storage) GetSurveyData(id string) (*model.SurveyData, error) {
+	ret := _m.Called(id)
+
+	var r0 *model.SurveyData
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) (*model.SurveyData, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(string) *model.SurveyData); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.SurveyData)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // GetAllOccupationDatas provides a mock function with given fields:
 func (_m *Storage) GetAllOccupationDatas() ([]model.OccupationData, error) {
 	ret := _m.Called()
@@ -192,6 +274,32 @@ func (_m *Storage) GetAllOccupationDatas() ([]model.OccupationData, error) {
 
 	if rf, ok := ret.Get(1).(func() error); ok {
 		r1 = rf()
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
+// GetUserMatchingResult provides a mock function with given fields: id
+func (_m *Storage) GetUserMatchingResult(id string) (*model.UserMatchingResult, error) {
+	ret := _m.Called(id)
+
+	var r0 *model.UserMatchingResult
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) (*model.UserMatchingResult, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(string) *model.UserMatchingResult); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.UserMatchingResult)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(id)
 	} else {
 		r1 = ret.Error(1)
 	}
@@ -267,6 +375,34 @@ func (_m *Storage) UpdateExample(example model.Example) error {
 	var r0 error
 	if rf, ok := ret.Get(0).(func(model.Example) error); ok {
 		r0 = rf(example)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateSurveyData provides a mock function with given fields: surveyData
+func (_m *Storage) UpdateSurveyData(surveyData model.SurveyData) error {
+	ret := _m.Called(surveyData)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.SurveyData) error); ok {
+		r0 = rf(surveyData)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateUserMatchingResult provides a mock function with given fields: bessiData
+func (_m *Storage) UpdateUserMatchingResult(bessiData model.UserMatchingResult) error {
+	ret := _m.Called(bessiData)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.UserMatchingResult) error); ok {
+		r0 = rf(bessiData)
 	} else {
 		r0 = ret.Error(0)
 	}

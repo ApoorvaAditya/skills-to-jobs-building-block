@@ -40,6 +40,18 @@ paths:
   /api/occupation/{id}:
     $ref: "./resources/client/occupation-id.yaml"
 
+  /api/user-match-results/{id}:
+    $ref: "./resources/client/user-matching-result-id.yaml"
+
+  /api/user-match-results:
+    $ref: "./resources/client/user-matching-result.yaml"
+
+  /api/survey-data:
+    $ref: "./resources/client/survey-data.yaml"
+
+  /api/survey-data/{id}:
+    $ref: "./resources/client/survey-data-id.yaml"
+
   # Admin
   /api/admin/examples:
     $ref: "./resources/admin/examples.yaml"

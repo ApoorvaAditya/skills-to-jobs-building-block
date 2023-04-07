@@ -1,0 +1,11 @@
+type: object
+required:
+- occupation_code
+- score
+properties:
+  occupation_code:
+    type: string
+    readOnly: true
+  score:
+    type: float
+    readOnly: true

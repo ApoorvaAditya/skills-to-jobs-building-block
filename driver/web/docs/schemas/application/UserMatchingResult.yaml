@@ -1,0 +1,26 @@
+type: object
+required:
+- id
+- version
+- matches
+- date_created
+- date_updated
+properties:
+  id:
+    type: string
+    readOnly: true
+  version:
+    type: string
+    readOnly: true
+  matches:
+    type: array
+    items:
+      $ref: "./Match.yaml" 
+    readOnly: true
+  date_created:
+    type: string
+    readOnly: true
+  date_updated:
+    type: string 
+    nullable: true
+    readOnly: true
