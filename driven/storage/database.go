@@ -85,7 +85,7 @@ func (d *database) start() error {
 
 	userMatchingResults := &collectionWrapper{database: d, coll: db.Collection("userMatchingResults")}
 	err = d.applyUserMatchingResultsChecks(userMatchingResults)
-  if err != nil {
+	if err != nil {
 		return err
 	}
 
@@ -138,7 +138,7 @@ func (d *database) applyUserMatchingResultsChecks(messages *collectionWrapper) e
 	d.logger.Info("apply userMatchingResults checks.....")
 
 	d.logger.Info("apply userMatchingResults passed")
-  return nil
+	return nil
 }
 
 func (d *database) applySurveyDatasChecks(messages *collectionWrapper) error {
