@@ -35,6 +35,11 @@ type Storage interface {
 	UpdateExample(example model.Example) error
 	DeleteExample(orgID string, appID string, id string) error
 
+	GetUserMatchingResult(id string) (*model.UserMatchingResult, error)
+	CreateUserMatchingResult(bessiData model.UserMatchingResult) error
+	UpdateUserMatchingResult(bessiData model.UserMatchingResult) error
+	DeleteUserMatchingResult(id string) error
+
 	GetSurveyData(id string) (*model.SurveyData, error)
 	CreateSurveyData(surveyData model.SurveyData) error
 	UpdateSurveyData(surveyData model.SurveyData) error

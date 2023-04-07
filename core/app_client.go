@@ -33,6 +33,32 @@ func (a appClient) GetExample(orgID string, appID string, id string) (*model.Exa
 	return a.app.shared.getExample(orgID, appID, id)
 }
 
+// GetUserMatchingResult gets an UserMatchingResult by ID
+func (a appClient) GetUserMatchingResult(id string) (*model.UserMatchingResult, error) {
+	return a.app.storage.GetUserMatchingResult(id)
+}
+
+// CreateUserMatchingResult creates a new UserMatchingResult
+func (a appClient) CreateUserMatchingResult(userMatchingResult model.UserMatchingResult) (*model.UserMatchingResult, error) {
+	userMatchingResult.ID = uuid.NewString()
+	userMatchingResult.DateCreated = time.Now()
+	err := a.app.storage.CreateUserMatchingResult(userMatchingResult)
+	if err != nil {
+		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeUserMatchingResult, nil, err)
+	}
+	return &userMatchingResult, nil
+}
+
+// UpdateUserMatchingResult updates an UserMatchingResult
+func (a appClient) UpdateUserMatchingResult(userMatchingResult model.UserMatchingResult) error {
+	return a.app.storage.UpdateUserMatchingResult(userMatchingResult)
+}
+
+// DeleteUserMatchingResult deletes an UserMatchingResult by ID
+func (a appClient) DeleteUserMatchingResult(id string) error {
+	return a.app.storage.DeleteUserMatchingResult(id)
+}
+
 // GetSurveyData gets a SurveyData by ID
 func (a appClient) GetSurveyData(id string) (*model.SurveyData, error) {
 	return a.app.storage.GetSurveyData(id)

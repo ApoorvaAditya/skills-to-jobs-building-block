@@ -29,6 +29,12 @@ type Default interface {
 type Client interface {
 	GetExample(orgID string, appID string, id string) (*model.Example, error)
 
+	// UserMatchingResult APIs
+	GetUserMatchingResult(id string) (*model.UserMatchingResult, error)
+	CreateUserMatchingResult(example model.UserMatchingResult) (*model.UserMatchingResult, error)
+	UpdateUserMatchingResult(example model.UserMatchingResult) error
+	DeleteUserMatchingResult(id string) error
+
 	// Survey Data APIs
 	GetSurveyData(id string) (*model.SurveyData, error)
 	CreateSurveyData(example model.SurveyData) (*model.SurveyData, error)

@@ -29,6 +29,20 @@ func (_m *Storage) CreateSurveyData(surveyData model.SurveyData) error {
 	return r0
 }
 
+// CreateUserMatchingResult provides a mock function with given fields: bessiData
+func (_m *Storage) CreateUserMatchingResult(bessiData model.UserMatchingResult) error {
+	ret := _m.Called(bessiData)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.UserMatchingResult) error); ok {
+		r0 = rf(bessiData)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
 // DeleteConfig provides a mock function with given fields: id
 func (_m *Storage) DeleteConfig(id string) error {
 	ret := _m.Called(id)
@@ -59,6 +73,20 @@ func (_m *Storage) DeleteExample(orgID string, appID string, id string) error {
 
 // DeleteSurveyData provides a mock function with given fields: id
 func (_m *Storage) DeleteSurveyData(id string) error {
+	ret := _m.Called(id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string) error); ok {
+		r0 = rf(id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// DeleteUserMatchingResult provides a mock function with given fields: id
+func (_m *Storage) DeleteUserMatchingResult(id string) error {
 	ret := _m.Called(id)
 
 	var r0 error
@@ -201,6 +229,32 @@ func (_m *Storage) GetSurveyData(id string) (*model.SurveyData, error) {
 	return r0, r1
 }
 
+// GetUserMatchingResult provides a mock function with given fields: id
+func (_m *Storage) GetUserMatchingResult(id string) (*model.UserMatchingResult, error) {
+	ret := _m.Called(id)
+
+	var r0 *model.UserMatchingResult
+	var r1 error
+	if rf, ok := ret.Get(0).(func(string) (*model.UserMatchingResult, error)); ok {
+		return rf(id)
+	}
+	if rf, ok := ret.Get(0).(func(string) *model.UserMatchingResult); ok {
+		r0 = rf(id)
+	} else {
+		if ret.Get(0) != nil {
+			r0 = ret.Get(0).(*model.UserMatchingResult)
+		}
+	}
+
+	if rf, ok := ret.Get(1).(func(string) error); ok {
+		r1 = rf(id)
+	} else {
+		r1 = ret.Error(1)
+	}
+
+	return r0, r1
+}
+
 // InsertConfig provides a mock function with given fields: config
 func (_m *Storage) InsertConfig(config model.Config) error {
 	ret := _m.Called(config)
@@ -283,6 +337,20 @@ func (_m *Storage) UpdateSurveyData(surveyData model.SurveyData) error {
 	var r0 error
 	if rf, ok := ret.Get(0).(func(model.SurveyData) error); ok {
 		r0 = rf(surveyData)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateUserMatchingResult provides a mock function with given fields: bessiData
+func (_m *Storage) UpdateUserMatchingResult(bessiData model.UserMatchingResult) error {
+	ret := _m.Called(bessiData)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.UserMatchingResult) error); ok {
+		r0 = rf(bessiData)
 	} else {
 		r0 = ret.Error(0)
 	}
