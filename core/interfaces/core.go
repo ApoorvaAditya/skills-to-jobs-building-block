@@ -35,14 +35,14 @@ type Client interface {
 
 	// UserMatchingResult APIs
 	GetUserMatchingResult(id string) (*model.UserMatchingResult, error)
-	CreateUserMatchingResult(example model.UserMatchingResult) (*model.UserMatchingResult, error)
-	UpdateUserMatchingResult(example model.UserMatchingResult) error
+	CreateUserMatchingResult(userMatchingResult model.UserMatchingResult) (*model.UserMatchingResult, error)
+	UpdateUserMatchingResult(userMatchingResult model.UserMatchingResult) error
 	DeleteUserMatchingResult(id string) error
 
 	// Survey Data APIs
 	GetSurveyData(id string) (*model.SurveyData, error)
-	CreateSurveyData(example model.SurveyData) (*model.SurveyData, error)
-	UpdateSurveyData(example model.SurveyData) error
+	CreateSurveyData(surveyData model.SurveyData) (*model.SurveyData, error)
+	UpdateSurveyData(surveyData model.SurveyData) error
 	DeleteSurveyData(id string) error
 }
 
