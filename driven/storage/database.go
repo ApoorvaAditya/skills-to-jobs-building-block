@@ -39,8 +39,9 @@ type database struct {
 	dbClient *mongo.Client
 	logger   *logs.Logger
 
-	configs  *collectionWrapper
-	examples *collectionWrapper
+	configs     *collectionWrapper
+	examples    *collectionWrapper
+	surveyDatas *collectionWrapper
 
 	listeners []interfaces.StorageListener
 }
@@ -81,12 +82,19 @@ func (d *database) start() error {
 		return err
 	}
 
+	surveyDatas := &collectionWrapper{database: d, coll: db.Collection("surveyDatas")}
+	err = d.applySurveyDatasChecks(surveyDatas)
+	if err != nil {
+		return err
+	}
+
 	//assign the db, db client and the collections
 	d.db = db
 	d.dbClient = client
 
 	d.configs = configs
 	d.examples = examples
+	d.surveyDatas = surveyDatas
 
 	go d.configs.Watch(nil, d.logger)
 
@@ -115,6 +123,13 @@ func (d *database) applyExamplesChecks(examples *collectionWrapper) error {
 	}
 
 	d.logger.Info("apply examples passed")
+	return nil
+}
+
+func (d *database) applySurveyDatasChecks(messages *collectionWrapper) error {
+	d.logger.Info("apply surveyDatas checks.....")
+
+	d.logger.Info("apply surveyDatas passed")
 	return nil
 }
 

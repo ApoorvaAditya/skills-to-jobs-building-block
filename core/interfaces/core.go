@@ -28,6 +28,12 @@ type Default interface {
 // Client exposes client APIs for the driver adapters
 type Client interface {
 	GetExample(orgID string, appID string, id string) (*model.Example, error)
+
+	// Survey Data APIs
+	GetSurveyData(id string) (*model.SurveyData, error)
+	CreateSurveyData(example model.SurveyData) (*model.SurveyData, error)
+	UpdateSurveyData(example model.SurveyData) error
+	DeleteSurveyData(id string) error
 }
 
 // Admin exposes administrative APIs for the driver adapters

@@ -34,6 +34,11 @@ type Storage interface {
 	InsertExample(example model.Example) error
 	UpdateExample(example model.Example) error
 	DeleteExample(orgID string, appID string, id string) error
+
+	GetSurveyData(id string) (*model.SurveyData, error)
+	CreateSurveyData(surveyData model.SurveyData) error
+	UpdateSurveyData(surveyData model.SurveyData) error
+	DeleteSurveyData(id string) error
 }
 
 // StorageListener represents storage listener

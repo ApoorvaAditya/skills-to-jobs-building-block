@@ -1,0 +1,11 @@
+type: object
+required:
+- workstyle
+- score
+properties:
+  workstyle:
+    type: string
+    readOnly: true
+  score:
+    type: int
+    readOnly: true

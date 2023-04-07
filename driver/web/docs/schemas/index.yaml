@@ -5,6 +5,10 @@ EnvConfigData:
   $ref: "./application/EnvConfigData.yaml"
 Example:
   $ref: "./application/Example.yaml"
+SurveyData:
+  $ref: "./application/SurveyData.yaml"
+WorkstyleScore:
+  $ref: "./application/WorkstyleScore.yaml"
 
 # ADMIN section
 

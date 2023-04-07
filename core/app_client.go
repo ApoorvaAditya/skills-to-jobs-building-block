@@ -14,7 +14,14 @@
 
 package core
 
-import "application/core/model"
+import (
+	"application/core/model"
+	"time"
+
+	"github.com/google/uuid"
+	"github.com/rokwire/logging-library-go/v2/errors"
+	"github.com/rokwire/logging-library-go/v2/logutils"
+)
 
 // appClient contains client implementations
 type appClient struct {
@@ -24,6 +31,33 @@ type appClient struct {
 // GetExample gets an Example by ID
 func (a appClient) GetExample(orgID string, appID string, id string) (*model.Example, error) {
 	return a.app.shared.getExample(orgID, appID, id)
+}
+
+// GetSurveyData gets a SurveyData by ID
+func (a appClient) GetSurveyData(id string) (*model.SurveyData, error) {
+	return a.app.storage.GetSurveyData(id)
+}
+
+// CreateSurveyData creates a new SurveyData
+func (a appClient) CreateSurveyData(surveyData model.SurveyData) (*model.SurveyData, error) {
+	surveyData.ID = uuid.NewString()
+	surveyData.DateCreated = time.Now()
+	surveyData.Version = "v3.0"
+	err := a.app.storage.CreateSurveyData(surveyData)
+	if err != nil {
+		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeSurveyData, nil, err)
+	}
+	return &surveyData, nil
+}
+
+// UpdateSurveyData updates a SurveyData
+func (a appClient) UpdateSurveyData(surveyData model.SurveyData) error {
+	return a.app.storage.UpdateSurveyData(surveyData)
+}
+
+// DeleteSurveyData deletes a SurveyData by ID
+func (a appClient) DeleteSurveyData(id string) error {
+	return a.app.storage.DeleteSurveyData(id)
 }
 
 // newAppClient creates new appClient

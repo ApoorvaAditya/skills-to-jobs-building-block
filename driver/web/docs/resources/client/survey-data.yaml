@@ -1,0 +1,29 @@
+post:
+  tags:
+  - Client
+  summary: Posts the Survey data
+  description: |
+    Posts Survey data
+
+    **Auth:** Requires valid user token
+  security:
+    - bearerAuth: []
+  requestBody:
+    required: true
+    content:
+      application/json:
+        schema:
+          $ref: "../../schemas/application/SurveyData.yaml"
+  responses:
+    200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/application/SurveyData.yaml"
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error
