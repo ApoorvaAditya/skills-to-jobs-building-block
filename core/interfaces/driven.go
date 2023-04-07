@@ -35,10 +35,10 @@ type Storage interface {
 	UpdateExample(example model.Example) error
 	DeleteExample(orgID string, appID string, id string) error
 
-	GetBessiData(id string) (*model.BessiData, error)
-	CreateBessiData(bessiData model.BessiData) error
-	UpdateBessiData(bessiData model.BessiData) error
-	DeleteBessiData(id string) error
+	GetSurveyData(id string) (*model.SurveyData, error)
+	CreateSurveyData(surveyData model.SurveyData) error
+	UpdateSurveyData(surveyData model.SurveyData) error
+	DeleteSurveyData(id string) error
 }
 
 // StorageListener represents storage listener

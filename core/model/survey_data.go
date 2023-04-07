@@ -21,12 +21,12 @@ import (
 )
 
 const (
-	//TypeBessiData data type
-	TypeBessiData logutils.MessageDataType = "bessi"
+	//TypeSurveyData data type
+	TypeSurveyData logutils.MessageDataType = "survey_data"
 )
 
-// BessiData represents the survey results from the BESSI
-type BessiData struct {
+// SurveyData represents the survey results from the BESSI Survey
+type SurveyData struct {
 	ID          string           `json:"id" bson:"_id"`
 	Scores      []WorkstyleScore `json:"scores" bson:"scores"`
 	DateCreated time.Time        `json:"date_created" bson:"date_created"`

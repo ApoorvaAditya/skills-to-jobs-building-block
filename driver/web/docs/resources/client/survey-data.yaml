@@ -1,9 +1,9 @@
 post:
   tags:
   - Client
-  summary: Posts the BESSI data
+  summary: Posts the Survey data
   description: |
-    Posts BESSI data
+    Posts Survey data
 
     **Auth:** Requires valid user token
   security:
@@ -13,14 +13,14 @@ post:
     content:
       application/json:
         schema:
-          $ref: "../../schemas/application/BessiData.yaml"
+          $ref: "../../schemas/application/SurveyData.yaml"
   responses:
     200:
       description: Success
       content:
         application/json:
           schema:
-            $ref: "../../schemas/application/BessiData.yaml"
+            $ref: "../../schemas/application/SurveyData.yaml"
     400:
       description: Bad request
     401:

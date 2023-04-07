@@ -34,11 +34,11 @@ paths:
   /api/examples/{id}:
     $ref: "./resources/client/examples-id.yaml"
 
-  /api/bessi:
-    $ref: "./resources/client/bessi-data.yaml"
+  /api/survey-data:
+    $ref: "./resources/client/survey-data.yaml"
 
-  /api/bessi/{id}:
-    $ref: "./resources/client/bessi-data-id.yaml"
+  /api/survey-data/{id}:
+    $ref: "./resources/client/survey-data-id.yaml"
 
   # Admin
   /api/admin/examples:

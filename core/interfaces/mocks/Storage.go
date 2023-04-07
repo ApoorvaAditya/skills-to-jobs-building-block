@@ -15,27 +15,13 @@ type Storage struct {
 	mock.Mock
 }
 
-// CreateBessiData provides a mock function with given fields: bessiData
-func (_m *Storage) CreateBessiData(bessiData model.BessiData) error {
-	ret := _m.Called(bessiData)
+// CreateSurveyData provides a mock function with given fields: surveyData
+func (_m *Storage) CreateSurveyData(surveyData model.SurveyData) error {
+	ret := _m.Called(surveyData)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(model.BessiData) error); ok {
-		r0 = rf(bessiData)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
-// DeleteBessiData provides a mock function with given fields: id
-func (_m *Storage) DeleteBessiData(id string) error {
-	ret := _m.Called(id)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(string) error); ok {
-		r0 = rf(id)
+	if rf, ok := ret.Get(0).(func(model.SurveyData) error); ok {
+		r0 = rf(surveyData)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -64,6 +50,20 @@ func (_m *Storage) DeleteExample(orgID string, appID string, id string) error {
 	var r0 error
 	if rf, ok := ret.Get(0).(func(string, string, string) error); ok {
 		r0 = rf(orgID, appID, id)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// DeleteSurveyData provides a mock function with given fields: id
+func (_m *Storage) DeleteSurveyData(id string) error {
+	ret := _m.Called(id)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(string) error); ok {
+		r0 = rf(id)
 	} else {
 		r0 = ret.Error(0)
 	}
@@ -175,20 +175,20 @@ func (_m *Storage) FindExample(orgID string, appID string, id string) (*model.Ex
 	return r0, r1
 }
 
-// GetBessiData provides a mock function with given fields: id
-func (_m *Storage) GetBessiData(id string) (*model.BessiData, error) {
+// GetSurveyData provides a mock function with given fields: id
+func (_m *Storage) GetSurveyData(id string) (*model.SurveyData, error) {
 	ret := _m.Called(id)
 
-	var r0 *model.BessiData
+	var r0 *model.SurveyData
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string) (*model.BessiData, error)); ok {
+	if rf, ok := ret.Get(0).(func(string) (*model.SurveyData, error)); ok {
 		return rf(id)
 	}
-	if rf, ok := ret.Get(0).(func(string) *model.BessiData); ok {
+	if rf, ok := ret.Get(0).(func(string) *model.SurveyData); ok {
 		r0 = rf(id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*model.BessiData)
+			r0 = ret.Get(0).(*model.SurveyData)
 		}
 	}
 
@@ -248,20 +248,6 @@ func (_m *Storage) RegisterStorageListener(listener interfaces.StorageListener) 
 	_m.Called(listener)
 }
 
-// UpdateBessiData provides a mock function with given fields: bessiData
-func (_m *Storage) UpdateBessiData(bessiData model.BessiData) error {
-	ret := _m.Called(bessiData)
-
-	var r0 error
-	if rf, ok := ret.Get(0).(func(model.BessiData) error); ok {
-		r0 = rf(bessiData)
-	} else {
-		r0 = ret.Error(0)
-	}
-
-	return r0
-}
-
 // UpdateConfig provides a mock function with given fields: config
 func (_m *Storage) UpdateConfig(config model.Config) error {
 	ret := _m.Called(config)
@@ -283,6 +269,20 @@ func (_m *Storage) UpdateExample(example model.Example) error {
 	var r0 error
 	if rf, ok := ret.Get(0).(func(model.Example) error); ok {
 		r0 = rf(example)
+	} else {
+		r0 = ret.Error(0)
+	}
+
+	return r0
+}
+
+// UpdateSurveyData provides a mock function with given fields: surveyData
+func (_m *Storage) UpdateSurveyData(surveyData model.SurveyData) error {
+	ret := _m.Called(surveyData)
+
+	var r0 error
+	if rf, ok := ret.Get(0).(func(model.SurveyData) error); ok {
+		r0 = rf(surveyData)
 	} else {
 		r0 = ret.Error(0)
 	}

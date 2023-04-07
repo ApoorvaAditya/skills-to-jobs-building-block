@@ -33,30 +33,30 @@ func (a appClient) GetExample(orgID string, appID string, id string) (*model.Exa
 	return a.app.shared.getExample(orgID, appID, id)
 }
 
-// GetBessiData gets an BessiData by ID
-func (a appClient) GetBessiData(id string) (*model.BessiData, error) {
-	return a.app.storage.GetBessiData(id)
+// GetSurveyData gets an SurveyData by ID
+func (a appClient) GetSurveyData(id string) (*model.SurveyData, error) {
+	return a.app.storage.GetSurveyData(id)
 }
 
-// CreateBessiData creates a new BessiData
-func (a appClient) CreateBessiData(bessiData model.BessiData) (*model.BessiData, error) {
-	bessiData.ID = uuid.NewString()
-	bessiData.DateCreated = time.Now()
-	err := a.app.storage.CreateBessiData(bessiData)
+// CreateSurveyData creates a new SurveyData
+func (a appClient) CreateSurveyData(surveyData model.SurveyData) (*model.SurveyData, error) {
+	surveyData.ID = uuid.NewString()
+	surveyData.DateCreated = time.Now()
+	err := a.app.storage.CreateSurveyData(surveyData)
 	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeBessiData, nil, err)
+		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeSurveyData, nil, err)
 	}
-	return &bessiData, nil
+	return &surveyData, nil
 }
 
-// UpdateBessiData updates an BessiData
-func (a appClient) UpdateBessiData(bessiData model.BessiData) error {
-	return a.app.storage.UpdateBessiData(bessiData)
+// UpdateSurveyData updates an SurveyData
+func (a appClient) UpdateSurveyData(surveyData model.SurveyData) error {
+	return a.app.storage.UpdateSurveyData(surveyData)
 }
 
-// DeleteBessiData deletes an BessiData by ID
-func (a appClient) DeleteBessiData(id string) error {
-	return a.app.storage.DeleteBessiData(id)
+// DeleteSurveyData deletes an SurveyData by ID
+func (a appClient) DeleteSurveyData(id string) error {
+	return a.app.storage.DeleteSurveyData(id)
 }
 
 // newAppClient creates new appClient

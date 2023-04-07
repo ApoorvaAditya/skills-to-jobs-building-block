@@ -76,11 +76,11 @@ func (a Adapter) Start() {
 	// Example API
 	mainRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.clientAPIsHandler.getExample, a.auth.client.Permissions)).Methods("GET")
 
-	// Bessi API
-	mainRouter.HandleFunc("/bessi/{id}", a.wrapFunc(a.clientAPIsHandler.getBessiData, a.auth.client.User)).Methods("GET")
-	mainRouter.HandleFunc("/bessi", a.wrapFunc(a.clientAPIsHandler.createBessiData, a.auth.client.User)).Methods("POST")
-	mainRouter.HandleFunc("/bessi/{id}", a.wrapFunc(a.clientAPIsHandler.updateBessiData, a.auth.client.User)).Methods("PUT")
-	mainRouter.HandleFunc("/bessi/{id}", a.wrapFunc(a.clientAPIsHandler.deleteBessiData, a.auth.client.User)).Methods("DELETE")
+	// Survey Data API
+	mainRouter.HandleFunc("/survey-data/{id}", a.wrapFunc(a.clientAPIsHandler.getSurveyData, a.auth.client.User)).Methods("GET")
+	mainRouter.HandleFunc("/survey-data", a.wrapFunc(a.clientAPIsHandler.createSurveyData, a.auth.client.User)).Methods("POST")
+	mainRouter.HandleFunc("/survey-data/{id}", a.wrapFunc(a.clientAPIsHandler.updateSurveyData, a.auth.client.User)).Methods("PUT")
+	mainRouter.HandleFunc("/survey-data/{id}", a.wrapFunc(a.clientAPIsHandler.deleteSurveyData, a.auth.client.User)).Methods("DELETE")
 
 	// Admin APIs
 	adminRouter := mainRouter.PathPrefix("/admin").Subrouter()

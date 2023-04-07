@@ -29,11 +29,11 @@ type Default interface {
 type Client interface {
 	GetExample(orgID string, appID string, id string) (*model.Example, error)
 
-	// Bessi APIs
-	GetBessiData(id string) (*model.BessiData, error)
-	CreateBessiData(example model.BessiData) (*model.BessiData, error)
-	UpdateBessiData(example model.BessiData) error
-	DeleteBessiData(id string) error
+	// Survey Data APIs
+	GetSurveyData(id string) (*model.SurveyData, error)
+	CreateSurveyData(example model.SurveyData) (*model.SurveyData, error)
+	UpdateSurveyData(example model.SurveyData) error
+	DeleteSurveyData(id string) error
 }
 
 // Admin exposes administrative APIs for the driver adapters

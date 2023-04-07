@@ -1,9 +1,9 @@
 get:
   tags:
   - Client
-  summary: Gets BESSI data
+  summary: Gets Survey data
   description: |
-    Gets BESSI data
+    Gets Survey data
 
     **Auth:** Requires valid user token
   security:
@@ -11,7 +11,7 @@ get:
   parameters:
   - name: id
     in: path
-    description: ID of BESSI Data to retrieve
+    description: ID of Survey Data to retrieve
     required: true
     style: simple
     explode: false
@@ -23,7 +23,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../../schemas/application/BessiData.yaml"
+            $ref: "../../schemas/application/SurveyData.yaml"
     400:
       description: Bad request
     401:
@@ -34,9 +34,9 @@ get:
 put:
   tags:
   - Client
-  summary: Updates BESSI data
+  summary: Updates Survey data
   description: |
-    Updates BESSI data
+    Updates Survey data
 
     **Auth:** Requires valid user token with `put_bessi_datas` permission
   security:
@@ -44,7 +44,7 @@ put:
   parameters:
   - name: id
     in: path
-    description: ID of BESSI Data to update
+    description: ID of Survey Data to update
     required: true
     style: simple
     explode: false
@@ -63,9 +63,9 @@ put:
 delete:
   tags:
   - Client
-  summary: Deletes BESSI data
+  summary: Deletes Survey data
   description: |
-    Deletes BESSI data
+    Deletes Survey data
 
     **Auth:** Requires valid user token with `delete_bessi_datas` permission
   security:
@@ -73,7 +73,7 @@ delete:
   parameters:
   - name: id
     in: path
-    description: ID of BESSI Data to delete
+    description: ID of Survey Data to delete
     required: true
     style: simple
     explode: false
