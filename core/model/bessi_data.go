@@ -21,7 +21,7 @@ import (
 )
 
 const (
-	//TypeBessiData example type
+	//TypeBessiData data type
 	TypeBessiData logutils.MessageDataType = "bessi"
 )
 
