@@ -33,11 +33,6 @@ func (a appClient) GetExample(orgID string, appID string, id string) (*model.Exa
 	return a.app.shared.getExample(orgID, appID, id)
 }
 
-// newAppClient creates new appClient
-func newAppClient(app *Application) appClient {
-	return appClient{app: app}
-}
-
 // GetUserData gets an UserData by ID
 func (a appClient) GetUserData(id string) (*model.UserData, error) {
 	return a.app.storage.GetUserData(id)
@@ -62,4 +57,9 @@ func (a appClient) UpdateUserData(userData model.UserData) error {
 // DeleteUserData deletes an UserData by ID
 func (a appClient) DeleteUserData(id string) error {
 	return a.app.storage.DeleteUserData(id)
+}
+
+// newAppClient creates new appClient
+func newAppClient(app *Application) appClient {
+	return appClient{app: app}
 }

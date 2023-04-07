@@ -4,7 +4,7 @@ post:
   summary: Posts the User data
   description: |
     Posts User data
-    **Auth:** Requires valid user token with `post_user_datas` permission
+    **Auth:** Requires valid user token
   security:
     - bearerAuth: []
   requestBody:

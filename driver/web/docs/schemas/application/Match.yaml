@@ -1,9 +1,9 @@
 type: object
 required:
-- job_id
+- occupation_code
 - score
 properties:
-  job_id:
+  occupation_code:
     type: string
     readOnly: true
   score:

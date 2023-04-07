@@ -57,12 +57,12 @@ func (h ClientAPIsHandler) getUserData(l *logs.Log, r *http.Request, claims *tok
 		return l.HTTPResponseErrorData(logutils.StatusMissing, logutils.TypePathParam, logutils.StringArgs("id"), nil, http.StatusBadRequest, false)
 	}
 
-	example, err := h.app.Client.GetUserData(id)
+	userData, err := h.app.Client.GetUserData(id)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionGet, model.TypeUserData, nil, err, http.StatusInternalServerError, true)
 	}
 
-	response, err := json.Marshal(example)
+	response, err := json.Marshal(userData)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
 	}
@@ -76,12 +76,12 @@ func (h ClientAPIsHandler) createUserData(l *logs.Log, r *http.Request, claims *
 		return l.HTTPResponseErrorAction(logutils.ActionUnmarshal, logutils.TypeRequestBody, nil, err, http.StatusBadRequest, true)
 	}
 
-	example, err := h.app.Client.CreateUserData(requestData)
-	if err != nil || example == nil {
+	userData, err := h.app.Client.CreateUserData(requestData)
+	if err != nil || userData == nil {
 		return l.HTTPResponseErrorAction(logutils.ActionCreate, model.TypeUserData, nil, err, http.StatusInternalServerError, true)
 	}
 
-	response, err := json.Marshal(example)
+	response, err := json.Marshal(userData)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
 	}

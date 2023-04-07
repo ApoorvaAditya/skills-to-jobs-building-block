@@ -76,14 +76,14 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  '/api/user/match-results/{id}':
+  '/api/user-match-results/{id}':
     get:
       tags:
         - Client
       summary: Gets User data
       description: |
         Gets User data
-        **Auth:** Requires valid user token with `get_user_datas` permission
+        **Auth:** Requires valid user token
       security:
         - bearerAuth: []
       parameters:
@@ -114,7 +114,7 @@ paths:
       summary: Updates User data
       description: |
         Updates User data
-        **Auth:** Requires valid user token with `put_user_datas` permission
+        **Auth:** Requires valid user token
       security:
         - bearerAuth: []
       parameters:
@@ -141,7 +141,7 @@ paths:
       summary: Deletes User data
       description: |
         Deletes User data
-        **Auth:** Requires valid user token with `delete_user_datas` permission
+        **Auth:** Requires valid user token
       security:
         - bearerAuth: []
       parameters:
@@ -162,14 +162,14 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-  /api/user/match-results:
+  /api/user-match-results:
     post:
       tags:
         - Client
       summary: Posts the User data
       description: |
         Posts User data
-        **Auth:** Requires valid user token with `post_user_datas` permission
+        **Auth:** Requires valid user token
       security:
         - bearerAuth: []
       requestBody:
@@ -780,10 +780,10 @@ components:
     Match:
       type: object
       required:
-        - job_id
+        - occupation_code
         - score
       properties:
-        job_id:
+        occupation_code:
           type: string
           readOnly: true
         score:

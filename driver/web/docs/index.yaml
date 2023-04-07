@@ -34,10 +34,10 @@ paths:
   /api/examples/{id}:
     $ref: "./resources/client/examples-id.yaml"
 
-  /api/user/match-results/{id}:
+  /api/user-match-results/{id}:
     $ref: "./resources/client/user-data-id.yaml"
 
-  /api/user/match-results:
+  /api/user-match-results:
     $ref: "./resources/client/user-data.yaml"
 
   # Admin

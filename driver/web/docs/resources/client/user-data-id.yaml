@@ -4,7 +4,7 @@ get:
   summary: Gets User data
   description: |
     Gets User data
-    **Auth:** Requires valid user token with `get_user_datas` permission
+    **Auth:** Requires valid user token
   security:
     - bearerAuth: []
   parameters:
@@ -36,7 +36,7 @@ put:
   summary: Updates User data
   description: |
     Updates User data
-    **Auth:** Requires valid user token with `put_user_datas` permission
+    **Auth:** Requires valid user token
   security:
     - bearerAuth: []
   parameters:
@@ -64,7 +64,7 @@ delete:
   summary: Deletes User data
   description: |
     Deletes User data
-    **Auth:** Requires valid user token with `delete_user_datas` permission
+    **Auth:** Requires valid user token
   security:
     - bearerAuth: []
   parameters:

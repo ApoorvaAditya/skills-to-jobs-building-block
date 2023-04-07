@@ -77,10 +77,10 @@ func (a Adapter) Start() {
 	mainRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.clientAPIsHandler.getExample, a.auth.client.Permissions)).Methods("GET")
 
 	// UserData API
-	mainRouter.HandleFunc("/user/match-results/{id}", a.wrapFunc(a.clientAPIsHandler.getUserData, a.auth.client.User)).Methods("GET")
-	mainRouter.HandleFunc("/user/match-results", a.wrapFunc(a.clientAPIsHandler.createUserData, a.auth.client.User)).Methods("POST")
-	mainRouter.HandleFunc("/user/match-results/{id}", a.wrapFunc(a.clientAPIsHandler.updateUserData, a.auth.client.User)).Methods("PUT")
-	mainRouter.HandleFunc("/user/match-results/{id}", a.wrapFunc(a.clientAPIsHandler.deleteUserData, a.auth.client.User)).Methods("DELETE")
+	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.getUserData, a.auth.client.User)).Methods("GET")
+	mainRouter.HandleFunc("/user-match-results", a.wrapFunc(a.clientAPIsHandler.createUserData, a.auth.client.User)).Methods("POST")
+	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.updateUserData, a.auth.client.User)).Methods("PUT")
+	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.deleteUserData, a.auth.client.User)).Methods("DELETE")
 
 	// Admin APIs
 	adminRouter := mainRouter.PathPrefix("/admin").Subrouter()
