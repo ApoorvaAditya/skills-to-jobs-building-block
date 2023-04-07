@@ -9,6 +9,10 @@ UserMatchingResult:
   $ref: "./application/UserMatchingResult.yaml"
 Match:
   $ref: "./application/Match.yaml"
+SurveyData:
+  $ref: "./application/SurveyData.yaml"
+WorkstyleScore:
+  $ref: "./application/WorkstyleScore.yaml"
 
 # ADMIN section
 

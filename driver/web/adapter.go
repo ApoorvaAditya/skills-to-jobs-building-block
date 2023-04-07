@@ -82,6 +82,12 @@ func (a Adapter) Start() {
 	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.updateUserMatchingResult, a.auth.client.User)).Methods("PUT")
 	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.deleteUserMatchingResult, a.auth.client.User)).Methods("DELETE")
 
+	// Survey Data API
+	mainRouter.HandleFunc("/survey-data/{id}", a.wrapFunc(a.clientAPIsHandler.getSurveyData, a.auth.client.User)).Methods("GET")
+	mainRouter.HandleFunc("/survey-data", a.wrapFunc(a.clientAPIsHandler.createSurveyData, a.auth.client.User)).Methods("POST")
+	mainRouter.HandleFunc("/survey-data/{id}", a.wrapFunc(a.clientAPIsHandler.updateSurveyData, a.auth.client.User)).Methods("PUT")
+	mainRouter.HandleFunc("/survey-data/{id}", a.wrapFunc(a.clientAPIsHandler.deleteSurveyData, a.auth.client.User)).Methods("DELETE")
+
 	// Admin APIs
 	adminRouter := mainRouter.PathPrefix("/admin").Subrouter()
 	adminRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.adminAPIsHandler.getExample, a.auth.admin.Permissions)).Methods("GET")

@@ -6,6 +6,7 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 ### Added
+- Added endpoints for storing BESSI survey data [#1](https://github.com/ApoorvaAditya/skills-to-jobs-building-block/issues/1)
 - Added endpoints for storing user's matching results [#1](https://github.com/ApoorvaAditya/skills-to-jobs-building-block/issues/3)
 
 ### Fixed

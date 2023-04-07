@@ -59,6 +59,33 @@ func (a appClient) DeleteUserMatchingResult(id string) error {
 	return a.app.storage.DeleteUserMatchingResult(id)
 }
 
+// GetSurveyData gets a SurveyData by ID
+func (a appClient) GetSurveyData(id string) (*model.SurveyData, error) {
+	return a.app.storage.GetSurveyData(id)
+}
+
+// CreateSurveyData creates a new SurveyData
+func (a appClient) CreateSurveyData(surveyData model.SurveyData) (*model.SurveyData, error) {
+	surveyData.ID = uuid.NewString()
+	surveyData.DateCreated = time.Now()
+	surveyData.Version = "v3.0"
+	err := a.app.storage.CreateSurveyData(surveyData)
+	if err != nil {
+		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeSurveyData, nil, err)
+	}
+	return &surveyData, nil
+}
+
+// UpdateSurveyData updates a SurveyData
+func (a appClient) UpdateSurveyData(surveyData model.SurveyData) error {
+	return a.app.storage.UpdateSurveyData(surveyData)
+}
+
+// DeleteSurveyData deletes a SurveyData by ID
+func (a appClient) DeleteSurveyData(id string) error {
+	return a.app.storage.DeleteSurveyData(id)
+}
+
 // newAppClient creates new appClient
 func newAppClient(app *Application) appClient {
 	return appClient{app: app}

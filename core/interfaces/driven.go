@@ -39,6 +39,11 @@ type Storage interface {
 	CreateUserMatchingResult(bessiData model.UserMatchingResult) error
 	UpdateUserMatchingResult(bessiData model.UserMatchingResult) error
 	DeleteUserMatchingResult(id string) error
+
+	GetSurveyData(id string) (*model.SurveyData, error)
+	CreateSurveyData(surveyData model.SurveyData) error
+	UpdateSurveyData(surveyData model.SurveyData) error
+	DeleteSurveyData(id string) error
 }
 
 // StorageListener represents storage listener

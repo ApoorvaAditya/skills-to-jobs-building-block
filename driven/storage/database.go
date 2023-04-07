@@ -42,6 +42,7 @@ type database struct {
 	configs             *collectionWrapper
 	examples            *collectionWrapper
 	userMatchingResults *collectionWrapper
+	surveyDatas         *collectionWrapper
 
 	listeners []interfaces.StorageListener
 }
@@ -84,6 +85,12 @@ func (d *database) start() error {
 
 	userMatchingResults := &collectionWrapper{database: d, coll: db.Collection("userMatchingResults")}
 	err = d.applyUserMatchingResultsChecks(userMatchingResults)
+  if err != nil {
+		return err
+	}
+
+	surveyDatas := &collectionWrapper{database: d, coll: db.Collection("surveyDatas")}
+	err = d.applySurveyDatasChecks(surveyDatas)
 	if err != nil {
 		return err
 	}
@@ -95,6 +102,7 @@ func (d *database) start() error {
 	d.configs = configs
 	d.examples = examples
 	d.userMatchingResults = userMatchingResults
+	d.surveyDatas = surveyDatas
 
 	go d.configs.Watch(nil, d.logger)
 
@@ -130,6 +138,13 @@ func (d *database) applyUserMatchingResultsChecks(messages *collectionWrapper) e
 	d.logger.Info("apply userMatchingResults checks.....")
 
 	d.logger.Info("apply userMatchingResults passed")
+  return nil
+}
+
+func (d *database) applySurveyDatasChecks(messages *collectionWrapper) error {
+	d.logger.Info("apply surveyDatas checks.....")
+
+	d.logger.Info("apply surveyDatas passed")
 	return nil
 }
 
