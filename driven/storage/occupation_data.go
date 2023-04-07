@@ -22,7 +22,7 @@ import (
 	"go.mongodb.org/mongo-driver/bson"
 )
 
-// GetBessiData finds bessiData by id
+// GetOccupationData finds OccupationData by code
 func (a Adapter) GetOccupationData(code string) (*model.OccupationData, error) {
 	filter := bson.M{"code": code}
 
@@ -35,6 +35,7 @@ func (a Adapter) GetOccupationData(code string) (*model.OccupationData, error) {
 	return data, nil
 }
 
+// GetOccupationData finds all OccupationDatas
 func (a Adapter) GetAllOccupationDatas() ([]model.OccupationData, error) {
 	filter := bson.M{}
 	var data []model.OccupationData
