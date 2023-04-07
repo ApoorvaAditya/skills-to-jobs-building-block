@@ -39,9 +39,9 @@ type database struct {
 	dbClient *mongo.Client
 	logger   *logs.Logger
 
-	configs   *collectionWrapper
-	examples  *collectionWrapper
-	userDatas *collectionWrapper
+	configs             *collectionWrapper
+	examples            *collectionWrapper
+	userMatchingResults *collectionWrapper
 
 	listeners []interfaces.StorageListener
 }
@@ -82,8 +82,8 @@ func (d *database) start() error {
 		return err
 	}
 
-	userDatas := &collectionWrapper{database: d, coll: db.Collection("userDatas")}
-	err = d.applyUserDatasChecks(userDatas)
+	userMatchingResults := &collectionWrapper{database: d, coll: db.Collection("userMatchingResults")}
+	err = d.applyUserMatchingResultsChecks(userMatchingResults)
 	if err != nil {
 		return err
 	}
@@ -94,7 +94,7 @@ func (d *database) start() error {
 
 	d.configs = configs
 	d.examples = examples
-	d.userDatas = userDatas
+	d.userMatchingResults = userMatchingResults
 
 	go d.configs.Watch(nil, d.logger)
 
@@ -126,10 +126,10 @@ func (d *database) applyExamplesChecks(examples *collectionWrapper) error {
 	return nil
 }
 
-func (d *database) applyUserDatasChecks(messages *collectionWrapper) error {
-	d.logger.Info("apply userDatas checks.....")
+func (d *database) applyUserMatchingResultsChecks(messages *collectionWrapper) error {
+	d.logger.Info("apply userMatchingResults checks.....")
 
-	d.logger.Info("apply userDatas passed")
+	d.logger.Info("apply userMatchingResults passed")
 	return nil
 }
 

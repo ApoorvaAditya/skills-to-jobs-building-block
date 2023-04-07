@@ -22,7 +22,7 @@ get:
       content:
         application/json:
           schema:
-            $ref: "../../schemas/application/UserData.yaml"
+            $ref: "../../schemas/application/UserMatchingResult.yaml"
     400:
       description: Bad request
     401:

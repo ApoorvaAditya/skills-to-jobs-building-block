@@ -101,7 +101,7 @@ paths:
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/UserData'
+                $ref: '#/components/schemas/UserMatchingResult'
         '400':
           description: Bad request
         '401':
@@ -177,7 +177,7 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/UserData'
+              $ref: '#/components/schemas/UserMatchingResult'
       responses:
         '200':
           description: Success
@@ -750,7 +750,7 @@ components:
           type: string
           nullable: true
           readOnly: true
-    UserData:
+    UserMatchingResult:
       type: object
       required:
         - id

@@ -15,12 +15,12 @@ type Storage struct {
 	mock.Mock
 }
 
-// CreateUserData provides a mock function with given fields: bessiData
-func (_m *Storage) CreateUserData(bessiData model.UserData) error {
+// CreateUserMatchingResult provides a mock function with given fields: bessiData
+func (_m *Storage) CreateUserMatchingResult(bessiData model.UserMatchingResult) error {
 	ret := _m.Called(bessiData)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(model.UserData) error); ok {
+	if rf, ok := ret.Get(0).(func(model.UserMatchingResult) error); ok {
 		r0 = rf(bessiData)
 	} else {
 		r0 = ret.Error(0)
@@ -57,8 +57,8 @@ func (_m *Storage) DeleteExample(orgID string, appID string, id string) error {
 	return r0
 }
 
-// DeleteUserData provides a mock function with given fields: id
-func (_m *Storage) DeleteUserData(id string) error {
+// DeleteUserMatchingResult provides a mock function with given fields: id
+func (_m *Storage) DeleteUserMatchingResult(id string) error {
 	ret := _m.Called(id)
 
 	var r0 error
@@ -175,20 +175,20 @@ func (_m *Storage) FindExample(orgID string, appID string, id string) (*model.Ex
 	return r0, r1
 }
 
-// GetUserData provides a mock function with given fields: id
-func (_m *Storage) GetUserData(id string) (*model.UserData, error) {
+// GetUserMatchingResult provides a mock function with given fields: id
+func (_m *Storage) GetUserMatchingResult(id string) (*model.UserMatchingResult, error) {
 	ret := _m.Called(id)
 
-	var r0 *model.UserData
+	var r0 *model.UserMatchingResult
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string) (*model.UserData, error)); ok {
+	if rf, ok := ret.Get(0).(func(string) (*model.UserMatchingResult, error)); ok {
 		return rf(id)
 	}
-	if rf, ok := ret.Get(0).(func(string) *model.UserData); ok {
+	if rf, ok := ret.Get(0).(func(string) *model.UserMatchingResult); ok {
 		r0 = rf(id)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).(*model.UserData)
+			r0 = ret.Get(0).(*model.UserMatchingResult)
 		}
 	}
 
@@ -276,12 +276,12 @@ func (_m *Storage) UpdateExample(example model.Example) error {
 	return r0
 }
 
-// UpdateUserData provides a mock function with given fields: bessiData
-func (_m *Storage) UpdateUserData(bessiData model.UserData) error {
+// UpdateUserMatchingResult provides a mock function with given fields: bessiData
+func (_m *Storage) UpdateUserMatchingResult(bessiData model.UserMatchingResult) error {
 	ret := _m.Called(bessiData)
 
 	var r0 error
-	if rf, ok := ret.Get(0).(func(model.UserData) error); ok {
+	if rf, ok := ret.Get(0).(func(model.UserMatchingResult) error); ok {
 		r0 = rf(bessiData)
 	} else {
 		r0 = ret.Error(0)

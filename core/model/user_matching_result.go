@@ -21,14 +21,14 @@ import (
 )
 
 const (
-	//TypeUserData type
-	TypeUserData logutils.MessageDataType = "userdata"
+	//TypeUserMatchingResult type
+	TypeUserMatchingResult logutils.MessageDataType = "userMatchingResult"
 	//TypeMatch type
 	TypeMatch logutils.MessageDataType = "match"
 )
 
-// UserData is a generic UserData data type
-type UserData struct {
+// UserMatchingResult represents the matching results of a specific user
+type UserMatchingResult struct {
 	ID          string     `json:"id" bson:"_id"`
 	Version     string     `json:"version" bson:"version"`
 	Matches     []Match    `json:"matches" bson:"matches"`

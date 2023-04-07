@@ -29,11 +29,11 @@ type Default interface {
 type Client interface {
 	GetExample(orgID string, appID string, id string) (*model.Example, error)
 
-	// UserData APIs
-	GetUserData(id string) (*model.UserData, error)
-	CreateUserData(example model.UserData) (*model.UserData, error)
-	UpdateUserData(example model.UserData) error
-	DeleteUserData(id string) error
+	// UserMatchingResult APIs
+	GetUserMatchingResult(id string) (*model.UserMatchingResult, error)
+	CreateUserMatchingResult(example model.UserMatchingResult) (*model.UserMatchingResult, error)
+	UpdateUserMatchingResult(example model.UserMatchingResult) error
+	DeleteUserMatchingResult(id string) error
 }
 
 // Admin exposes administrative APIs for the driver adapters
