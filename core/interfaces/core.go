@@ -29,6 +29,10 @@ type Default interface {
 type Client interface {
 	GetExample(orgID string, appID string, id string) (*model.Example, error)
 
+	// OccupationData APIs
+	GetOccupationData(code string) (*model.OccupationData, error)
+	GetAllOccupationDatas() ([]model.OccupationData, error)
+
 	// UserMatchingResult APIs
 	GetUserMatchingResult(id string) (*model.UserMatchingResult, error)
 	CreateUserMatchingResult(example model.UserMatchingResult) (*model.UserMatchingResult, error)

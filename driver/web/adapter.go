@@ -76,6 +76,10 @@ func (a Adapter) Start() {
 	// Example APIs
 	mainRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.clientAPIsHandler.getExample, a.auth.client.Permissions)).Methods("GET")
 
+	// Occupation API
+	mainRouter.HandleFunc("/occupation/{code}", a.wrapFunc(a.clientAPIsHandler.getOccupationData, a.auth.client.User)).Methods("GET")
+	mainRouter.HandleFunc("/occupation", a.wrapFunc(a.clientAPIsHandler.getAllOccupationDatas, a.auth.client.User)).Methods("GET")
+
 	// UserMatchingResult API
 	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.getUserMatchingResult, a.auth.client.User)).Methods("GET")
 	mainRouter.HandleFunc("/user-match-results", a.wrapFunc(a.clientAPIsHandler.createUserMatchingResult, a.auth.client.User)).Methods("POST")

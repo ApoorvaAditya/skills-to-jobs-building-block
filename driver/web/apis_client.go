@@ -50,6 +50,38 @@ func (h ClientAPIsHandler) getExample(l *logs.Log, r *http.Request, claims *toke
 	return l.HTTPResponseSuccessJSON(response)
 }
 
+func (h ClientAPIsHandler) getOccupationData(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
+	params := mux.Vars(r)
+	code := params["code"]
+	if len(code) <= 0 {
+		return l.HTTPResponseErrorData(logutils.StatusMissing, logutils.TypePathParam, logutils.StringArgs("code"), nil, http.StatusBadRequest, false)
+	}
+
+	occupationData, err := h.app.Client.GetOccupationData(code)
+	if err != nil {
+		return l.HTTPResponseErrorAction(logutils.ActionGet, model.TypeOccupationData, nil, err, http.StatusInternalServerError, true)
+	}
+
+	response, err := json.Marshal(occupationData)
+	if err != nil {
+		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
+	}
+	return l.HTTPResponseSuccessJSON(response)
+}
+
+func (h ClientAPIsHandler) getAllOccupationDatas(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
+	occupationData, err := h.app.Client.GetAllOccupationDatas()
+	if err != nil {
+		return l.HTTPResponseErrorAction(logutils.ActionGet, model.TypeOccupationData, nil, err, http.StatusInternalServerError, true)
+	}
+
+	response, err := json.Marshal(occupationData)
+	if err != nil {
+		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
+	}
+	return l.HTTPResponseSuccessJSON(response)
+}
+
 func (h ClientAPIsHandler) getUserMatchingResult(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
 	params := mux.Vars(r)
 	id := params["id"]
