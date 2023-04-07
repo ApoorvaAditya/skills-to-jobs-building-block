@@ -33,6 +33,16 @@ func (a appClient) GetExample(orgID string, appID string, id string) (*model.Exa
 	return a.app.shared.getExample(orgID, appID, id)
 }
 
+// GetOccupationData gets an OccupationData by Code
+func (a appClient) GetOccupationData(code string) (*model.OccupationData, error) {
+	return a.app.storage.GetOccupationData(code)
+}
+
+// GetAllOccupationDatas gets all the OccupationDatas
+func (a appClient) GetAllOccupationDatas() ([]model.OccupationData, error) {
+	return a.app.storage.GetAllOccupationDatas()
+}
+
 // GetUserMatchingResult gets an UserMatchingResult by ID
 func (a appClient) GetUserMatchingResult(id string) (*model.UserMatchingResult, error) {
 	return a.app.storage.GetUserMatchingResult(id)
@@ -89,12 +99,4 @@ func (a appClient) DeleteSurveyData(id string) error {
 // newAppClient creates new appClient
 func newAppClient(app *Application) appClient {
 	return appClient{app: app}
-}
-
-func (a appClient) GetOccupationData(code string) (*model.OccupationData, error) {
-	return a.app.storage.GetOccupationData(code)
-}
-
-func (a appClient) GetAllOccupationDatas() ([]model.OccupationData, error) {
-	return a.app.storage.GetAllOccupationDatas()
 }

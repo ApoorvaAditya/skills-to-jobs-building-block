@@ -23,7 +23,7 @@ const (
 	TypeOccupationData logutils.MessageDataType = "occupation"
 )
 
-// OccupationData represents the survey results from the Occupation
+// OccupationData stores the relevant information about each Occupation from ONET
 type OccupationData struct {
 	Code        string `json:"code" bson:"code"`
 	Title       string `json:"title" bson:"title"`
