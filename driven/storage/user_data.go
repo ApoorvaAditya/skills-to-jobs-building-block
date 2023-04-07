@@ -28,7 +28,7 @@ func (a Adapter) GetUserData(id string) (*model.UserData, error) {
 	filter := bson.M{"_id": id}
 
 	var data *model.UserData
-	err := a.db.userDatas.FindOneWithContext(a.context, filter, &data, nil)
+	err := a.db.userDatas.FindOne(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeUserData, filterArgs(filter), err)
 	}
@@ -38,7 +38,7 @@ func (a Adapter) GetUserData(id string) (*model.UserData, error) {
 
 // CreateUserData inserts a new userData
 func (a Adapter) CreateUserData(userData model.UserData) error {
-	_, err := a.db.userDatas.InsertOneWithContext(a.context, userData)
+	_, err := a.db.userDatas.InsertOne(a.context, userData)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionInsert, model.TypeUserData, nil, err)
 	}
@@ -51,7 +51,7 @@ func (a Adapter) UpdateUserData(userData model.UserData) error {
 	filter := bson.M{"_id": userData.ID}
 	update := bson.M{"$set": bson.M{"matches": userData.Matches, "data_updated": time.Now()}}
 
-	_, err := a.db.userDatas.UpdateOneWithContext(a.context, filter, update, nil)
+	_, err := a.db.userDatas.UpdateOne(a.context, filter, update, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionUpdate, model.TypeUserData, filterArgs(filter), err)
 	}
@@ -62,7 +62,7 @@ func (a Adapter) UpdateUserData(userData model.UserData) error {
 func (a Adapter) DeleteUserData(id string) error {
 	filter := bson.M{"_id": id}
 
-	res, err := a.db.userDatas.DeleteOneWithContext(a.context, filter, nil)
+	res, err := a.db.userDatas.DeleteOne(a.context, filter, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionDelete, model.TypeUserData, filterArgs(filter), err)
 	}
