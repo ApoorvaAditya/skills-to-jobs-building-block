@@ -38,7 +38,7 @@ put:
   description: |
     Updates Survey data
 
-    **Auth:** Requires valid user token with `put_bessi_datas` permission
+    **Auth:** Requires valid user token
   security:
     - bearerAuth: []
   parameters:
@@ -67,7 +67,7 @@ delete:
   description: |
     Deletes Survey data
 
-    **Auth:** Requires valid user token with `delete_bessi_datas` permission
+    **Auth:** Requires valid user token
   security:
     - bearerAuth: []
   parameters:

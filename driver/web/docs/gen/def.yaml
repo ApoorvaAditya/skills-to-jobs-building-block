@@ -146,7 +146,7 @@ paths:
       description: |
         Updates Survey data
 
-        **Auth:** Requires valid user token with `put_bessi_datas` permission
+        **Auth:** Requires valid user token
       security:
         - bearerAuth: []
       parameters:
@@ -174,7 +174,7 @@ paths:
       description: |
         Deletes Survey data
 
-        **Auth:** Requires valid user token with `delete_bessi_datas` permission
+        **Auth:** Requires valid user token
       security:
         - bearerAuth: []
       parameters:
@@ -767,6 +767,9 @@ components:
         - date_updated
       properties:
         id:
+          type: string
+          readOnly: true
+        version:
           type: string
           readOnly: true
         scores:

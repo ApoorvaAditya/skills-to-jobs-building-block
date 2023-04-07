@@ -28,6 +28,7 @@ const (
 // SurveyData represents the survey results from the BESSI Survey
 type SurveyData struct {
 	ID          string           `json:"id" bson:"_id"`
+	Version     string           `json:"version" bson:"version"`
 	Scores      []WorkstyleScore `json:"scores" bson:"scores"`
 	DateCreated time.Time        `json:"date_created" bson:"date_created"`
 	DateUpdated *time.Time       `json:"date_updated" bson:"date_updated"`

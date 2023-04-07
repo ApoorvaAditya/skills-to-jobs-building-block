@@ -8,6 +8,9 @@ properties:
   id:
     type: string
     readOnly: true
+  version:
+    type: string
+    readOnly: true
   scores:
     type: array
     items:

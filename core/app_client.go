@@ -33,7 +33,7 @@ func (a appClient) GetExample(orgID string, appID string, id string) (*model.Exa
 	return a.app.shared.getExample(orgID, appID, id)
 }
 
-// GetSurveyData gets an SurveyData by ID
+// GetSurveyData gets a SurveyData by ID
 func (a appClient) GetSurveyData(id string) (*model.SurveyData, error) {
 	return a.app.storage.GetSurveyData(id)
 }
@@ -42,6 +42,7 @@ func (a appClient) GetSurveyData(id string) (*model.SurveyData, error) {
 func (a appClient) CreateSurveyData(surveyData model.SurveyData) (*model.SurveyData, error) {
 	surveyData.ID = uuid.NewString()
 	surveyData.DateCreated = time.Now()
+	surveyData.Version = "v3.0"
 	err := a.app.storage.CreateSurveyData(surveyData)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeSurveyData, nil, err)
@@ -49,12 +50,12 @@ func (a appClient) CreateSurveyData(surveyData model.SurveyData) (*model.SurveyD
 	return &surveyData, nil
 }
 
-// UpdateSurveyData updates an SurveyData
+// UpdateSurveyData updates a SurveyData
 func (a appClient) UpdateSurveyData(surveyData model.SurveyData) error {
 	return a.app.storage.UpdateSurveyData(surveyData)
 }
 
-// DeleteSurveyData deletes an SurveyData by ID
+// DeleteSurveyData deletes a SurveyData by ID
 func (a appClient) DeleteSurveyData(id string) error {
 	return a.app.storage.DeleteSurveyData(id)
 }

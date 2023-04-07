@@ -46,7 +46,7 @@ func (a Adapter) CreateSurveyData(surveyData model.SurveyData) error {
 	return nil
 }
 
-// UpdateSurveyData updates an surveyData
+// UpdateSurveyData updates a surveyData
 func (a Adapter) UpdateSurveyData(surveyData model.SurveyData) error {
 	filter := bson.M{"_id": surveyData.ID}
 	update := bson.M{"$set": bson.M{"scores": surveyData.Scores, "date_updated": time.Now()}}
@@ -58,7 +58,7 @@ func (a Adapter) UpdateSurveyData(surveyData model.SurveyData) error {
 	return nil
 }
 
-// DeleteSurveyData deletes an surveyData
+// DeleteSurveyData deletes a surveyData
 func (a Adapter) DeleteSurveyData(id string) error {
 	filter := bson.M{"_id": id}
 
