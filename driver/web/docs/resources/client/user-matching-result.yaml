@@ -1,3 +1,26 @@
+get:
+  tags:
+  - Client
+  summary: Gets User data
+  description: |
+    Gets User data
+    **Auth:** Requires valid user token
+  security:
+    - bearerAuth: []
+  responses:
+    200:
+      description: Success
+      content:
+        application/json:
+          schema:
+            $ref: "../../schemas/application/UserMatchingResult.yaml"
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error
+
 post:
   tags:
   - Client
@@ -13,6 +36,44 @@ post:
       application/json:
         schema:
           $ref: "../../schemas/application/UserMatchingResult.yaml"
+  responses:
+    200:
+      description: Success
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error
+
+put:
+  tags:
+  - Client
+  summary: Updates User data
+  description: |
+    Updates User data
+    **Auth:** Requires valid user token
+  security:
+    - bearerAuth: []
+  responses:
+    200:
+      description: Success
+    400:
+      description: Bad request
+    401:
+      description: Unauthorized
+    500:
+      description: Internal error
+
+delete:
+  tags:
+  - Client
+  summary: Deletes User data
+  description: |
+    Deletes User data
+    **Auth:** Requires valid user token
+  security:
+    - bearerAuth: []
   responses:
     200:
       description: Success

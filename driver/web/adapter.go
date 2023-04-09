@@ -81,10 +81,10 @@ func (a Adapter) Start() {
 	mainRouter.HandleFunc("/occupation", a.wrapFunc(a.clientAPIsHandler.getAllOccupationDatas, a.auth.client.User)).Methods("GET")
 
 	// UserMatchingResult API
-	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.getUserMatchingResult, a.auth.client.User)).Methods("GET")
+	mainRouter.HandleFunc("/user-match-results", a.wrapFunc(a.clientAPIsHandler.getUserMatchingResult, a.auth.client.User)).Methods("GET")
 	mainRouter.HandleFunc("/user-match-results", a.wrapFunc(a.clientAPIsHandler.createUserMatchingResult, a.auth.client.User)).Methods("POST")
-	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.updateUserMatchingResult, a.auth.client.User)).Methods("PUT")
-	mainRouter.HandleFunc("/user-match-results/{id}", a.wrapFunc(a.clientAPIsHandler.deleteUserMatchingResult, a.auth.client.User)).Methods("DELETE")
+	mainRouter.HandleFunc("/user-match-results", a.wrapFunc(a.clientAPIsHandler.updateUserMatchingResult, a.auth.client.User)).Methods("PUT")
+	mainRouter.HandleFunc("/user-match-results", a.wrapFunc(a.clientAPIsHandler.deleteUserMatchingResult, a.auth.client.User)).Methods("DELETE")
 
 	// Survey Data API
 	mainRouter.HandleFunc("/survey-data/{id}", a.wrapFunc(a.clientAPIsHandler.getSurveyData, a.auth.client.User)).Methods("GET")

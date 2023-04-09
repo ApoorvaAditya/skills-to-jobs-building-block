@@ -83,12 +83,7 @@ func (h ClientAPIsHandler) getAllOccupationDatas(l *logs.Log, r *http.Request, c
 }
 
 func (h ClientAPIsHandler) getUserMatchingResult(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
-	params := mux.Vars(r)
-	id := params["id"]
-	if len(id) <= 0 {
-		return l.HTTPResponseErrorData(logutils.StatusMissing, logutils.TypePathParam, logutils.StringArgs("id"), nil, http.StatusBadRequest, false)
-	}
-
+	id := claims.Subject
 	userMatchingResult, err := h.app.Client.GetUserMatchingResult(id)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionGet, model.TypeUserMatchingResult, nil, err, http.StatusInternalServerError, true)
@@ -107,7 +102,7 @@ func (h ClientAPIsHandler) createUserMatchingResult(l *logs.Log, r *http.Request
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionUnmarshal, logutils.TypeRequestBody, nil, err, http.StatusBadRequest, true)
 	}
-
+	requestData.ID = claims.Subject
 	userMatchingResult, err := h.app.Client.CreateUserMatchingResult(requestData)
 	if err != nil || userMatchingResult == nil {
 		return l.HTTPResponseErrorAction(logutils.ActionCreate, model.TypeUserMatchingResult, nil, err, http.StatusInternalServerError, true)
@@ -121,18 +116,13 @@ func (h ClientAPIsHandler) createUserMatchingResult(l *logs.Log, r *http.Request
 }
 
 func (h ClientAPIsHandler) updateUserMatchingResult(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
-	params := mux.Vars(r)
-	id := params["id"]
-	if len(id) <= 0 {
-		return l.HTTPResponseErrorData(logutils.StatusMissing, logutils.TypePathParam, logutils.StringArgs("id"), nil, http.StatusBadRequest, false)
-	}
-
 	var requestData model.UserMatchingResult
 	err := json.NewDecoder(r.Body).Decode(&requestData)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionUnmarshal, logutils.TypeRequestBody, nil, err, http.StatusBadRequest, true)
 	}
 
+	id := claims.Subject
 	requestData.ID = id
 	err = h.app.Client.UpdateUserMatchingResult(requestData)
 	if err != nil {
@@ -143,12 +133,7 @@ func (h ClientAPIsHandler) updateUserMatchingResult(l *logs.Log, r *http.Request
 }
 
 func (h ClientAPIsHandler) deleteUserMatchingResult(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
-	params := mux.Vars(r)
-	id := params["id"]
-	if len(id) <= 0 {
-		return l.HTTPResponseErrorData(logutils.StatusMissing, logutils.TypePathParam, logutils.StringArgs("id"), nil, http.StatusBadRequest, false)
-	}
-
+	id := claims.Subject
 	err := h.app.Client.DeleteUserMatchingResult(id)
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionDelete, model.TypeUserMatchingResult, nil, err, http.StatusInternalServerError, true)
@@ -173,6 +158,7 @@ func (h ClientAPIsHandler) getSurveyData(l *logs.Log, r *http.Request, claims *t
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
 	}
+	// runMatchingAlgorithm([]model.OccupationData{}, response)
 	return l.HTTPResponseSuccessJSON(response)
 }
 
