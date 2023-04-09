@@ -38,6 +38,7 @@ type UserMatchingResult struct {
 
 // Match represents a occupation match and the corresponding score
 type Match struct {
-	OccupationCode string  `json:"occupation_code" bson:"occupation_code"`
-	Score          float32 `json:"score" bson:"score"`
+	OccupationCode string         `json:"occupation_code" bson:"occupation_code"`
+	Occupation     OccupationData `json:"occupation" bson:"occupation"`
+	Score          float64        `json:"score" bson:"score"`
 }
