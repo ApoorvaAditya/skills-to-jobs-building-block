@@ -1,11 +1,12 @@
 type: object
 required:
-- occupation_code
-- score
+- occupation
+- match_percent
 properties:
-  occupation_code:
-    type: string
+  occupation:
+    type:
+      $ref: ./OccupationData.yaml
     readOnly: true
-  score:
+  match_percent:
     type: float
     readOnly: true

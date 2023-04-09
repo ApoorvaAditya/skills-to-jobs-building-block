@@ -943,13 +943,14 @@ components:
     Match:
       type: object
       required:
-        - occupation_code
-        - score
+        - occupation
+        - match_percent
       properties:
-        occupation_code:
-          type: string
+        occupation:
+          type:
+            $ref: '#/paths/~1api~1occupation/get/responses/200/content/application~1json/items'
           readOnly: true
-        score:
+        match_percent:
           type: float
           readOnly: true
     SurveyData:
