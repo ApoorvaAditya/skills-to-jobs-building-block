@@ -158,7 +158,6 @@ func (h ClientAPIsHandler) getSurveyData(l *logs.Log, r *http.Request, claims *t
 	if err != nil {
 		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
 	}
-	// runMatchingAlgorithm([]model.OccupationData{}, response)
 	return l.HTTPResponseSuccessJSON(response)
 }
 
