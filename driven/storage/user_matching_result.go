@@ -49,7 +49,7 @@ func (a Adapter) CreateUserMatchingResult(userMatchingResult model.UserMatchingR
 // UpdateUserMatchingResult updates an userMatchingResult
 func (a Adapter) UpdateUserMatchingResult(userMatchingResult model.UserMatchingResult) error {
 	filter := bson.M{"_id": userMatchingResult.ID}
-	update := bson.M{"$set": bson.M{"matches": userMatchingResult.Matches, "data_updated": time.Now()}}
+	update := bson.M{"$set": bson.M{"matches": userMatchingResult.Matches, "date_updated": time.Now()}}
 
 	_, err := a.db.userMatchingResults.UpdateOne(a.context, filter, update, nil)
 	if err != nil {
