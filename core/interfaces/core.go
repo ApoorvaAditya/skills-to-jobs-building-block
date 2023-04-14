@@ -44,6 +44,9 @@ type Client interface {
 	CreateSurveyData(surveyData model.SurveyData) (*model.SurveyData, error)
 	UpdateSurveyData(surveyData model.SurveyData) error
 	DeleteSurveyData(id string) error
+
+	GetAllWorkstyleDatas() ([]model.WorkstyleData, error)
+	GetWorkstyleDatasForOccupation(occupationCode string) ([]model.WorkstyleData, error)
 }
 
 // Admin exposes administrative APIs for the driver adapters
