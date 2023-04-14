@@ -18,8 +18,12 @@ import (
 	"application/core"
 	"application/core/model"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"net/http"
+	"sort"
 
+	"github.com/go-gota/gota/dataframe"
 	"github.com/gorilla/mux"
 	"github.com/rokwire/core-auth-library-go/v3/tokenauth"
 	"github.com/rokwire/logging-library-go/v2/logs"
@@ -173,6 +177,7 @@ func (h ClientAPIsHandler) createSurveyData(l *logs.Log, r *http.Request, claims
 	if err != nil || surveyData == nil {
 		return l.HTTPResponseErrorAction(logutils.ActionCreate, model.TypeSurveyData, nil, err, http.StatusInternalServerError, true)
 	}
+	go h.runMatchingAlgoAndCreateUserData(*surveyData)
 
 	response, err := json.Marshal(surveyData)
 	if err != nil {
@@ -221,4 +226,97 @@ func (h ClientAPIsHandler) deleteSurveyData(l *logs.Log, r *http.Request, claims
 // NewClientAPIsHandler creates new client API handler instance
 func NewClientAPIsHandler(app *core.Application) ClientAPIsHandler {
 	return ClientAPIsHandler{app: app}
+}
+
+func (h ClientAPIsHandler) runMatchingAlgoAndCreateUserData(surveyData model.SurveyData) {
+	occupations, err := h.app.Client.GetAllOccupationDatas()
+	if err != nil {
+		return
+	}
+
+	matches := h.runMatchingAlgo(surveyData.Scores, occupations)
+	userMatchingResult := model.UserMatchingResult{
+		ID:      surveyData.ID,
+		Matches: matches,
+		Version: "",
+	}
+
+	_, err = h.app.Client.GetUserMatchingResult(userMatchingResult.ID)
+	fmt.Println(err)
+	if err != nil {
+		h.app.Client.CreateUserMatchingResult(userMatchingResult)
+	} else {
+		h.app.Client.UpdateUserMatchingResult(userMatchingResult)
+	}
+}
+
+func (h ClientAPIsHandler) runMatchingAlgo(userScores []model.WorkstyleScore, occupations []model.OccupationData) []model.Match {
+	matches := make([]model.Match, 0)
+	for _, occupation := range occupations {
+		workstyles, err := h.app.Client.GetWorkstyleDatasForOccupation(occupation.Code)
+		if err != nil {
+			return make([]model.Match, 0)
+		}
+		occupationMatch := h.runMatchingAlgorithmPerOccupation(occupation, userScores, workstyles)
+		matches = append(matches, occupationMatch)
+	}
+	sort.SliceStable(matches, func(i, j int) bool {
+		return matches[i].MatchPercent > matches[j].MatchPercent
+	})
+	return matches
+}
+
+func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.OccupationData, userScores []model.WorkstyleScore, workstyles []model.WorkstyleData) model.Match {
+	match := model.Match{Occupation: occupation}
+
+	df_userScoresUnsorted := dataframe.LoadStructs(userScores)
+	df_userScores := df_userScoresUnsorted.Arrange(dataframe.Sort("Score"))
+	df_importanceUnsorted := dataframe.LoadStructs(workstyles)
+	df_importance := df_importanceUnsorted.Arrange(dataframe.Sort("DataValue"))
+
+	bessiToWorkstyles := map[string]string{
+		"stress_regulation":         "Stress Tolerance",
+		"adaptability":              "Adaptability/Flexibility",
+		"capacity_social_warmth":    "Concern for Others",
+		"abstract_thinking":         "Analytical Thinking",
+		"teamwork":                  "Cooperation",
+		"responsibility_management": "Dependability",
+		"detail_management":         "Attention to Detail",
+		"initiative":                "Initiative",
+		"anger_management":          "Self-Control",
+		"capacity_consistency":      "Persistence",
+		"capacity_independence":     "Independence",
+		"perspective_taking":        "Social Orientation",
+		"goal_regulation":           "Achievement/Effort",
+		"creativity":                "Innovation",
+		"ethical_competence":        "Integrity",
+		"leadership":                "Leadership",
+	}
+
+	sum_squared := 0.0
+	n := float64(df_userScores.Nrow())
+	for i := 0; i < df_userScores.Nrow(); i++ {
+		row := df_userScores.Subset(i)
+		workstyle := bessiToWorkstyles[row.Col("Workstyle").Elem(0).String()]
+		idx, err := Index(df_importance, workstyle)
+		if err != nil {
+			return match
+		}
+		diff := i - idx
+		diff_squared := diff * diff
+		sum_squared = sum_squared + float64(diff_squared)
+	}
+	final_score := 1 - ((6 * sum_squared) / (n * (n*n - 1)))
+	match.MatchPercent = (final_score + 1) * 0.5 * 100
+	return match
+}
+
+func Index(df dataframe.DataFrame, workstyle string) (int, error) {
+	for i := 0; i < df.Nrow(); i++ {
+		row := df.Subset(i)
+		if row.Col("ElementName").Elem(0).String() == workstyle {
+			return i, nil
+		}
+	}
+	return -1, errors.New("did not find matching workstyle")
 }
