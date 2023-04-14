@@ -50,7 +50,6 @@ func (a appClient) GetUserMatchingResult(id string) (*model.UserMatchingResult, 
 
 // CreateUserMatchingResult creates a new UserMatchingResult
 func (a appClient) CreateUserMatchingResult(userMatchingResult model.UserMatchingResult) (*model.UserMatchingResult, error) {
-	userMatchingResult.ID = uuid.NewString()
 	userMatchingResult.DateCreated = time.Now()
 	err := a.app.storage.CreateUserMatchingResult(userMatchingResult)
 	if err != nil {
@@ -94,6 +93,16 @@ func (a appClient) UpdateSurveyData(surveyData model.SurveyData) error {
 // DeleteSurveyData deletes a SurveyData by ID
 func (a appClient) DeleteSurveyData(id string) error {
 	return a.app.storage.DeleteSurveyData(id)
+}
+
+// GetAllWorkstyleDatas gets all WorkstyleDatas
+func (a appClient) GetAllWorkstyleDatas() ([]model.WorkstyleData, error) {
+	return a.app.storage.GetAllWorkstyleDatas()
+}
+
+// GetAllWorkstyleDatas finds all WorkstyleDatas for a given occupation
+func (a appClient) GetWorkstyleDatasForOccupation(occupationCode string) ([]model.WorkstyleData, error) {
+	return a.app.storage.GetWorkstyleDatasForOccupation(occupationCode)
 }
 
 // newAppClient creates new appClient

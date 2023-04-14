@@ -44,6 +44,7 @@ type database struct {
 	occupationDatas     *collectionWrapper
 	userMatchingResults *collectionWrapper
 	surveyDatas         *collectionWrapper
+	workstyleDatas      *collectionWrapper
 
 	listeners []interfaces.StorageListener
 }
@@ -102,6 +103,12 @@ func (d *database) start() error {
 		return err
 	}
 
+	workstyleDatas := &collectionWrapper{database: d, coll: db.Collection("workstyles")}
+	err = d.applyWorkstyleDatasChecks(workstyleDatas)
+	if err != nil {
+		return err
+	}
+
 	//assign the db, db client and the collections
 	d.db = db
 	d.dbClient = client
@@ -111,6 +118,7 @@ func (d *database) start() error {
 	d.occupationDatas = occupationDatas
 	d.userMatchingResults = userMatchingResults
 	d.surveyDatas = surveyDatas
+	d.workstyleDatas = workstyleDatas
 
 	go d.configs.Watch(nil, d.logger)
 
@@ -160,6 +168,13 @@ func (d *database) applySurveyDatasChecks(messages *collectionWrapper) error {
 	d.logger.Info("apply surveyDatas checks.....")
 
 	d.logger.Info("apply surveyDatas passed")
+	return nil
+}
+
+func (d *database) applyWorkstyleDatasChecks(messages *collectionWrapper) error {
+	d.logger.Info("apply workstyleDatas checks.....")
+
+	d.logger.Info("apply workstyleDatas passed")
 	return nil
 }
 
