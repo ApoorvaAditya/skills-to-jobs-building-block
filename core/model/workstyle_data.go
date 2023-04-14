@@ -23,7 +23,7 @@ const (
 	TypeWorkstyleData logutils.MessageDataType = "workstyleData"
 )
 
-// WorkstyleData stores the relevant information about each Occupation from ONET
+// WorkstyleData stores statistics such as importance for each workstyle and occupation pair
 type WorkstyleData struct {
 	Code        string  `json:"O*NET-SOC Code" bson:"O*NET-SOC Code"`
 	Title       string  `json:"Title" bson:"Title"`

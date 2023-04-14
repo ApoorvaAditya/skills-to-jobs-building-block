@@ -269,10 +269,10 @@ func (h ClientAPIsHandler) runMatchingAlgo(userScores []model.WorkstyleScore, oc
 func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.OccupationData, userScores []model.WorkstyleScore, workstyles []model.WorkstyleData) model.Match {
 	match := model.Match{Occupation: occupation}
 
-	df_userScoresUnsorted := dataframe.LoadStructs(userScores)
-	df_userScores := df_userScoresUnsorted.Arrange(dataframe.Sort("Score"))
-	df_importanceUnsorted := dataframe.LoadStructs(workstyles)
-	df_importance := df_importanceUnsorted.Arrange(dataframe.Sort("DataValue"))
+	dfUserScoresUnsorted := dataframe.LoadStructs(userScores)
+	dfUserScores := dfUserScoresUnsorted.Arrange(dataframe.Sort("Score"))
+	dfImportanceUnsorted := dataframe.LoadStructs(workstyles)
+	dfImportance := dfImportanceUnsorted.Arrange(dataframe.Sort("DataValue"))
 
 	bessiToWorkstyles := map[string]string{
 		"stress_regulation":         "Stress Tolerance",
@@ -293,25 +293,24 @@ func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.Oc
 		"leadership":                "Leadership",
 	}
 
-	sum_squared := 0.0
-	n := float64(df_userScores.Nrow())
-	for i := 0; i < df_userScores.Nrow(); i++ {
-		row := df_userScores.Subset(i)
+	sumSquared := 0.0
+	n := float64(dfUserScores.Nrow())
+	for i := 0; i < dfUserScores.Nrow(); i++ {
+		row := dfUserScores.Subset(i)
 		workstyle := bessiToWorkstyles[row.Col("Workstyle").Elem(0).String()]
-		idx, err := Index(df_importance, workstyle)
+		idx, err := index(dfImportance, workstyle)
 		if err != nil {
 			return match
 		}
 		diff := i - idx
-		diff_squared := diff * diff
-		sum_squared = sum_squared + float64(diff_squared)
+		sumSquared = sumSquared + float64(diff*diff)
 	}
-	final_score := 1 - ((6 * sum_squared) / (n * (n*n - 1)))
-	match.MatchPercent = (final_score + 1) * 0.5 * 100
+	finalScore := 1 - ((6 * sumSquared) / (n * (n*n - 1)))
+	match.MatchPercent = (finalScore + 1) * 0.5 * 100
 	return match
 }
 
-func Index(df dataframe.DataFrame, workstyle string) (int, error) {
+func index(df dataframe.DataFrame, workstyle string) (int, error) {
 	for i := 0; i < df.Nrow(); i++ {
 		row := df.Subset(i)
 		if row.Col("ElementName").Elem(0).String() == workstyle {
