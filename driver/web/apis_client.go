@@ -252,11 +252,12 @@ func (h ClientAPIsHandler) runMatchingAlgoAndCreateUserData(surveyData model.Sur
 
 func (h ClientAPIsHandler) runMatchingAlgo(userScores []model.WorkstyleScore, occupations []model.OccupationData) []model.Match {
 	matches := make([]model.Match, 0)
+	allWorkstyles, err := h.app.Client.GetAllWorkstyleDatas()
+	if err != nil {
+		return matches
+	}
 	for _, occupation := range occupations {
-		workstyles, err := h.app.Client.GetWorkstyleDatasForOccupation(occupation.Code)
-		if err != nil {
-			return make([]model.Match, 0)
-		}
+		workstyles := h.getWorkstyleDataForOccupation(occupation.Code, allWorkstyles)
 		occupationMatch := h.runMatchingAlgorithmPerOccupation(occupation, userScores, workstyles)
 		matches = append(matches, occupationMatch)
 	}
@@ -264,6 +265,16 @@ func (h ClientAPIsHandler) runMatchingAlgo(userScores []model.WorkstyleScore, oc
 		return matches[i].MatchPercent > matches[j].MatchPercent
 	})
 	return matches
+}
+
+func (h ClientAPIsHandler) getWorkstyleDataForOccupation(code string, allWorkstyles []model.WorkstyleData) []model.WorkstyleData {
+	filteredWorkstyles := make([]model.WorkstyleData, 0)
+	for _, workstyle := range allWorkstyles {
+		if workstyle.Code == code {
+			filteredWorkstyles = append(filteredWorkstyles, workstyle)
+		}
+	}
+	return filteredWorkstyles
 }
 
 func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.OccupationData, userScores []model.WorkstyleScore, workstyles []model.WorkstyleData) model.Match {
