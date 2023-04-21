@@ -24,7 +24,7 @@ const (
 )
 
 // WorkstyleData stores statistics such as importance for each workstyle and occupation pair
-type WorkstyleData struct {
+type OccupationWorkstyleData struct {
 	Code        string  `json:"O*NET-SOC Code" bson:"O*NET-SOC Code"`
 	Title       string  `json:"Title" bson:"Title"`
 	ElementID   string  `json:"Element ID" bson:"Element ID"`

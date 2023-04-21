@@ -23,9 +23,9 @@ import (
 )
 
 // GetAllWorkstyleDatas finds all WorkstyleDatas
-func (a Adapter) GetAllWorkstyleDatas() ([]model.WorkstyleData, error) {
+func (a Adapter) GetAllWorkstyleDatas() ([]model.OccupationWorkstyleData, error) {
 	filter := bson.M{}
-	var data []model.WorkstyleData
+	var data []model.OccupationWorkstyleData
 	err := a.db.workstyleDatas.Find(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeWorkstyleData, nil, err)
@@ -35,9 +35,9 @@ func (a Adapter) GetAllWorkstyleDatas() ([]model.WorkstyleData, error) {
 }
 
 // GetWorkstyleDatasForOccupation finds all WorkstyleDatas
-func (a Adapter) GetWorkstyleDatasForOccupation(occupationCode string) ([]model.WorkstyleData, error) {
+func (a Adapter) GetWorkstyleDatasForOccupation(occupationCode string) ([]model.OccupationWorkstyleData, error) {
 	filter := bson.M{"O*NET-SOC Code": occupationCode}
-	var data []model.WorkstyleData
+	var data []model.OccupationWorkstyleData
 	err := a.db.workstyleDatas.Find(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeWorkstyleData, nil, err)
