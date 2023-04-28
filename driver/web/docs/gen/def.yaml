@@ -99,6 +99,8 @@ paths:
                   - code
                   - title
                   - description
+                  - technology_skills
+                  - work_styles
                 properties:
                   code:
                     type: string
@@ -108,6 +110,46 @@ paths:
                     readOnly: true
                   description:
                     type: string
+                    readOnly: true
+                  technology_skills:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - id
+                        - title
+                        - examples
+                      properties:
+                        id:
+                          type: int
+                          readOnly: true
+                        title:
+                          type: string
+                          readOnly: true
+                        examples:
+                          type: array
+                          items:
+                            type: string
+                          readOnly: true
+                    readOnly: true
+                  work_styles:
+                    type: array
+                    items:
+                      type: object
+                      required:
+                        - id
+                        - name
+                        - description
+                      properties:
+                        id:
+                          type: string
+                          readOnly: true
+                        name:
+                          type: string
+                          readOnly: true
+                        description:
+                          type: string
+                          readOnly: true
                     readOnly: true
         '400':
           description: Bad request
