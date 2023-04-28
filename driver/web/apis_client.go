@@ -311,7 +311,7 @@ func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.Oc
 		workstyle := bessiToWorkstyles[row.Col("Workstyle").Elem(0).String()]
 		idx, err := index(dfImportance, workstyle)
 		if err != nil {
-			return match
+			continue
 		}
 		diff := i - idx
 		sumSquared = sumSquared + float64(diff*diff)
