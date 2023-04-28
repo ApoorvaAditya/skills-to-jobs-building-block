@@ -230,19 +230,19 @@ func (_m *Storage) GetAllOccupationDatas() ([]model.OccupationData, error) {
 }
 
 // GetAllWorkstyleDatas provides a mock function with given fields:
-func (_m *Storage) GetAllWorkstyleDatas() ([]model.OccupationWorkstyleData, error) {
+func (_m *Storage) GetAllWorkstyleDatas() ([]model.WorkstyleData, error) {
 	ret := _m.Called()
 
-	var r0 []model.OccupationWorkstyleData
+	var r0 []model.WorkstyleData
 	var r1 error
-	if rf, ok := ret.Get(0).(func() ([]model.OccupationWorkstyleData, error)); ok {
+	if rf, ok := ret.Get(0).(func() ([]model.WorkstyleData, error)); ok {
 		return rf()
 	}
-	if rf, ok := ret.Get(0).(func() []model.OccupationWorkstyleData); ok {
+	if rf, ok := ret.Get(0).(func() []model.WorkstyleData); ok {
 		r0 = rf()
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]model.OccupationWorkstyleData)
+			r0 = ret.Get(0).([]model.WorkstyleData)
 		}
 	}
 
@@ -334,19 +334,19 @@ func (_m *Storage) GetUserMatchingResult(id string) (*model.UserMatchingResult, 
 }
 
 // GetWorkstyleDatasForOccupation provides a mock function with given fields: occupationCode
-func (_m *Storage) GetWorkstyleDatasForOccupation(occupationCode string) ([]model.OccupationWorkstyleData, error) {
+func (_m *Storage) GetWorkstyleDatasForOccupation(occupationCode string) ([]model.WorkstyleData, error) {
 	ret := _m.Called(occupationCode)
 
-	var r0 []model.OccupationWorkstyleData
+	var r0 []model.WorkstyleData
 	var r1 error
-	if rf, ok := ret.Get(0).(func(string) ([]model.OccupationWorkstyleData, error)); ok {
+	if rf, ok := ret.Get(0).(func(string) ([]model.WorkstyleData, error)); ok {
 		return rf(occupationCode)
 	}
-	if rf, ok := ret.Get(0).(func(string) []model.OccupationWorkstyleData); ok {
+	if rf, ok := ret.Get(0).(func(string) []model.WorkstyleData); ok {
 		r0 = rf(occupationCode)
 	} else {
 		if ret.Get(0) != nil {
-			r0 = ret.Get(0).([]model.OccupationWorkstyleData)
+			r0 = ret.Get(0).([]model.WorkstyleData)
 		}
 	}
 

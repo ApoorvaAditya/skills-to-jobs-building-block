@@ -19,10 +19,9 @@ import (
 	"application/core/model"
 	"encoding/json"
 	"errors"
-	"fmt"
 	"net/http"
 	"sort"
-	
+
 	"github.com/go-gota/gota/dataframe"
 	"github.com/gorilla/mux"
 	"github.com/rokwire/core-auth-library-go/v3/tokenauth"
@@ -242,7 +241,7 @@ func (h ClientAPIsHandler) runMatchingAlgoAndCreateUserData(surveyData model.Sur
 	}
 
 	_, err = h.app.Client.GetUserMatchingResult(userMatchingResult.ID)
-	fmt.Println(err)
+
 	if err != nil {
 		h.app.Client.CreateUserMatchingResult(userMatchingResult)
 	} else {
@@ -267,8 +266,8 @@ func (h ClientAPIsHandler) runMatchingAlgo(userScores []model.WorkstyleScore, oc
 	return matches
 }
 
-func (h ClientAPIsHandler) getWorkstyleDataForOccupation(code string, allWorkstyles []model.OccupationWorkstyleData) []model.OccupationWorkstyleData {
-	filteredWorkstyles := make([]model.OccupationWorkstyleData, 0)
+func (h ClientAPIsHandler) getWorkstyleDataForOccupation(code string, allWorkstyles []model.WorkstyleData) []model.WorkstyleData {
+	filteredWorkstyles := make([]model.WorkstyleData, 0)
 	for _, workstyle := range allWorkstyles {
 		if workstyle.Code == code {
 			filteredWorkstyles = append(filteredWorkstyles, workstyle)
@@ -278,7 +277,7 @@ func (h ClientAPIsHandler) getWorkstyleDataForOccupation(code string, allWorksty
 }
 
 // It runs the matching alogrithm on the entire occupation list and its workstyles to find the p-value for each occupation
-func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.OccupationData, userScores []model.WorkstyleScore, workstyles []model.OccupationWorkstyleData) model.Match {
+func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.OccupationData, userScores []model.WorkstyleScore, workstyles []model.WorkstyleData) model.Match {
 	match := model.Match{Occupation: occupation}
 
 	dfUserScoresUnsorted := dataframe.LoadStructs(userScores)
@@ -321,7 +320,7 @@ func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.Oc
 	match.MatchPercent = (finalScore + 1) * 0.5 * 100
 	return match
 }
- 
+
 func index(df dataframe.DataFrame, workstyle string) (int, error) {
 	for i := 0; i < df.Nrow(); i++ {
 		row := df.Subset(i)
