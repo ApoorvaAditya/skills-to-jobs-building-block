@@ -96,12 +96,12 @@ func (a appClient) DeleteSurveyData(id string) error {
 }
 
 // GetAllWorkstyleDatas gets all WorkstyleDatas
-func (a appClient) GetAllWorkstyleDatas() ([]model.WorkstyleData, error) {
+func (a appClient) GetAllWorkstyleDatas() ([]model.OccupationWorkstyleData, error) {
 	return a.app.storage.GetAllWorkstyleDatas()
 }
 
 // GetAllWorkstyleDatas finds all WorkstyleDatas for a given occupation
-func (a appClient) GetWorkstyleDatasForOccupation(occupationCode string) ([]model.WorkstyleData, error) {
+func (a appClient) GetWorkstyleDatasForOccupation(occupationCode string) ([]model.OccupationWorkstyleData, error) {
 	return a.app.storage.GetWorkstyleDatasForOccupation(occupationCode)
 }
 
