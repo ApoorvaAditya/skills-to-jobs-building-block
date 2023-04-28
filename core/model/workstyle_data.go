@@ -20,7 +20,7 @@ import (
 
 const (
 	//TypeWorkstyleData example type
-	TypeWorkstyleData logutils.MessageDataType = "workstyleData"
+	TypeWorkstyleData logutils.MessageDataType = "workstyle data"
 )
 
 // WorkstyleData stores statistics such as importance for each workstyle and occupation pair

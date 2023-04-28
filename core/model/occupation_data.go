@@ -19,8 +19,12 @@ import (
 )
 
 const (
-	//TypeOccupationData example type
-	TypeOccupationData logutils.MessageDataType = "occupation"
+	//TypeOccupationData type
+	TypeOccupationData logutils.MessageDataType = "occupation data"
+	//TypeTechnologySkill type
+	TypeTechnologySkill logutils.MessageDataType = "technology skill"
+	//TypeWorkstyle type
+	TypeWorkstyle logutils.MessageDataType = "workstyle"
 )
 
 // OccupationData stores the relevant information about each Occupation from ONET
@@ -29,16 +33,18 @@ type OccupationData struct {
 	Title            string            `json:"title" bson:"title"`
 	Description      string            `json:"description" bson:"description"`
 	TechnologySkills []TechnologySkill `json:"technology_skills" bson:"technology_skills"`
-	WorkStyles       []WorkStyle       `json:"work_styles" bson:"work_styles"`
+	Workstyles       []Workstyle       `json:"work_styles" bson:"work_styles"`
 }
 
+// TechnologySkill stores the relevant information about each Technology Skill for an occupation
 type TechnologySkill struct {
 	ID       int      `json:"id" bson:"id"`
 	Title    string   `json:"title" bson:"title"`
 	Examples []string `json:"examples" bson:"examples"`
 }
 
-type WorkStyle struct {
+// Workstyle stores the relevant information about each Workstyle for an occupation
+type Workstyle struct {
 	ID          string `json:"id" bson:"id"`
 	Name        string `json:"name" bson:"name"`
 	Description string `json:"description" bson:"description"`

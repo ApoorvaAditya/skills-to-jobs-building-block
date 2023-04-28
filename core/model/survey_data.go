@@ -21,8 +21,10 @@ import (
 )
 
 const (
-	//TypeSurveyData data type
-	TypeSurveyData logutils.MessageDataType = "survey_data"
+	// TypeSurveyData type
+	TypeSurveyData logutils.MessageDataType = "survey data"
+	// TypeWorkstyleScore type
+	TypeWorkstyleScore logutils.MessageDataType = "workstyle score"
 )
 
 // SurveyData represents the survey results from the BESSI Survey

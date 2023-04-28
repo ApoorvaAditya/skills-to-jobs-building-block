@@ -22,7 +22,7 @@ import (
 
 const (
 	//TypeUserMatchingResult type
-	TypeUserMatchingResult logutils.MessageDataType = "userMatchingResult"
+	TypeUserMatchingResult logutils.MessageDataType = "user matching result"
 	//TypeMatch type
 	TypeMatch logutils.MessageDataType = "match"
 )
