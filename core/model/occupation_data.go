@@ -25,7 +25,21 @@ const (
 
 // OccupationData stores the relevant information about each Occupation from ONET
 type OccupationData struct {
-	Code        string `json:"code" bson:"code"`
-	Title       string `json:"title" bson:"title"`
+	Code             string            `json:"code" bson:"code"`
+	Title            string            `json:"title" bson:"title"`
+	Description      string            `json:"description" bson:"description"`
+	TechnologySkills []TechnologySkill `json:"technology_skills" bson:"technology_skills"`
+	WorkStyles       []WorkStyle       `json:"work_styles" bson:"work_styles"`
+}
+
+type TechnologySkill struct {
+	ID       int      `json:"id" bson:"id"`
+	Title    string   `json:"title" bson:"title"`
+	Examples []string `json:"examples" bson:"examples"`
+}
+
+type WorkStyle struct {
+	ID          string `json:"id" bson:"id"`
+	Name        string `json:"name" bson:"name"`
 	Description string `json:"description" bson:"description"`
 }
