@@ -20,14 +20,12 @@ with open('.env', 'r') as file:
 # Define MongoDB connection and collection
 mongo_raw_occupations_collection_name = "rawOccupationDatas"
 mongo_occupations_collection_name = "occupationDatas"
-mongo_user_matching_results_collection_name = "userMatchingResults"
 
 # Create MongoDB Client and set up collections
 mongo_client = MongoClient(mongo_client_uri)
 mongo_db = mongo_client[mongo_db_name]
 mongo_raw_occupations_collection = mongo_db[mongo_raw_occupations_collection_name]
 mongo_occupations_collection = mongo_db[mongo_occupations_collection_name]
-mongo_user_matching_results_collection = mongo_db[mongo_user_matching_results_collection_name]
 
 # Define bearer token
 headers = {
@@ -64,7 +62,9 @@ def get_occupation(occupation_code):
     response = requests.get(onet_api_url + occupation_code + '/summary', params={'display': 'long'}, headers=headers)
     if response.status_code == 200:
         data = response.json()
-        result = mongo_raw_occupations_collection.insert_one(data)
+        # result = mongo_raw_occupations_collection.insert_one(data)
+        occupation_data = convert_raw_occupation_data_to_modified_occupation_data(data)
+        mongo_occupations_collection.insert_one(occupation_data)
     else:
         print(f"Failed to retrieve occupation data for {occupation_code} from ONET API.")
         print(f'Reason: {response.status_code}: {response.reason}')
