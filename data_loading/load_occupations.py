@@ -18,13 +18,11 @@ with open('.env', 'r') as file:
     mongo_db_name = file.readline().split('=')[1].replace("\"", "")
 
 # Define MongoDB connection and collection
-mongo_raw_occupations_collection_name = "rawOccupationDatas"
 mongo_occupations_collection_name = "occupationDatas"
 
 # Create MongoDB Client and set up collections
 mongo_client = MongoClient(mongo_client_uri)
 mongo_db = mongo_client[mongo_db_name]
-mongo_raw_occupations_collection = mongo_db[mongo_raw_occupations_collection_name]
 mongo_occupations_collection = mongo_db[mongo_occupations_collection_name]
 
 # Define bearer token
@@ -62,15 +60,29 @@ def get_occupation(occupation_code):
     response = requests.get(onet_api_url + occupation_code + '/summary', params={'display': 'long'}, headers=headers)
     if response.status_code == 200:
         data = response.json()
-        # result = mongo_raw_occupations_collection.insert_one(data)
-        occupation_data = convert_raw_occupation_data_to_modified_occupation_data(data)
+        occupation_data = filter_occupation_data(data)
+        workstyle_data = get_workstyles(occupation_code)
+        if len(workstyle_data) > 0:
+            #TODO: check key
+            occupation_data['workstyles'] = workstyle_data
         mongo_occupations_collection.insert_one(occupation_data)
     else:
         print(f"Failed to retrieve occupation data for {occupation_code} from ONET API.")
         print(f'Reason: {response.status_code}: {response.reason}')
 
+def get_workstyles(occupation_code):
+    response = requests.get(onet_api_url + occupation_code + '/details/work_styles', headers=headers)
+    if response.status_code == 200:
+        data = response.json()
+        workstyle_data = filter_workstyle_data(data)
+        return workstyle_data
+    else:
+        print(f"Failed to retrieve workstyle data for {occupation_code} from ONET API.")
+        print(f'Reason: {response.status_code}: {response.reason}')
+        return []
+
 # Gets all occupations from ONET and stores it in the raw_occupations_collection
-def get_all_raw_occupation_data():
+def get_all_occupation_data():
     with open('data_loading/occupation_codes.txt', 'r') as file:
         occupation_codes = file.readlines()
         for occupation_code in tqdm(occupation_codes):
@@ -80,24 +92,30 @@ def get_all_raw_occupation_data():
 
 # Checks if the occupation with the given occupation code exists in the database
 def occupation_exists_in_db(occupation_code):
-    result = mongo_raw_occupations_collection.find_one({'code': occupation_code})
+    result = mongo_occupations_collection.find_one({'code': occupation_code})
     return result != None
 
 # Converts a raw_occupation_data to occupation data that we will actually use and need
-def convert_raw_occupation_data_to_modified_occupation_data(raw_occupation_data):
+def filter_occupation_data(raw_occupation_data):
     occupation_data = {}
     occupation_data['code'] = raw_occupation_data['code']
     occupation_data['title'] = raw_occupation_data['occupation']['title']
     occupation_data['description'] = raw_occupation_data['occupation']['description']
+    #TODO: add more fields
     return occupation_data
 
-# Converts all raw occupation data to modified occupation data
-def get_all_occupation_data():
-    all_raw_occupation_data = mongo_raw_occupations_collection.find({})
-    for raw_occupation_data in tqdm(all_raw_occupation_data, total=1016):
-        occupation_data = convert_raw_occupation_data_to_modified_occupation_data(raw_occupation_data)
-        mongo_occupations_collection.insert_one(occupation_data)
+# Converts a raw_workstyle_data to workstyle data that we will actually use and need
+def filter_workstyle_data(raw_workstyle_data):
+    workstyle_data = []
+    for workstyle in raw_workstyle_data:
+        data = {}
+        data['code'] = workstyle['code']
+        data['title'] = workstyle['occupation']['title']
+        data['description'] = workstyle['occupation']['description']
+        #TODO: add more fields
+        workstyle_data.append(data)
+    return workstyle_data
 
 if __name__ == '__main__':
-    get_all_raw_occupation_data()
+    get_all_occupation_data()
     print("All occupation data stored in MongoDB!")
