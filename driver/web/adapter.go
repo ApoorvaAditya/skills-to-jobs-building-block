@@ -47,9 +47,6 @@ type Adapter struct {
 	defaultAPIsHandler DefaultAPIsHandler
 	clientAPIsHandler  ClientAPIsHandler
 	adminAPIsHandler   AdminAPIsHandler
-	bbsAPIsHandler     BBsAPIsHandler
-	tpsAPIsHandler     TPSAPIsHandler
-	systemAPIsHandler  SystemAPIsHandler
 
 	app *core.Application
 
@@ -73,9 +70,6 @@ func (a Adapter) Start() {
 
 	// Client APIs
 
-	// Example APIs
-	mainRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.clientAPIsHandler.getExample, a.auth.client.Permissions)).Methods("GET")
-
 	// Occupation API
 	mainRouter.HandleFunc("/occupation/{code}", a.wrapFunc(a.clientAPIsHandler.getOccupationData, a.auth.client.User)).Methods("GET")
 	mainRouter.HandleFunc("/occupation", a.wrapFunc(a.clientAPIsHandler.getAllOccupationDatas, a.auth.client.User)).Methods("GET")
@@ -94,11 +88,6 @@ func (a Adapter) Start() {
 
 	// Admin APIs
 	adminRouter := mainRouter.PathPrefix("/admin").Subrouter()
-	adminRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.adminAPIsHandler.getExample, a.auth.admin.Permissions)).Methods("GET")
-	adminRouter.HandleFunc("/examples", a.wrapFunc(a.adminAPIsHandler.createExample, a.auth.admin.Permissions)).Methods("POST")
-	adminRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.adminAPIsHandler.updateExample, a.auth.admin.Permissions)).Methods("PUT")
-	adminRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.adminAPIsHandler.deleteExample, a.auth.admin.Permissions)).Methods("DELETE")
-
 	adminRouter.HandleFunc("/configs/{id}", a.wrapFunc(a.adminAPIsHandler.getConfig, a.auth.admin.Permissions)).Methods("GET")
 	adminRouter.HandleFunc("/configs", a.wrapFunc(a.adminAPIsHandler.getConfigs, a.auth.admin.Permissions)).Methods("GET")
 	adminRouter.HandleFunc("/configs", a.wrapFunc(a.adminAPIsHandler.createConfig, a.auth.admin.Permissions)).Methods("POST")
@@ -106,16 +95,13 @@ func (a Adapter) Start() {
 	adminRouter.HandleFunc("/configs/{id}", a.wrapFunc(a.adminAPIsHandler.deleteConfig, a.auth.admin.Permissions)).Methods("DELETE")
 
 	// BB APIs
-	bbsRouter := mainRouter.PathPrefix("/bbs").Subrouter()
-	bbsRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.bbsAPIsHandler.getExample, a.auth.bbs.Permissions)).Methods("GET")
+	// bbsRouter := mainRouter.PathPrefix("/bbs").Subrouter()
 
 	// TPS APIs
-	tpsRouter := mainRouter.PathPrefix("/tps").Subrouter()
-	tpsRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.tpsAPIsHandler.getExample, a.auth.tps.Permissions)).Methods("GET")
+	// tpsRouter := mainRouter.PathPrefix("/tps").Subrouter()
 
 	// System APIs
-	systemRouter := mainRouter.PathPrefix("/system").Subrouter()
-	systemRouter.HandleFunc("/examples/{id}", a.wrapFunc(a.systemAPIsHandler.getExample, a.auth.system.Permissions)).Methods("GET")
+	// systemRouter := mainRouter.PathPrefix("/system").Subrouter()
 
 	a.logger.Fatalf("Error serving: %v", http.ListenAndServe(":"+a.port, router))
 }
@@ -206,7 +192,6 @@ func NewWebAdapter(baseURL string, port string, serviceID string, app *core.Appl
 	defaultAPIsHandler := NewDefaultAPIsHandler(app)
 	clientAPIsHandler := NewClientAPIsHandler(app)
 	adminAPIsHandler := NewAdminAPIsHandler(app)
-	bbsAPIsHandler := NewBBsAPIsHandler(app)
 	return Adapter{baseURL: baseURL, port: port, serviceID: serviceID, cachedYamlDoc: yamlDoc, auth: auth, defaultAPIsHandler: defaultAPIsHandler,
-		clientAPIsHandler: clientAPIsHandler, adminAPIsHandler: adminAPIsHandler, bbsAPIsHandler: bbsAPIsHandler, app: app, logger: logger}
+		clientAPIsHandler: clientAPIsHandler, adminAPIsHandler: adminAPIsHandler, app: app, logger: logger}
 }

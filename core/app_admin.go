@@ -15,7 +15,6 @@
 package core
 
 import (
-	"application/core/interfaces"
 	"application/core/model"
 	"time"
 
@@ -29,61 +28,6 @@ import (
 // appAdmin contains admin implementations
 type appAdmin struct {
 	app *Application
-}
-
-// GetExample gets an Example by ID
-func (a appAdmin) GetExample(orgID string, appID string, id string) (*model.Example, error) {
-	return a.app.shared.getExample(orgID, appID, id)
-}
-
-// CreateExample creates a new Example
-func (a appAdmin) CreateExample(example model.Example) (*model.Example, error) {
-	example.ID = uuid.NewString()
-	err := a.app.storage.InsertExample(example)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeExample, nil, err)
-	}
-	return &example, nil
-}
-
-// UpdateExample updates an Example
-func (a appAdmin) UpdateExample(example model.Example) error {
-	return a.app.storage.UpdateExample(example)
-}
-
-// AppendExample appends to the data in an example - Example of transaction usage
-func (a appAdmin) AppendExample(example model.Example) (*model.Example, error) {
-	now := time.Now()
-	var newExample *model.Example
-	transaction := func(storage interfaces.Storage) error {
-		oldExample, err := storage.FindExample(example.OrgID, example.AppID, example.ID)
-		if err != nil || oldExample == nil {
-			return errors.WrapErrorAction(logutils.ActionFind, model.TypeExample, nil, err)
-		}
-
-		oldExample.Data = oldExample.Data + "," + example.Data
-		oldExample.DateUpdated = &now
-
-		err = storage.UpdateExample(*oldExample)
-		if err != nil {
-			return errors.WrapErrorAction(logutils.ActionUpdate, model.TypeExample, nil, err)
-		}
-
-		newExample = oldExample
-		return nil
-	}
-
-	err := a.app.storage.PerformTransaction(transaction)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionCommit, logutils.TypeTransaction, nil, err)
-	}
-
-	return newExample, nil
-}
-
-// DeleteExample deletes an Example by ID
-func (a appAdmin) DeleteExample(orgID string, appID string, id string) error {
-	return a.app.storage.DeleteExample(orgID, appID, id)
 }
 
 func (a appAdmin) GetConfig(id string, claims *tokenauth.Claims) (*model.Config, error) {

@@ -28,11 +28,6 @@ type appClient struct {
 	app *Application
 }
 
-// GetExample gets an Example by ID
-func (a appClient) GetExample(orgID string, appID string, id string) (*model.Example, error) {
-	return a.app.shared.getExample(orgID, appID, id)
-}
-
 // GetOccupationData gets an OccupationData by Code
 func (a appClient) GetOccupationData(code string) (*model.OccupationData, error) {
 	return a.app.storage.GetOccupationData(code)

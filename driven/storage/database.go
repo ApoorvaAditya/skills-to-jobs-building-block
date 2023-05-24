@@ -19,9 +19,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/rokwire/logging-library-go/v2/errors"
 	"github.com/rokwire/logging-library-go/v2/logs"
-	"github.com/rokwire/logging-library-go/v2/logutils"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -40,7 +38,6 @@ type database struct {
 	logger   *logs.Logger
 
 	configs             *collectionWrapper
-	examples            *collectionWrapper
 	occupationDatas     *collectionWrapper
 	userMatchingResults *collectionWrapper
 	surveyDatas         *collectionWrapper
@@ -79,12 +76,6 @@ func (d *database) start() error {
 		return err
 	}
 
-	examples := &collectionWrapper{database: d, coll: db.Collection("examples")}
-	err = d.applyExamplesChecks(examples)
-	if err != nil {
-		return err
-	}
-
 	occupationDatas := &collectionWrapper{database: d, coll: db.Collection("occupationDatas")}
 	err = d.applyOccupationDatasChecks(occupationDatas)
 	if err != nil {
@@ -114,7 +105,6 @@ func (d *database) start() error {
 	d.dbClient = client
 
 	d.configs = configs
-	d.examples = examples
 	d.occupationDatas = occupationDatas
 	d.userMatchingResults = userMatchingResults
 	d.surveyDatas = surveyDatas
@@ -134,19 +124,6 @@ func (d *database) applyConfigsChecks(configs *collectionWrapper) error {
 	}
 
 	d.logger.Info("apply configs passed")
-	return nil
-}
-
-func (d *database) applyExamplesChecks(examples *collectionWrapper) error {
-	d.logger.Info("apply examples checks.....")
-
-	//add compound unique index - org_id + app_id
-	err := examples.AddIndex(nil, bson.D{primitive.E{Key: "org_id", Value: 1}, primitive.E{Key: "app_id", Value: 1}}, false)
-	if err != nil {
-		return errors.WrapErrorAction(logutils.ActionCreate, "index", nil, err)
-	}
-
-	d.logger.Info("apply examples passed")
 	return nil
 }
 
@@ -196,12 +173,6 @@ func (d *database) onDataChanged(changeDoc map[string]interface{}) {
 
 		for _, listener := range d.listeners {
 			go listener.OnConfigsUpdated()
-		}
-	case "examples":
-		d.logger.Info("examples collection changed")
-
-		for _, listener := range d.listeners {
-			go listener.OnExamplesUpdated()
 		}
 	}
 }

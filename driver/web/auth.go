@@ -29,9 +29,6 @@ import (
 type Auth struct {
 	client tokenauth.Handlers
 	admin  tokenauth.Handlers
-	bbs    tokenauth.Handlers
-	tps    tokenauth.Handlers
-	system tokenauth.Handlers
 }
 
 // NewAuth creates new auth handler
@@ -48,30 +45,9 @@ func NewAuth(serviceRegManager *authservice.ServiceRegManager) (*Auth, error) {
 	}
 	adminHandlers := tokenauth.NewHandlers(admin)
 
-	bbs, err := newBBsAuth(serviceRegManager)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionCreate, "bbs auth", nil, err)
-	}
-	bbsHandlers := tokenauth.NewHandlers(bbs)
-
-	tps, err := newTPSAuth(serviceRegManager)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionCreate, "tps auth", nil, err)
-	}
-	tpsHandlers := tokenauth.NewHandlers(tps)
-
-	system, err := newSystemAuth(serviceRegManager)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionCreate, "system auth", nil, err)
-	}
-	systemHandlers := tokenauth.NewHandlers(system)
-
 	auth := Auth{
 		client: clientHandlers,
 		admin:  adminHandlers,
-		bbs:    bbsHandlers,
-		tps:    tpsHandlers,
-		system: systemHandlers,
 	}
 	return &auth, nil
 }
@@ -117,70 +93,5 @@ func newAdminAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.
 	}
 
 	auth := tokenauth.NewStandardHandler(adminTokenAuth, check)
-	return auth, nil
-}
-
-func newBBsAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
-	bbsPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/bbs_permission_policy.csv")
-	bbsTokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, bbsPermissionAuth, nil)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionStart, "bbs token auth", nil, err)
-	}
-
-	check := func(claims *tokenauth.Claims, req *http.Request) (int, error) {
-		if !claims.Service {
-			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "service claim", nil)
-		}
-
-		if !claims.FirstParty {
-			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "first party claim", nil)
-		}
-
-		return http.StatusOK, nil
-	}
-
-	auth := tokenauth.NewStandardHandler(bbsTokenAuth, check)
-	return auth, nil
-}
-
-func newTPSAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
-	tpsPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/tps_permission_policy.csv")
-	tpsTokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, tpsPermissionAuth, nil)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionStart, "tps token auth", nil, err)
-	}
-
-	check := func(claims *tokenauth.Claims, req *http.Request) (int, error) {
-		if !claims.Service {
-			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "service claim", nil)
-		}
-
-		if claims.FirstParty {
-			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "first party claim", nil)
-		}
-
-		return http.StatusOK, nil
-	}
-
-	auth := tokenauth.NewStandardHandler(tpsTokenAuth, check)
-	return auth, nil
-}
-
-func newSystemAuth(serviceRegManager *authservice.ServiceRegManager) (*tokenauth.StandardHandler, error) {
-	systemPermissionAuth := authorization.NewCasbinStringAuthorization("driver/web/system_permission_policy.csv")
-	systemTokenAuth, err := tokenauth.NewTokenAuth(true, serviceRegManager, systemPermissionAuth, nil)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionCreate, "system token auth", nil, err)
-	}
-
-	check := func(claims *tokenauth.Claims, req *http.Request) (int, error) {
-		if !claims.System {
-			return http.StatusUnauthorized, errors.ErrorData(logutils.StatusInvalid, "system claim", nil)
-		}
-
-		return http.StatusOK, nil
-	}
-
-	auth := tokenauth.NewStandardHandler(systemTokenAuth, check)
 	return auth, nil
 }

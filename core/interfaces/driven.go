@@ -30,11 +30,6 @@ type Storage interface {
 	UpdateConfig(config model.Config) error
 	DeleteConfig(id string) error
 
-	FindExample(orgID string, appID string, id string) (*model.Example, error)
-	InsertExample(example model.Example) error
-	UpdateExample(example model.Example) error
-	DeleteExample(orgID string, appID string, id string) error
-
 	GetOccupationData(id string) (*model.OccupationData, error)
 	GetAllOccupationDatas() ([]model.OccupationData, error)
 
@@ -55,5 +50,4 @@ type Storage interface {
 // StorageListener represents storage listener
 type StorageListener interface {
 	OnConfigsUpdated()
-	OnExamplesUpdated()
 }

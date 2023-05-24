@@ -3,8 +3,6 @@ Config:
   $ref: "./application/Config.yaml"
 EnvConfigData:
   $ref: "./application/EnvConfigData.yaml"
-Example:
-  $ref: "./application/Example.yaml"
 UserMatchingResult:
   $ref: "./application/UserMatchingResult.yaml"
 Match:

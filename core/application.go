@@ -29,13 +29,6 @@ type storageListener struct {
 	model.DefaultStorageListener
 }
 
-// OnExampleUpdated notifies that the example collection has changed
-func (s *storageListener) OnExampleUpdated() {
-	s.app.logger.Infof("OnExampleUpdated")
-
-	// TODO: Implement listener
-}
-
 // Application represents the core application code based on hexagonal architecture
 type Application struct {
 	version string
@@ -44,10 +37,6 @@ type Application struct {
 	Default interfaces.Default // expose to the drivers adapters
 	Client  interfaces.Client  // expose to the drivers adapters
 	Admin   interfaces.Admin   // expose to the drivers adapters
-	BBs     interfaces.BBs     // expose to the drivers adapters
-	TPS     interfaces.TPS     // expose to the drivers adapters
-	System  interfaces.System  // expose to the drivers adapters
-	shared  Shared
 
 	logger *logs.Logger
 
@@ -82,10 +71,6 @@ func NewApplication(version string, build string, storage interfaces.Storage, lo
 	application.Default = newAppDefault(&application)
 	application.Client = newAppClient(&application)
 	application.Admin = newAppAdmin(&application)
-	application.BBs = newAppBBs(&application)
-	application.TPS = newAppTPS(&application)
-	application.System = newAppSystem(&application)
-	application.shared = newAppShared(&application)
 
 	return &application
 }

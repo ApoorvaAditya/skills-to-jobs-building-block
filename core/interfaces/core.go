@@ -27,8 +27,6 @@ type Default interface {
 
 // Client exposes client APIs for the driver adapters
 type Client interface {
-	GetExample(orgID string, appID string, id string) (*model.Example, error)
-
 	// OccupationData APIs
 	GetOccupationData(code string) (*model.OccupationData, error)
 	GetAllOccupationDatas() ([]model.OccupationData, error)
@@ -51,30 +49,9 @@ type Client interface {
 
 // Admin exposes administrative APIs for the driver adapters
 type Admin interface {
-	GetExample(orgID string, appID string, id string) (*model.Example, error)
-	CreateExample(example model.Example) (*model.Example, error)
-	UpdateExample(example model.Example) error
-	AppendExample(example model.Example) (*model.Example, error)
-	DeleteExample(orgID string, appID string, id string) error
-
 	GetConfig(id string, claims *tokenauth.Claims) (*model.Config, error)
 	GetConfigs(configType *string, claims *tokenauth.Claims) ([]model.Config, error)
 	CreateConfig(config model.Config, claims *tokenauth.Claims) (*model.Config, error)
 	UpdateConfig(config model.Config, claims *tokenauth.Claims) error
 	DeleteConfig(id string, claims *tokenauth.Claims) error
-}
-
-// BBs exposes Building Block APIs for the driver adapters
-type BBs interface {
-	GetExample(orgID string, appID string, id string) (*model.Example, error)
-}
-
-// TPS exposes third-party service APIs for the driver adapters
-type TPS interface {
-	GetExample(orgID string, appID string, id string) (*model.Example, error)
-}
-
-// System exposes system administrative APIs for the driver adapters
-type System interface {
-	GetExample(orgID string, appID string, id string) (*model.Example, error)
 }
