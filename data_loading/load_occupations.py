@@ -13,11 +13,11 @@ onet_api_params = {
 
 # Read in API keys and MongoDB Conenction URL with a .env file
 with open('.env', 'r') as file:
-    base64_credentials = file.readline().split('=')[1]
-    mongo_client_uri = file.readline().split('=')[1]
+    base64_credentials = file.readline().split('=')[1].replace("\"", "")
+    mongo_client_uri = file.readline().split('=')[1].replace("\"", "")
+    mongo_db_name = file.readline().split('=')[1].replace("\"", "")
 
 # Define MongoDB connection and collection
-mongo_db_name = "IllinoisApp"
 mongo_raw_occupations_collection_name = "rawOccupationDatas"
 mongo_occupations_collection_name = "occupationDatas"
 mongo_user_matching_results_collection_name = "userMatchingResults"
@@ -48,8 +48,8 @@ def get_all_occupation_codes():
             occupation_codes.append(occupation["code"])
             occupation_urls.append(occupation["href"])
         
-        write_lines_to_file('occupation_codes.txt', occupation_codes)
-        write_lines_to_file('occupation_urls.txt', occupation_urls)
+        write_lines_to_file('data_loading/occupation_codes.txt', occupation_codes)
+        write_lines_to_file('data_loading/occupation_urls.txt', occupation_urls)
 
         print("Occupation data written to files")
     else:
@@ -71,7 +71,7 @@ def get_occupation(occupation_code):
 
 # Gets all occupations from ONET and stores it in the raw_occupations_collection
 def get_all_raw_occupation_data():
-    with open('occupation_codes.txt', 'r') as file:
+    with open('data_loading/occupation_codes.txt', 'r') as file:
         occupation_codes = file.readlines()
         for occupation_code in tqdm(occupation_codes):
             occupation_code = occupation_code.strip()
