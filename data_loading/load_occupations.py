@@ -13,9 +13,9 @@ onet_api_params = {
 
 # Read in API keys and MongoDB Conenction URL with a .env file
 with open('.env', 'r') as file:
-    base64_credentials = file.readline().split('=')[1].replace("\"", "")
-    mongo_client_uri = file.readline().split('=')[1].replace("\"", "")
-    mongo_db_name = file.readline().split('=')[1].replace("\"", "")
+    base64_credentials = file.readline().split('=')[1].replace("\"", "").strip()
+    mongo_client_uri = file.readline().split('=')[1].replace("\"", "").strip()
+    mongo_db_name = file.readline().split('=')[1].replace("\"", "").strip()
 
 # Define MongoDB connection and collection
 mongo_occupations_collection_name = "occupationDatas"
@@ -45,7 +45,7 @@ def get_all_occupation_codes():
             occupation_urls.append(occupation["href"])
         
         write_lines_to_file('data_loading/occupation_codes.txt', occupation_codes)
-        write_lines_to_file('data_loading/occupation_urls.txt', occupation_urls)
+        # write_lines_to_file('data_loading/occupation_urls.txt', occupation_urls)
 
         print("Occupation data written to files")
     else:
@@ -62,23 +62,20 @@ def get_occupation(occupation_code):
         data = response.json()
         occupation_data = filter_occupation_data(data)
         workstyle_data = get_workstyles(occupation_code)
-        if len(workstyle_data) > 0:
-            #TODO: check key
-            occupation_data['workstyles'] = workstyle_data
-        mongo_occupations_collection.insert_one(occupation_data)
+        occupation_data['work_styles'] = workstyle_data
+        occupation_data['date_updated'] = datetime.utcnow()
+        mongo_occupations_collection.replace_one({'code': occupation_code}, occupation_data, upsert=True)
     else:
         print(f"Failed to retrieve occupation data for {occupation_code} from ONET API.")
         print(f'Reason: {response.status_code}: {response.reason}')
 
 def get_workstyles(occupation_code):
-    response = requests.get(onet_api_url + occupation_code + '/details/work_styles', headers=headers)
+    response = requests.get(onet_api_url + occupation_code + '/details/work_styles', params={'display': 'long'}, headers=headers)
     if response.status_code == 200:
         data = response.json()
         workstyle_data = filter_workstyle_data(data)
         return workstyle_data
     else:
-        print(f"Failed to retrieve workstyle data for {occupation_code} from ONET API.")
-        print(f'Reason: {response.status_code}: {response.reason}')
         return []
 
 # Gets all occupations from ONET and stores it in the raw_occupations_collection
@@ -87,13 +84,8 @@ def get_all_occupation_data():
         occupation_codes = file.readlines()
         for occupation_code in tqdm(occupation_codes):
             occupation_code = occupation_code.strip()
-            if occupation_code != '' and not occupation_exists_in_db(occupation_code):
+            if occupation_code != '': # and not occupation_exists_in_db(occupation_code):
                 get_occupation(occupation_code)
-
-# Checks if the occupation with the given occupation code exists in the database
-def occupation_exists_in_db(occupation_code):
-    result = mongo_occupations_collection.find_one({'code': occupation_code})
-    return result != None
 
 # Converts a raw_occupation_data to occupation data that we will actually use and need
 def filter_occupation_data(raw_occupation_data):
@@ -101,18 +93,32 @@ def filter_occupation_data(raw_occupation_data):
     occupation_data['code'] = raw_occupation_data['code']
     occupation_data['title'] = raw_occupation_data['occupation']['title']
     occupation_data['description'] = raw_occupation_data['occupation']['description']
-    #TODO: add more fields
+    occupation_data['technology_skills'] = filter_tech_skills(raw_occupation_data.get('technology_skills', {'category': []}))
     return occupation_data
 
-# Converts a raw_workstyle_data to workstyle data that we will actually use and need
-def filter_workstyle_data(raw_workstyle_data):
-    workstyle_data = []
-    for workstyle in raw_workstyle_data:
+# Converts a raw technology skills to tech skills data
+def filter_tech_skills(raw_tech_skills):   
+    tech_skills = []
+    for skill in raw_tech_skills['category']:
         data = {}
-        data['code'] = workstyle['code']
-        data['title'] = workstyle['occupation']['title']
-        data['description'] = workstyle['occupation']['description']
-        #TODO: add more fields
+        data['id'] = skill['title']['id']
+        data['name'] = skill['title']['name']
+        data['examples'] = []
+        for example in skill['example']:
+            data['examples'].append(example['name'])
+        tech_skills.append(data)
+    return tech_skills
+
+# Converts a raw_workstyle_data to workstyle data that we will actually use and need
+def filter_workstyle_data(raw_workstyle_data):   
+    workstyle_data = []
+    for workstyle in raw_workstyle_data['element']:
+        data = {}
+        data['id'] = workstyle['id']
+        data['title'] = workstyle['name']
+        data['description'] = workstyle['description']
+        data['scale'] = workstyle['score']['scale']
+        data['value'] = workstyle['score']['value']
         workstyle_data.append(data)
     return workstyle_data
 
