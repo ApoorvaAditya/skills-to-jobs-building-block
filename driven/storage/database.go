@@ -37,11 +37,10 @@ type database struct {
 	dbClient *mongo.Client
 	logger   *logs.Logger
 
-	configs             *collectionWrapper
-	occupationDatas     *collectionWrapper
-	userMatchingResults *collectionWrapper
-	surveyDatas         *collectionWrapper
-	workstyleDatas      *collectionWrapper
+	configs         *collectionWrapper
+	occupationData  *collectionWrapper
+	matchResults    *collectionWrapper
+	surveyResponses *collectionWrapper
 
 	listeners []interfaces.StorageListener
 }
@@ -76,26 +75,20 @@ func (d *database) start() error {
 		return err
 	}
 
-	occupationDatas := &collectionWrapper{database: d, coll: db.Collection("occupationDatas")}
-	err = d.applyOccupationDatasChecks(occupationDatas)
+	occupationData := &collectionWrapper{database: d, coll: db.Collection("occupation_data")}
+	err = d.applyOccupationDataChecks(occupationData)
 	if err != nil {
 		return err
 	}
 
-	userMatchingResults := &collectionWrapper{database: d, coll: db.Collection("userMatchingResults")}
-	err = d.applyUserMatchingResultsChecks(userMatchingResults)
+	matchResults := &collectionWrapper{database: d, coll: db.Collection("match_results")}
+	err = d.applyMatchResultsChecks(matchResults)
 	if err != nil {
 		return err
 	}
 
-	surveyDatas := &collectionWrapper{database: d, coll: db.Collection("surveyDatas")}
-	err = d.applySurveyDatasChecks(surveyDatas)
-	if err != nil {
-		return err
-	}
-
-	workstyleDatas := &collectionWrapper{database: d, coll: db.Collection("workstyles")}
-	err = d.applyWorkstyleDatasChecks(workstyleDatas)
+	surveyResponses := &collectionWrapper{database: d, coll: db.Collection("survey_responses")}
+	err = d.applySurveyResponsesChecks(surveyResponses)
 	if err != nil {
 		return err
 	}
@@ -105,10 +98,9 @@ func (d *database) start() error {
 	d.dbClient = client
 
 	d.configs = configs
-	d.occupationDatas = occupationDatas
-	d.userMatchingResults = userMatchingResults
-	d.surveyDatas = surveyDatas
-	d.workstyleDatas = workstyleDatas
+	d.occupationData = occupationData
+	d.matchResults = matchResults
+	d.surveyResponses = surveyResponses
 
 	go d.configs.Watch(nil, d.logger)
 
@@ -127,31 +119,29 @@ func (d *database) applyConfigsChecks(configs *collectionWrapper) error {
 	return nil
 }
 
-func (d *database) applyOccupationDatasChecks(messages *collectionWrapper) error {
-	d.logger.Info("apply occupationDatas checks.....")
+func (d *database) applyOccupationDataChecks(occupationData *collectionWrapper) error {
+	d.logger.Info("apply occupationData checks.....")
 
-	d.logger.Info("apply occupationDatas passed")
+	err := occupationData.AddIndex(nil, bson.D{primitive.E{Key: "code", Value: 1}}, true)
+	if err != nil {
+		return err
+	}
+
+	d.logger.Info("apply occupationData passed")
 	return nil
 }
 
-func (d *database) applyUserMatchingResultsChecks(messages *collectionWrapper) error {
-	d.logger.Info("apply userMatchingResults checks.....")
+func (d *database) applyMatchResultsChecks(matchResults *collectionWrapper) error {
+	d.logger.Info("apply matchResults checks.....")
 
-	d.logger.Info("apply userMatchingResults passed")
+	d.logger.Info("apply matchResults passed")
 	return nil
 }
 
-func (d *database) applySurveyDatasChecks(messages *collectionWrapper) error {
-	d.logger.Info("apply surveyDatas checks.....")
+func (d *database) applySurveyResponsesChecks(surveyResponses *collectionWrapper) error {
+	d.logger.Info("apply surveyResponses checks.....")
 
-	d.logger.Info("apply surveyDatas passed")
-	return nil
-}
-
-func (d *database) applyWorkstyleDatasChecks(messages *collectionWrapper) error {
-	d.logger.Info("apply workstyleDatas checks.....")
-
-	d.logger.Info("apply workstyleDatas passed")
+	d.logger.Info("apply surveyResponses passed")
 	return nil
 }
 

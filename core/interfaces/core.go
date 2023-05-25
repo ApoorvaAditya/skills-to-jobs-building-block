@@ -33,8 +33,6 @@ type Client interface {
 
 	// UserMatchingResult APIs
 	GetUserMatchingResult(id string) (*model.UserMatchingResult, error)
-	CreateUserMatchingResult(userMatchingResult model.UserMatchingResult) (*model.UserMatchingResult, error)
-	UpdateUserMatchingResult(userMatchingResult model.UserMatchingResult) error
 	DeleteUserMatchingResult(id string) error
 
 	// Survey Data APIs
@@ -43,8 +41,8 @@ type Client interface {
 	UpdateSurveyData(surveyData model.SurveyData) error
 	DeleteSurveyData(id string) error
 
-	GetAllWorkstyleDatas() ([]model.WorkstyleData, error)
-	GetWorkstyleDatasForOccupation(occupationCode string) ([]model.WorkstyleData, error)
+	// Occupation Matching
+	MatchOccupations(surveyData model.SurveyData, userID string)
 }
 
 // Admin exposes administrative APIs for the driver adapters

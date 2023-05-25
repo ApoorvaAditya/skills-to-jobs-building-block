@@ -16,8 +16,10 @@ package core
 
 import (
 	"application/core/model"
+	"sort"
 	"time"
 
+	"github.com/go-gota/gota/dataframe"
 	"github.com/google/uuid"
 	"github.com/rokwire/logging-library-go/v2/errors"
 	"github.com/rokwire/logging-library-go/v2/logutils"
@@ -41,21 +43,6 @@ func (a appClient) GetAllOccupationDatas() ([]model.OccupationData, error) {
 // GetUserMatchingResult gets an UserMatchingResult by ID
 func (a appClient) GetUserMatchingResult(id string) (*model.UserMatchingResult, error) {
 	return a.app.storage.GetUserMatchingResult(id)
-}
-
-// CreateUserMatchingResult creates a new UserMatchingResult
-func (a appClient) CreateUserMatchingResult(userMatchingResult model.UserMatchingResult) (*model.UserMatchingResult, error) {
-	userMatchingResult.DateCreated = time.Now()
-	err := a.app.storage.CreateUserMatchingResult(userMatchingResult)
-	if err != nil {
-		return nil, errors.WrapErrorAction(logutils.ActionCreate, model.TypeUserMatchingResult, nil, err)
-	}
-	return &userMatchingResult, nil
-}
-
-// UpdateUserMatchingResult updates an UserMatchingResult
-func (a appClient) UpdateUserMatchingResult(userMatchingResult model.UserMatchingResult) error {
-	return a.app.storage.UpdateUserMatchingResult(userMatchingResult)
 }
 
 // DeleteUserMatchingResult deletes an UserMatchingResult by ID
@@ -90,14 +77,89 @@ func (a appClient) DeleteSurveyData(id string) error {
 	return a.app.storage.DeleteSurveyData(id)
 }
 
-// GetAllWorkstyleDatas gets all WorkstyleDatas
-func (a appClient) GetAllWorkstyleDatas() ([]model.WorkstyleData, error) {
-	return a.app.storage.GetAllWorkstyleDatas()
+func (a appClient) MatchOccupations(surveyData model.SurveyData, userID string) {
+	occupations, err := a.GetAllOccupationDatas()
+	if err != nil {
+		return
+	}
+
+	matches := a.runMatchingAlgo(surveyData.Scores, occupations)
+	userMatchingResult := model.UserMatchingResult{
+		ID:      userID,
+		Matches: matches,
+		Version: surveyData.Version,
+	}
+
+	a.app.storage.SaveUserMatchingResult(userMatchingResult)
 }
 
-// GetAllWorkstyleDatas finds all WorkstyleDatas for a given occupation
-func (a appClient) GetWorkstyleDatasForOccupation(occupationCode string) ([]model.WorkstyleData, error) {
-	return a.app.storage.GetWorkstyleDatasForOccupation(occupationCode)
+func (a appClient) runMatchingAlgo(userScores []model.WorkstyleScore, occupations []model.OccupationData) []model.Match {
+	matches := make([]model.Match, 0)
+	for _, occupation := range occupations {
+		if len(occupation.Workstyles) > 0 {
+			occupationMatch := a.runMatchingAlgorithmPerOccupation(occupation, userScores)
+			matches = append(matches, occupationMatch)
+		}
+	}
+	sort.SliceStable(matches, func(i, j int) bool {
+		return matches[i].MatchPercent > matches[j].MatchPercent
+	})
+	return matches
+}
+
+// It runs the matching alogrithm on the entire occupation list and its workstyles to find the p-value for each occupation
+func (a appClient) runMatchingAlgorithmPerOccupation(occupation model.OccupationData, userScores []model.WorkstyleScore) model.Match {
+	match := model.Match{Occupation: model.OccupationMatch{Code: occupation.Code, Name: occupation.Name}}
+
+	dfUserScoresUnsorted := dataframe.LoadStructs(userScores)
+	dfUserScores := dfUserScoresUnsorted.Arrange(dataframe.Sort("Score"))
+	dfImportanceUnsorted := dataframe.LoadStructs(occupation.Workstyles)
+	dfImportance := dfImportanceUnsorted.Arrange(dataframe.Sort("Value"))
+
+	bessiToWorkstyles := map[string]string{
+		"stress_regulation":         "Stress Tolerance",
+		"adaptability":              "Adaptability/Flexibility",
+		"capacity_social_warmth":    "Concern for Others",
+		"abstract_thinking":         "Analytical Thinking",
+		"teamwork":                  "Cooperation",
+		"responsibility_management": "Dependability",
+		"detail_management":         "Attention to Detail",
+		"initiative":                "Initiative",
+		"anger_management":          "Self-Control",
+		"capacity_consistency":      "Persistence",
+		"capacity_independence":     "Independence",
+		"perspective_taking":        "Social Orientation",
+		"goal_regulation":           "Achievement/Effort",
+		"creativity":                "Innovation",
+		"ethical_competence":        "Integrity",
+		"leadership":                "Leadership",
+	}
+
+	sumSquared := 0.0
+	n := float64(dfUserScores.Nrow())
+	for i := 0; i < dfUserScores.Nrow(); i++ {
+		row := dfUserScores.Subset(i)
+		workstyle := bessiToWorkstyles[row.Col("Workstyle").Elem(0).String()]
+		idx, err := index(dfImportance, workstyle)
+		if err != nil {
+			continue
+		}
+		diff := i - idx
+		sumSquared = sumSquared + float64(diff*diff)
+	}
+	finalScore := 1 - ((6 * sumSquared) / (n * (n*n - 1)))
+	match.MatchPercent = (finalScore + 1) * 0.5 * 100
+	return match
+}
+
+func index(df dataframe.DataFrame, workstyle string) (int, error) {
+	for i := 0; i < df.Nrow(); i++ {
+		row := df.Subset(i)
+		if row.Col("Name").Elem(0).String() == workstyle {
+			return i, nil
+		}
+	}
+	return -1, errors.New("did not find matching workstyle")
 }
 
 // newAppClient creates new appClient

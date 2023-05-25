@@ -18,11 +18,8 @@ import (
 	"application/core"
 	"application/core/model"
 	"encoding/json"
-	"errors"
 	"net/http"
-	"sort"
 
-	"github.com/go-gota/gota/dataframe"
 	"github.com/gorilla/mux"
 	"github.com/rokwire/core-auth-library-go/v3/tokenauth"
 	"github.com/rokwire/logging-library-go/v2/logs"
@@ -80,42 +77,6 @@ func (h ClientAPIsHandler) getUserMatchingResult(l *logs.Log, r *http.Request, c
 	return l.HTTPResponseSuccessJSON(response)
 }
 
-func (h ClientAPIsHandler) createUserMatchingResult(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
-	var requestData model.UserMatchingResult
-	err := json.NewDecoder(r.Body).Decode(&requestData)
-	if err != nil {
-		return l.HTTPResponseErrorAction(logutils.ActionUnmarshal, logutils.TypeRequestBody, nil, err, http.StatusBadRequest, true)
-	}
-	requestData.ID = claims.Subject
-	userMatchingResult, err := h.app.Client.CreateUserMatchingResult(requestData)
-	if err != nil || userMatchingResult == nil {
-		return l.HTTPResponseErrorAction(logutils.ActionCreate, model.TypeUserMatchingResult, nil, err, http.StatusInternalServerError, true)
-	}
-
-	response, err := json.Marshal(userMatchingResult)
-	if err != nil {
-		return l.HTTPResponseErrorAction(logutils.ActionMarshal, logutils.TypeResponseBody, nil, err, http.StatusInternalServerError, false)
-	}
-	return l.HTTPResponseSuccessJSON(response)
-}
-
-func (h ClientAPIsHandler) updateUserMatchingResult(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
-	var requestData model.UserMatchingResult
-	err := json.NewDecoder(r.Body).Decode(&requestData)
-	if err != nil {
-		return l.HTTPResponseErrorAction(logutils.ActionUnmarshal, logutils.TypeRequestBody, nil, err, http.StatusBadRequest, true)
-	}
-
-	id := claims.Subject
-	requestData.ID = id
-	err = h.app.Client.UpdateUserMatchingResult(requestData)
-	if err != nil {
-		return l.HTTPResponseErrorAction(logutils.ActionUpdate, model.TypeUserMatchingResult, nil, err, http.StatusInternalServerError, true)
-	}
-
-	return l.HTTPResponseSuccess()
-}
-
 func (h ClientAPIsHandler) deleteUserMatchingResult(l *logs.Log, r *http.Request, claims *tokenauth.Claims) logs.HTTPResponse {
 	id := claims.Subject
 	err := h.app.Client.DeleteUserMatchingResult(id)
@@ -153,11 +114,10 @@ func (h ClientAPIsHandler) createSurveyData(l *logs.Log, r *http.Request, claims
 	}
 
 	surveyData, err := h.app.Client.CreateSurveyData(requestData)
-	surveyData.ID = claims.Subject
 	if err != nil || surveyData == nil {
 		return l.HTTPResponseErrorAction(logutils.ActionCreate, model.TypeSurveyData, nil, err, http.StatusInternalServerError, true)
 	}
-	go h.runMatchingAlgoAndCreateUserData(*surveyData)
+	go h.app.Client.MatchOccupations(*surveyData, claims.Subject)
 
 	response, err := json.Marshal(surveyData)
 	if err != nil {
@@ -206,108 +166,4 @@ func (h ClientAPIsHandler) deleteSurveyData(l *logs.Log, r *http.Request, claims
 // NewClientAPIsHandler creates new client API handler instance
 func NewClientAPIsHandler(app *core.Application) ClientAPIsHandler {
 	return ClientAPIsHandler{app: app}
-}
-
-func (h ClientAPIsHandler) runMatchingAlgoAndCreateUserData(surveyData model.SurveyData) {
-	occupations, err := h.app.Client.GetAllOccupationDatas()
-	if err != nil {
-		return
-	}
-
-	matches := h.runMatchingAlgo(surveyData.Scores, occupations)
-	userMatchingResult := model.UserMatchingResult{
-		ID:      surveyData.ID,
-		Matches: matches,
-		Version: "",
-	}
-
-	_, err = h.app.Client.GetUserMatchingResult(userMatchingResult.ID)
-
-	if err != nil {
-		h.app.Client.CreateUserMatchingResult(userMatchingResult)
-	} else {
-		h.app.Client.UpdateUserMatchingResult(userMatchingResult)
-	}
-}
-
-func (h ClientAPIsHandler) runMatchingAlgo(userScores []model.WorkstyleScore, occupations []model.OccupationData) []model.Match {
-	matches := make([]model.Match, 0)
-	allWorkstyles, err := h.app.Client.GetAllWorkstyleDatas()
-	if err != nil {
-		return matches
-	}
-	for _, occupation := range occupations {
-		workstyles := h.getWorkstyleDataForOccupation(occupation.Code, allWorkstyles)
-		occupationMatch := h.runMatchingAlgorithmPerOccupation(occupation, userScores, workstyles)
-		matches = append(matches, occupationMatch)
-	}
-	sort.SliceStable(matches, func(i, j int) bool {
-		return matches[i].MatchPercent > matches[j].MatchPercent
-	})
-	return matches
-}
-
-func (h ClientAPIsHandler) getWorkstyleDataForOccupation(code string, allWorkstyles []model.WorkstyleData) []model.WorkstyleData {
-	filteredWorkstyles := make([]model.WorkstyleData, 0)
-	for _, workstyle := range allWorkstyles {
-		if workstyle.Code == code {
-			filteredWorkstyles = append(filteredWorkstyles, workstyle)
-		}
-	}
-	return filteredWorkstyles
-}
-
-// It runs the matching alogrithm on the entire occupation list and its workstyles to find the p-value for each occupation
-func (h ClientAPIsHandler) runMatchingAlgorithmPerOccupation(occupation model.OccupationData, userScores []model.WorkstyleScore, workstyles []model.WorkstyleData) model.Match {
-	match := model.Match{Occupation: occupation}
-
-	dfUserScoresUnsorted := dataframe.LoadStructs(userScores)
-	dfUserScores := dfUserScoresUnsorted.Arrange(dataframe.Sort("Score"))
-	dfImportanceUnsorted := dataframe.LoadStructs(workstyles)
-	dfImportance := dfImportanceUnsorted.Arrange(dataframe.Sort("DataValue"))
-
-	bessiToWorkstyles := map[string]string{
-		"stress_regulation":         "Stress Tolerance",
-		"adaptability":              "Adaptability/Flexibility",
-		"capacity_social_warmth":    "Concern for Others",
-		"abstract_thinking":         "Analytical Thinking",
-		"teamwork":                  "Cooperation",
-		"responsibility_management": "Dependability",
-		"detail_management":         "Attention to Detail",
-		"initiative":                "Initiative",
-		"anger_management":          "Self-Control",
-		"capacity_consistency":      "Persistence",
-		"capacity_independence":     "Independence",
-		"perspective_taking":        "Social Orientation",
-		"goal_regulation":           "Achievement/Effort",
-		"creativity":                "Innovation",
-		"ethical_competence":        "Integrity",
-		"leadership":                "Leadership",
-	}
-
-	sumSquared := 0.0
-	n := float64(dfUserScores.Nrow())
-	for i := 0; i < dfUserScores.Nrow(); i++ {
-		row := dfUserScores.Subset(i)
-		workstyle := bessiToWorkstyles[row.Col("Workstyle").Elem(0).String()]
-		idx, err := index(dfImportance, workstyle)
-		if err != nil {
-			continue
-		}
-		diff := i - idx
-		sumSquared = sumSquared + float64(diff*diff)
-	}
-	finalScore := 1 - ((6 * sumSquared) / (n * (n*n - 1)))
-	match.MatchPercent = (finalScore + 1) * 0.5 * 100
-	return match
-}
-
-func index(df dataframe.DataFrame, workstyle string) (int, error) {
-	for i := 0; i < df.Nrow(); i++ {
-		row := df.Subset(i)
-		if row.Col("ElementName").Elem(0).String() == workstyle {
-			return i, nil
-		}
-	}
-	return -1, errors.New("did not find matching workstyle")
 }

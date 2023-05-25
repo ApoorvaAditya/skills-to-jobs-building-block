@@ -180,48 +180,6 @@ paths:
           description: Unauthorized
         '500':
           description: Internal error
-    post:
-      tags:
-        - Client
-      summary: Posts the User data
-      description: |
-        Posts User data
-        **Auth:** Requires valid user token
-      security:
-        - bearerAuth: []
-      requestBody:
-        required: true
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/UserMatchingResult'
-      responses:
-        '200':
-          description: Success
-        '400':
-          description: Bad request
-        '401':
-          description: Unauthorized
-        '500':
-          description: Internal error
-    put:
-      tags:
-        - Client
-      summary: Updates User data
-      description: |
-        Updates User data
-        **Auth:** Requires valid user token
-      security:
-        - bearerAuth: []
-      responses:
-        '200':
-          description: Success
-        '400':
-          description: Bad request
-        '401':
-          description: Unauthorized
-        '500':
-          description: Internal error
     delete:
       tags:
         - Client

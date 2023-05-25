@@ -34,17 +34,13 @@ type Storage interface {
 	GetAllOccupationDatas() ([]model.OccupationData, error)
 
 	GetUserMatchingResult(id string) (*model.UserMatchingResult, error)
-	CreateUserMatchingResult(bessiData model.UserMatchingResult) error
-	UpdateUserMatchingResult(bessiData model.UserMatchingResult) error
+	SaveUserMatchingResult(bessiData model.UserMatchingResult) error
 	DeleteUserMatchingResult(id string) error
 
 	GetSurveyData(id string) (*model.SurveyData, error)
 	CreateSurveyData(surveyData model.SurveyData) error
 	UpdateSurveyData(surveyData model.SurveyData) error
 	DeleteSurveyData(id string) error
-
-	GetAllWorkstyleDatas() ([]model.WorkstyleData, error)
-	GetWorkstyleDatasForOccupation(occupationCode string) ([]model.WorkstyleData, error)
 }
 
 // StorageListener represents storage listener
