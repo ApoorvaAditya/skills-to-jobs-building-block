@@ -18,7 +18,7 @@ with open('.env', 'r') as file:
     mongo_db_name = file.readline().split('=')[1].replace("\"", "").strip()
 
 # Define MongoDB connection and collection
-mongo_occupations_collection_name = "occupationDatas"
+mongo_occupations_collection_name = "occupation_data"
 
 # Create MongoDB Client and set up collections
 mongo_client = MongoClient(mongo_client_uri)
@@ -91,7 +91,7 @@ def get_all_occupation_data():
 def filter_occupation_data(raw_occupation_data):
     occupation_data = {}
     occupation_data['code'] = raw_occupation_data['code']
-    occupation_data['title'] = raw_occupation_data['occupation']['title']
+    occupation_data['name'] = raw_occupation_data['occupation']['title']
     occupation_data['description'] = raw_occupation_data['occupation']['description']
     occupation_data['technology_skills'] = filter_tech_skills(raw_occupation_data.get('technology_skills', {'category': []}))
     return occupation_data
@@ -115,7 +115,7 @@ def filter_workstyle_data(raw_workstyle_data):
     for workstyle in raw_workstyle_data['element']:
         data = {}
         data['id'] = workstyle['id']
-        data['title'] = workstyle['name']
+        data['name'] = workstyle['name']
         data['description'] = workstyle['description']
         data['scale'] = workstyle['score']['scale']
         data['value'] = workstyle['score']['value']
