@@ -22,9 +22,11 @@ import (
 
 const (
 	//TypeUserMatchingResult type
-	TypeUserMatchingResult logutils.MessageDataType = "userMatchingResult"
+	TypeUserMatchingResult logutils.MessageDataType = "user matching result"
 	//TypeMatch type
 	TypeMatch logutils.MessageDataType = "match"
+	//TypeOccupationMatch type
+	TypeOccupationMatch logutils.MessageDataType = "occupation match"
 )
 
 // UserMatchingResult represents the matching results of a specific user
@@ -38,6 +40,12 @@ type UserMatchingResult struct {
 
 // Match represents a occupation match and the corresponding score
 type Match struct {
-	Occupation   OccupationData `json:"occupation" bson:"occupation"`
-	MatchPercent float64        `json:"match_percent" bson:"match_percent"`
+	Occupation   OccupationMatch `json:"occupation" bson:"occupation"`
+	MatchPercent float64         `json:"match_percent" bson:"match_percent"`
+}
+
+// OccupationMatch stores the relevant information about each Occupation match
+type OccupationMatch struct {
+	Code string `json:"code" bson:"code"`
+	Name string `json:"name" bson:"name"`
 }

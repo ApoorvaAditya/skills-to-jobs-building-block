@@ -28,7 +28,7 @@ func (a Adapter) GetSurveyData(id string) (*model.SurveyData, error) {
 	filter := bson.M{"_id": id}
 
 	var data *model.SurveyData
-	err := a.db.surveyDatas.FindOne(a.context, filter, &data, nil)
+	err := a.db.surveyResponses.FindOne(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeSurveyData, filterArgs(filter), err)
 	}
@@ -38,7 +38,7 @@ func (a Adapter) GetSurveyData(id string) (*model.SurveyData, error) {
 
 // CreateSurveyData inserts a new surveyData
 func (a Adapter) CreateSurveyData(surveyData model.SurveyData) error {
-	_, err := a.db.surveyDatas.InsertOne(a.context, surveyData)
+	_, err := a.db.surveyResponses.InsertOne(a.context, surveyData)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionInsert, model.TypeSurveyData, nil, err)
 	}
@@ -51,7 +51,7 @@ func (a Adapter) UpdateSurveyData(surveyData model.SurveyData) error {
 	filter := bson.M{"_id": surveyData.ID}
 	update := bson.M{"$set": bson.M{"scores": surveyData.Scores, "date_updated": time.Now()}}
 
-	_, err := a.db.surveyDatas.UpdateOne(a.context, filter, update, nil)
+	_, err := a.db.surveyResponses.UpdateOne(a.context, filter, update, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionUpdate, model.TypeSurveyData, filterArgs(filter), err)
 	}
@@ -62,7 +62,7 @@ func (a Adapter) UpdateSurveyData(surveyData model.SurveyData) error {
 func (a Adapter) DeleteSurveyData(id string) error {
 	filter := bson.M{"_id": id}
 
-	res, err := a.db.surveyDatas.DeleteOne(a.context, filter, nil)
+	res, err := a.db.surveyResponses.DeleteOne(a.context, filter, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionDelete, model.TypeSurveyData, filterArgs(filter), err)
 	}

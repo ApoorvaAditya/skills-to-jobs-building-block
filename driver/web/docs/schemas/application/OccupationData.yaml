@@ -3,6 +3,8 @@ required:
 - code
 - title
 - description
+- technology_skills
+- work_styles
 properties:
   code:
     type: string
@@ -12,4 +14,14 @@ properties:
     readOnly: true
   description:
     type: string
+    readOnly: true
+  technology_skills:
+    type: array
+    items:
+      $ref: "./TechnologySkill.yaml"
+    readOnly: true
+  work_styles:
+    type: array
+    items:
+      $ref: "./Workstyle.yaml"
     readOnly: true

@@ -3,6 +3,7 @@ module application
 go 1.20
 
 require (
+	github.com/go-gota/gota v0.12.0
 	github.com/google/uuid v1.3.0
 	github.com/gorilla/mux v1.8.0
 	github.com/rokwire/core-auth-library-go/v3 v3.0.1
@@ -51,6 +52,7 @@ require (
 	golang.org/x/sys v0.8.0 // indirect
 	golang.org/x/text v0.9.0 // indirect
 	golang.org/x/tools v0.9.1 // indirect
+	gonum.org/v1/gonum v0.9.1 // indirect
 	gopkg.in/go-playground/validator.v9 v9.31.0 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )

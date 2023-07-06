@@ -21,6 +21,7 @@ import (
 	"github.com/rokwire/logging-library-go/v2/errors"
 	"github.com/rokwire/logging-library-go/v2/logutils"
 	"go.mongodb.org/mongo-driver/bson"
+	"go.mongodb.org/mongo-driver/mongo/options"
 )
 
 // GetUserMatchingResult finds userMatchingResult by id
@@ -28,7 +29,7 @@ func (a Adapter) GetUserMatchingResult(id string) (*model.UserMatchingResult, er
 	filter := bson.M{"_id": id}
 
 	var data *model.UserMatchingResult
-	err := a.db.userMatchingResults.FindOne(a.context, filter, &data, nil)
+	err := a.db.matchResults.FindOne(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeUserMatchingResult, filterArgs(filter), err)
 	}
@@ -36,22 +37,21 @@ func (a Adapter) GetUserMatchingResult(id string) (*model.UserMatchingResult, er
 	return data, nil
 }
 
-// CreateUserMatchingResult inserts a new userMatchingResult
-func (a Adapter) CreateUserMatchingResult(userMatchingResult model.UserMatchingResult) error {
-	_, err := a.db.userMatchingResults.InsertOne(a.context, userMatchingResult)
-	if err != nil {
-		return errors.WrapErrorAction(logutils.ActionInsert, model.TypeUserMatchingResult, nil, err)
+// SaveUserMatchingResult saves a userMatchingResult
+func (a Adapter) SaveUserMatchingResult(userMatchingResult model.UserMatchingResult) error {
+	filter := bson.M{"_id": userMatchingResult.ID}
+	update := bson.M{
+		"$set": bson.M{
+			"matches":      userMatchingResult.Matches,
+			"date_updated": time.Now().UTC(),
+		},
+		"$setOnInsert": bson.M{
+			"date_created": time.Now().UTC(),
+		},
 	}
 
-	return nil
-}
-
-// UpdateUserMatchingResult updates an userMatchingResult
-func (a Adapter) UpdateUserMatchingResult(userMatchingResult model.UserMatchingResult) error {
-	filter := bson.M{"_id": userMatchingResult.ID}
-	update := bson.M{"$set": bson.M{"matches": userMatchingResult.Matches, "date_updated": time.Now()}}
-
-	_, err := a.db.userMatchingResults.UpdateOne(a.context, filter, update, nil)
+	opts := options.Update().SetUpsert(true)
+	_, err := a.db.matchResults.UpdateOne(a.context, filter, update, opts)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionUpdate, model.TypeUserMatchingResult, filterArgs(filter), err)
 	}
@@ -62,7 +62,7 @@ func (a Adapter) UpdateUserMatchingResult(userMatchingResult model.UserMatchingR
 func (a Adapter) DeleteUserMatchingResult(id string) error {
 	filter := bson.M{"_id": id}
 
-	res, err := a.db.userMatchingResults.DeleteOne(a.context, filter, nil)
+	res, err := a.db.matchResults.DeleteOne(a.context, filter, nil)
 	if err != nil {
 		return errors.WrapErrorAction(logutils.ActionDelete, model.TypeUserMatchingResult, filterArgs(filter), err)
 	}

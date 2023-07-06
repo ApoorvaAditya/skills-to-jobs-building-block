@@ -1,0 +1,17 @@
+type: object
+required:
+- id
+- title
+- examples
+properties:
+  id:
+    type: int
+    readOnly: true
+  title:
+    type: string
+    readOnly: true
+  examples:
+    type: array
+    items:
+      type: string
+    readOnly: true

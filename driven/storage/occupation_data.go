@@ -27,7 +27,7 @@ func (a Adapter) GetOccupationData(code string) (*model.OccupationData, error) {
 	filter := bson.M{"code": code}
 
 	var data *model.OccupationData
-	err := a.db.occupationDatas.FindOne(a.context, filter, &data, nil)
+	err := a.db.occupationData.FindOne(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeOccupationData, filterArgs(filter), err)
 	}
@@ -39,7 +39,7 @@ func (a Adapter) GetOccupationData(code string) (*model.OccupationData, error) {
 func (a Adapter) GetAllOccupationDatas() ([]model.OccupationData, error) {
 	filter := bson.M{}
 	var data []model.OccupationData
-	err := a.db.occupationDatas.Find(a.context, filter, &data, nil)
+	err := a.db.occupationData.Find(a.context, filter, &data, nil)
 	if err != nil {
 		return nil, errors.WrapErrorAction(logutils.ActionFind, model.TypeOccupationData, nil, err)
 	}

@@ -19,9 +19,7 @@ import (
 	"context"
 	"time"
 
-	"github.com/rokwire/logging-library-go/v2/errors"
 	"github.com/rokwire/logging-library-go/v2/logs"
-	"github.com/rokwire/logging-library-go/v2/logutils"
 
 	"go.mongodb.org/mongo-driver/bson"
 	"go.mongodb.org/mongo-driver/bson/primitive"
@@ -39,11 +37,10 @@ type database struct {
 	dbClient *mongo.Client
 	logger   *logs.Logger
 
-	configs             *collectionWrapper
-	examples            *collectionWrapper
-	occupationDatas     *collectionWrapper
-	userMatchingResults *collectionWrapper
-	surveyDatas         *collectionWrapper
+	configs         *collectionWrapper
+	occupationData  *collectionWrapper
+	matchResults    *collectionWrapper
+	surveyResponses *collectionWrapper
 
 	listeners []interfaces.StorageListener
 }
@@ -78,26 +75,20 @@ func (d *database) start() error {
 		return err
 	}
 
-	examples := &collectionWrapper{database: d, coll: db.Collection("examples")}
-	err = d.applyExamplesChecks(examples)
+	occupationData := &collectionWrapper{database: d, coll: db.Collection("occupation_data")}
+	err = d.applyOccupationDataChecks(occupationData)
 	if err != nil {
 		return err
 	}
 
-	occupationDatas := &collectionWrapper{database: d, coll: db.Collection("occupationDatas")}
-	err = d.applyOccupationDatasChecks(occupationDatas)
+	matchResults := &collectionWrapper{database: d, coll: db.Collection("match_results")}
+	err = d.applyMatchResultsChecks(matchResults)
 	if err != nil {
 		return err
 	}
 
-	userMatchingResults := &collectionWrapper{database: d, coll: db.Collection("userMatchingResults")}
-	err = d.applyUserMatchingResultsChecks(userMatchingResults)
-	if err != nil {
-		return err
-	}
-
-	surveyDatas := &collectionWrapper{database: d, coll: db.Collection("surveyDatas")}
-	err = d.applySurveyDatasChecks(surveyDatas)
+	surveyResponses := &collectionWrapper{database: d, coll: db.Collection("survey_responses")}
+	err = d.applySurveyResponsesChecks(surveyResponses)
 	if err != nil {
 		return err
 	}
@@ -107,10 +98,9 @@ func (d *database) start() error {
 	d.dbClient = client
 
 	d.configs = configs
-	d.examples = examples
-	d.occupationDatas = occupationDatas
-	d.userMatchingResults = userMatchingResults
-	d.surveyDatas = surveyDatas
+	d.occupationData = occupationData
+	d.matchResults = matchResults
+	d.surveyResponses = surveyResponses
 
 	go d.configs.Watch(nil, d.logger)
 
@@ -129,37 +119,29 @@ func (d *database) applyConfigsChecks(configs *collectionWrapper) error {
 	return nil
 }
 
-func (d *database) applyExamplesChecks(examples *collectionWrapper) error {
-	d.logger.Info("apply examples checks.....")
+func (d *database) applyOccupationDataChecks(occupationData *collectionWrapper) error {
+	d.logger.Info("apply occupationData checks.....")
 
-	//add compound unique index - org_id + app_id
-	err := examples.AddIndex(nil, bson.D{primitive.E{Key: "org_id", Value: 1}, primitive.E{Key: "app_id", Value: 1}}, false)
+	err := occupationData.AddIndex(nil, bson.D{primitive.E{Key: "code", Value: 1}}, true)
 	if err != nil {
-		return errors.WrapErrorAction(logutils.ActionCreate, "index", nil, err)
+		return err
 	}
 
-	d.logger.Info("apply examples passed")
+	d.logger.Info("apply occupationData passed")
 	return nil
 }
 
-func (d *database) applyOccupationDatasChecks(messages *collectionWrapper) error {
-	d.logger.Info("apply occupationDatas checks.....")
+func (d *database) applyMatchResultsChecks(matchResults *collectionWrapper) error {
+	d.logger.Info("apply matchResults checks.....")
 
-	d.logger.Info("apply occupationDatas passed")
+	d.logger.Info("apply matchResults passed")
 	return nil
 }
 
-func (d *database) applyUserMatchingResultsChecks(messages *collectionWrapper) error {
-	d.logger.Info("apply userMatchingResults checks.....")
+func (d *database) applySurveyResponsesChecks(surveyResponses *collectionWrapper) error {
+	d.logger.Info("apply surveyResponses checks.....")
 
-	d.logger.Info("apply userMatchingResults passed")
-	return nil
-}
-
-func (d *database) applySurveyDatasChecks(messages *collectionWrapper) error {
-	d.logger.Info("apply surveyDatas checks.....")
-
-	d.logger.Info("apply surveyDatas passed")
+	d.logger.Info("apply surveyResponses passed")
 	return nil
 }
 
@@ -181,12 +163,6 @@ func (d *database) onDataChanged(changeDoc map[string]interface{}) {
 
 		for _, listener := range d.listeners {
 			go listener.OnConfigsUpdated()
-		}
-	case "examples":
-		d.logger.Info("examples collection changed")
-
-		for _, listener := range d.listeners {
-			go listener.OnExamplesUpdated()
 		}
 	}
 }

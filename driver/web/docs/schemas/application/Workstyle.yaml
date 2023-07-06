@@ -1,0 +1,15 @@
+type: object
+required:
+- id
+- name
+- description
+properties:
+  id:
+    type: string
+    readOnly: true
+  name:
+    type: string
+    readOnly: true
+  description:
+    type: string
+    readOnly: true

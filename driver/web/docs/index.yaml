@@ -31,9 +31,6 @@ paths:
     $ref: "./resources/default/version.yaml"
 
   # Client
-  /api/examples/{id}:
-    $ref: "./resources/client/examples-id.yaml"
-
   /api/occupation:
     $ref: "./resources/client/occupation.yaml"
 
@@ -50,26 +47,16 @@ paths:
     $ref: "./resources/client/survey-data-id.yaml"
 
   # Admin
-  /api/admin/examples:
-    $ref: "./resources/admin/examples.yaml"
-  /api/admin/examples/{id}:
-    $ref: "./resources/admin/examples-id.yaml"
   /api/admin/configs:
     $ref: "./resources/admin/configs.yaml"
   /api/admin/configs/{id}:
     $ref: "./resources/admin/configs-id.yaml"
 
   # BBs
-  /api/bbs/examples/{id}:
-    $ref: "./resources/bbs/examples-id.yaml"
   
   # TPS
-  /api/tps/examples/{id}:
-    $ref: "./resources/tps/examples-id.yaml"
 
   # System
-  /api/system/examples/{id}:
-    $ref: "./resources/system/examples-id.yaml"
     
 components:
   securitySchemes:
